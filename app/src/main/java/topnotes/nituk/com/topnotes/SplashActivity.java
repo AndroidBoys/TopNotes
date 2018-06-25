@@ -27,7 +27,7 @@ public class SplashActivity extends AppCompatActivity {
 
             }
         }.start();
-//uiui
+
 
 
     }
