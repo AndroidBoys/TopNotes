@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 
+import java.util.Objects;
+
 // Sohan create a splash of 4 sec which leads to the login activity
 
 public class SplashActivity extends AppCompatActivity {
@@ -15,7 +17,11 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         // Action bar is depricated from the splash
-        getSupportActionBar().hide();
+        try {
+            Objects.requireNonNull(getSupportActionBar()).hide();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         new CountDownTimer(4000,1000){
             @Override
             public void onTick(long l) {
