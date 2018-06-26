@@ -34,7 +34,7 @@
         android:alpha="1"
         android:text="Boost Your Marks!"
         android:textAppearance="@style/TextAppearance.AppCompat.Title"
-        android:textColor="@color/black"
+        android:textColor="@color/colorPrimary"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
