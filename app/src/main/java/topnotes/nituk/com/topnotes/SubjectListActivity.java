@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -14,6 +16,7 @@ import com.google.android.material.navigation.NavigationView;
 public class SubjectListActivity extends AppCompatActivity {
 
 
+    //This activity contains navigation drawer and fragments
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle actionBarDrawerToggle;
 
@@ -35,6 +38,8 @@ public class SubjectListActivity extends AppCompatActivity {
         //Below one will set the icon on the action bar
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        addSubjectList();//it will show the list of subjects when this activity will be opened.
+
         NavigationView navigationView=findViewById(R.id.navigationView);
 
         //This below method is used for click events of navigaiton menu
@@ -46,6 +51,8 @@ public class SubjectListActivity extends AppCompatActivity {
 
                     case R.id.mySubjects:
                         Toast.makeText(SubjectListActivity.this,"mySubject selected",Toast.LENGTH_SHORT).show();
+
+                        addSubjectList();//it will set the subject list fragment in frameLayout.
                         return true;
 
                     case R.id.myDownloads:
@@ -78,6 +85,16 @@ public class SubjectListActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    void addSubjectList(){
+        FragmentManager fragmentManager=getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
+
+        MySubjects mySubjects=new MySubjects();
+        mySubjects.mySubjectContext=SubjectListActivity.this;
+        fragmentTransaction.replace(R.id.frameLayout,mySubjects);
+        fragmentTransaction.commit();
     }
 
     //This below function is for the selection of item in action bar.
