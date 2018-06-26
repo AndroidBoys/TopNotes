@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -41,6 +42,7 @@ public class SubjectListActivity extends AppCompatActivity {
         addSubjectList();//it will show the list of subjects when this activity will be opened.
 
         NavigationView navigationView=findViewById(R.id.navigationView);
+        //drawerLayout.closeDrawer(Gravity.START,false);
 
         //This below method is used for click events of navigaiton menu
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -51,33 +53,39 @@ public class SubjectListActivity extends AppCompatActivity {
 
                     case R.id.mySubjects:
                         Toast.makeText(SubjectListActivity.this,"mySubject selected",Toast.LENGTH_SHORT).show();
-
+                        drawerLayout.closeDrawer(Gravity.START,false); // it will close the navigation drawer when item is pressed
                         addSubjectList();//it will set the subject list fragment in frameLayout.
                         return true;
 
                     case R.id.myDownloads:
                         //MyDownloads fragment will be added
+                        drawerLayout.closeDrawer(Gravity.START,false);
                         return true;
 
                     case R.id.myuploads:
                         //MyUploads fragment will be added
+                        drawerLayout.closeDrawer(Gravity.START,false);
                         return true;
 
                     case R.id.leaderboard:
                         //Toast.makeText(SubjectListActivity.this,"leaderboard selected",Toast.LENGTH_SHORT).show();
                         //LeaderFragment will be added
+                        drawerLayout.closeDrawer(Gravity.START,false);
                         return true;
 
                     case R.id.contactUs:
                         //contactUs fragment will be added
+                        drawerLayout.closeDrawer(Gravity.START,false);
                         return true;
 
                     case R.id.aboutUs:
                         //aboutUs fragment will be added
+                        drawerLayout.closeDrawer(Gravity.START,false);
                         return true;
 
                     case R.id.logOut:
                         //logOut fragment will be added
+                        drawerLayout.closeDrawer(Gravity.START,false);
                         return true;
                 }
                 return false;
