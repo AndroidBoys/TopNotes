@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -106,5 +107,11 @@ public class SubjectListActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed(){
+        addSubjectList();
+
     }
 }

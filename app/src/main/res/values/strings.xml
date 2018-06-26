@@ -1,7 +1,32 @@
+
 <resources>
     <string name="app_name">TopNotes</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
     <string name="your_name">Your Name?</string>
     <string name="r_n">Roll number</string>
+
+
+    <string-array name="subjectList">
+
+        <item>DataBase Management System</item>
+        <item>Computer Networks</item>
+        <item>Network Security</item>
+        <item>Real Time System</item>
+        <item>Industrial and Society</item>
+        <item>DataBase Management System</item>
+        <item>Computer Networks</item>
+        <item>Network Security</item>
+        <item>Real Time System</item>
+        <item>Industrial and Society</item>
+        <item>DataBase Management System</item>
+        <item>Computer Networks</item>
+        <item>Network Security</item>
+        <item>Real Time System</item>
+        <item>Industrial and Society</item>
+
+    </string-array>
+
+
+
 </resources>
