@@ -15,6 +15,8 @@ import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 
+import java.util.Objects;
+
 public class SubjectListActivity extends AppCompatActivity {
 
 
@@ -38,9 +40,9 @@ public class SubjectListActivity extends AppCompatActivity {
         actionBarDrawerToggle.syncState();
 
         //Below one will set the icon on the action bar
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
-        addDifferentFragments(MySubjects.getInstance());//it will show the list of subjects when this activity will be opened.
+        addDifferentFragments(new MySubjects());//it will show the list of subjects when this activity will be opened.
 
         NavigationView navigationView=findViewById(R.id.navigationView);
 
@@ -111,7 +113,7 @@ public class SubjectListActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed(){
-        addSubjectList();
+        addDifferentFragments(new MySubjects());
 
     }
 }

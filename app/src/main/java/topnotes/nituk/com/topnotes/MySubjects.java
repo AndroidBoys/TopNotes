@@ -31,7 +31,7 @@ public class MySubjects extends Fragment {
 
         View view = inflater.inflate(R.layout.my_subjects, container, false);
         subjectListView = view.findViewById(R.id.subjectListView);
-        MyCustomArrayAdapter myCustomArrayAdapter = new MyCustomArrayAdapter(mySubjectContext, getResources().getStringArray(R.array.subjectList));
+        MyCustomArrayAdapter myCustomArrayAdapter = new MyCustomArrayAdapter(getActivity(), getResources().getStringArray(R.array.subjectList));
         subjectListView.setAdapter(myCustomArrayAdapter);
         fragment=new Dialog_fragment();
 
@@ -67,6 +67,9 @@ public class MySubjects extends Fragment {
 
 
         return view;
+    }
+    public static MySubjects getInstance(){
+        return new MySubjects();
     }
 
 
