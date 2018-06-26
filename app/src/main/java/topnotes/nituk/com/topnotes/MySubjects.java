@@ -22,7 +22,8 @@ public class MySubjects extends Fragment {
     Context mySubjectContext;
 
     private ListView subjectListView;
-
+    private int listViewClickCount=0;
+     Fragment fragment;
     //private ArrayList<String> allSubjects=new ArrayList<>();
     @Nullable
     @Override
@@ -30,18 +31,13 @@ public class MySubjects extends Fragment {
 
         View view = inflater.inflate(R.layout.my_subjects, container, false);
         subjectListView = view.findViewById(R.id.subjectListView);
-
         MyCustomArrayAdapter myCustomArrayAdapter = new MyCustomArrayAdapter(mySubjectContext, getResources().getStringArray(R.array.subjectList));
         subjectListView.setAdapter(myCustomArrayAdapter);
+        fragment=new Dialog_fragment();
 
         subjectListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-                subjectListView.setEnabled(false); //if a subjectlistView is clicked then disable the listview
-                subjectListView.setAlpha((float) 0.4);// make subjectlistView transparent
-
-                Log.d("subjectlistclicked", "sdfasdfasdfasd");
 
                 FragmentManager fragmentManager = getFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -51,8 +47,21 @@ public class MySubjects extends Fragment {
                         R.anim.fragment_open_exit, R.anim.fragment_close_enter,
                         R.anim.fragment_close_exit);
 
-                fragmentTransaction.replace(R.id.Dialog_fragment_frameLayout, new Dialog_fragment()).commit();
+                if(listViewClickCount==0) {
+                    listViewClickCount=1;
+                    subjectListView.setAlpha((float) 0.4);// make subjectlistView transparent
 
+                    Log.d("subjectlistclicked", "sdfasdfasdfasd");
+
+
+                    fragmentTransaction.replace(R.id.Dialog_fragment_frameLayout, fragment).commit();
+                }
+
+                else{
+                    listViewClickCount=0;
+                    subjectListView.setAlpha((float) 1);// make subjectlistView transparent
+                    fragmentTransaction.remove(fragment).commit();//removing existing fragment
+                }
             }
         });
 
