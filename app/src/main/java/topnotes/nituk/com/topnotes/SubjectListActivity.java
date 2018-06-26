@@ -107,4 +107,5 @@ public class SubjectListActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
 }

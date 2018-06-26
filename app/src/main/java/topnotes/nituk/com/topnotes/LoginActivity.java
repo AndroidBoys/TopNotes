@@ -125,6 +125,7 @@ public class LoginActivity extends AppCompatActivity {
                              Toast.makeText(LoginActivity.this,"Google sign in sucessfull! Details:"+acct.getEmail(),Toast.LENGTH_SHORT).show();
 
                             Log.d("success:", "signInWithCredential:success");
+                            moveToSubjectListActivity();
                             FirebaseUser user = mAuth.getCurrentUser();
                         } else {
                             // If sign in fails, display a message to the user.
