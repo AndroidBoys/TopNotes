@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -39,7 +40,7 @@ public class SubjectListActivity extends AppCompatActivity {
         //Below one will set the icon on the action bar
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        addSubjectList();//it will show the list of subjects when this activity will be opened.
+        addDifferentFragments(MySubjects.getInstance());//it will show the list of subjects when this activity will be opened.
 
         NavigationView navigationView=findViewById(R.id.navigationView);
 
@@ -52,8 +53,8 @@ public class SubjectListActivity extends AppCompatActivity {
 
                     case R.id.mySubjects:
                         Toast.makeText(SubjectListActivity.this,"mySubject selected",Toast.LENGTH_SHORT).show();
-
-                        addSubjectList();//it will set the subject list fragment in frameLayout.
+                         MySubjects mySubjects = MySubjects.getInstance();
+                        addDifferentFragments(mySubjects);//it will set the subject list fragment in frameLayout.
                         return true;
 
                     case R.id.myDownloads:
@@ -62,6 +63,8 @@ public class SubjectListActivity extends AppCompatActivity {
 
                     case R.id.myuploads:
                         //MyUploads fragment will be added
+                        UploadFragment uploadFragment = UploadFragment.getInstance();
+                        addDifferentFragments(uploadFragment);
                         return true;
 
                     case R.id.leaderboard:
@@ -88,13 +91,10 @@ public class SubjectListActivity extends AppCompatActivity {
 
     }
 
-    void addSubjectList(){
+    void addDifferentFragments(Fragment replacableFragment){
         FragmentManager fragmentManager=getSupportFragmentManager();
         FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
-
-        MySubjects mySubjects=new MySubjects();
-        mySubjects.mySubjectContext=SubjectListActivity.this;
-        fragmentTransaction.replace(R.id.frameLayout,mySubjects);
+        fragmentTransaction.replace(R.id.frameLayout,replacableFragment);
         fragmentTransaction.commit();
     }
 
