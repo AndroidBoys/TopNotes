@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/fontdiner_swanky"
         android:text="Top Notes"
-        android:textColor="@color/blueColor"
+        android:textColor="@color/colorPrimary"
         android:layout_marginLeft="70dp"
         android:layout_marginTop="60dp"
         android:rotation="-20"
