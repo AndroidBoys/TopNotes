@@ -6,7 +6,12 @@
     <color name="brownColor">#9c4824</color>
     <color name="greenColor">#5e9428</color>
     <color name="blueColor">#4a6fae</color>
+    <color name="blackColor">#111112</color>
+    <color name="lightOrangeColor">#eca68d</color>
+    <color name="lightSkyColor">#b6e2ed</color>
+    <color name="lightGreyColor">#b4babc</color>
+    <color name="redColor">#f4102b</color>
+    <color name="greenYellowColor">#bcf23e</color>
+    <color name="lightPurpleColor">#f48fcf</color>
 
-
-    <color name="black">#0216b1</color>
 </resources>

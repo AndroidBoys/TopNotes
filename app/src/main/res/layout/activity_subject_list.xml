@@ -8,6 +8,11 @@
     android:layout_height="match_parent"
     tools:context=".SubjectListActivity">
 
+    <FrameLayout
+        android:id="@+id/frameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </FrameLayout>
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navigationView"
@@ -16,7 +21,7 @@
         android:layout_gravity="start"
         app:itemTextColor="@color/brownColor"
         app:menu="@menu/list_menu"
-        app:headerLayout="@layout/drawerlayout"
+        app:headerLayout="@layout/drawer_header_layout"
         tools:layout_editor_absoluteX="8dp"
         tools:layout_editor_absoluteY="8dp">
 
