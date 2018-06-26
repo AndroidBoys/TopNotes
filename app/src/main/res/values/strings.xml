@@ -2,4 +2,6 @@
     <string name="app_name">TopNotes</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
+    <string name="your_name">Your Name?</string>
+    <string name="r_n">Roll number</string>
 </resources>
