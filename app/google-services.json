@@ -1,27 +1,35 @@
 {
   "project_info": {
-    "project_number": "75402772037",
-    "firebase_url": "https://topnotes-f48c2.firebaseio.com",
-    "project_id": "topnotes-f48c2",
-    "storage_bucket": "topnotes-f48c2.appspot.com"
+    "project_number": "1084188026615",
+    "firebase_url": "https://topnotes-11bf0.firebaseio.com",
+    "project_id": "topnotes-11bf0",
+    "storage_bucket": "topnotes-11bf0.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:75402772037:android:67bf8cf7dc94e6fb",
+        "mobilesdk_app_id": "1:1084188026615:android:67bf8cf7dc94e6fb",
         "android_client_info": {
           "package_name": "topnotes.nituk.com.topnotes"
         }
       },
       "oauth_client": [
         {
-          "client_id": "75402772037-pgknrgltb3e53lti93b1ubhfv94qgrku.apps.googleusercontent.com",
+          "client_id": "1084188026615-fdjv1aa2ubqtbc4ku0mh6ennpt7kcful.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "topnotes.nituk.com.topnotes",
+            "certificate_hash": "191fe12e246f81ff6a1ed1b972d9b629013fb624"
+          }
+        },
+        {
+          "client_id": "1084188026615-7qnmd2nuqktdi2agd3tamldko5uqfv9c.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBnpOkEFuR2Zk2HZ35x7vafykiSBHCgcr8"
+          "current_key": "AIzaSyC7NlKJBwDbz6IyzyqM97qkx9r0DXpYHQg"
         }
       ],
       "services": {
@@ -29,8 +37,13 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1084188026615-7qnmd2nuqktdi2agd3tamldko5uqfv9c.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2

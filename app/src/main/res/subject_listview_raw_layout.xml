@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--To enable listview clicklistener we need to set focusable of every widget
+    false.-->
+<LinearLayout
+    android:focusable="false"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="90dp"
+    android:background="@color/lightSkyColor">
+
+    <LinearLayout
+        android:focusable="false"
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_weight="4"
+        android:layout_height="70dp">
+
+        <TextView
+            android:focusable="false"
+            android:id="@+id/rowTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="3"
+            android:drawableStart="@drawable/my_subject"
+            android:drawableEnd="@drawable/menu"
+            android:text="Subject Name Here"
+            android:textAlignment="center"
+            android:textColor="@color/blackColor"
+            android:textSize="18dp"
+            android:textStyle="bold"/>
+
+    </LinearLayout>
+
+    <Button
+        android:focusable="false"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_weight="1"
+        android:background="@color/blackColor"
+        android:layout_marginTop="6dp"
+        android:layout_marginBottom="1dp"/>
+
+</LinearLayout>
