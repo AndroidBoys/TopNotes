@@ -14,10 +14,10 @@ public class Dialog_fragment extends DialogFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        TextView tv;
+
+            //by using view you can find the id of the widgets present in R.layout.dialog_fragment
         View view=inflater.inflate(R.layout.dialog_fragment,container,false);
-        tv=view.findViewById(R.id.notes);
-        tv.setSelected(true);
+
         return view;
     }
 
