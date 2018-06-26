@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <group
+         android:id="@+id/groupOne">
+        <item android:title="Study Desk">
+              <menu>
+
+                  <item android:id="@+id/mySubjects"
+                        android:title="My Subjects"
+                        android:icon="@drawable/my_subject"/>
+
+                  <item android:id="@+id/myDownloads"
+                        android:title="My Downloads"
+                        android:icon="@drawable/my_downloads"/>
+
+                  <item android:id="@+id/myuploads"
+                        android:title="My Uploads"
+                        android:icon="@drawable/my_uploads"/>
+
+              </menu>
+        </item>
+
+    </group>
+
+
+
+    <item android:id="@+id/leaderboard"
+          android:title="Leaderboard"
+          android:icon="@drawable/leaderboard"/>
+
+
+    <group
+        android:id="@+id/groupTwo">
+
+        <item android:title="others">
+            <menu>
+                <item android:id="@+id/contactUs"
+                      android:title="Contact Us"
+                      android:icon="@drawable/contact_us"/>
+
+
+                <item android:id="@+id/aboutUs"
+                      android:title="About Us"
+                      android:icon="@drawable/about_us"/>
+            </menu>
+
+        </item>
+
+    </group>
+
+
+    <item android:id="@+id/logOut"
+          android:title="Log Out"
+          android:icon="@drawable/log_out"/>
+
+</menu>
