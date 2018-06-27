@@ -3,16 +3,20 @@ package topnotes.nituk.com.topnotes;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
+
+import java.util.Objects;
 
 public class SubjectListActivity extends AppCompatActivity {
 
@@ -37,7 +41,7 @@ public class SubjectListActivity extends AppCompatActivity {
         actionBarDrawerToggle.syncState();
 
         //Below one will set the icon on the action bar
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
         addDifferentFragments(MySubjects.getInstance());//it will show the list of subjects when this activity will be opened.
 
@@ -54,36 +58,37 @@ public class SubjectListActivity extends AppCompatActivity {
                         Toast.makeText(SubjectListActivity.this,"mySubject selected",Toast.LENGTH_SHORT).show();
                          MySubjects mySubjects = MySubjects.getInstance();
                         addDifferentFragments(mySubjects);//it will set the subject list fragment in frameLayout.
-                        return true;
+                        break;
 
                     case R.id.myDownloads:
                         //MyDownloads fragment will be added
-                        return true;
+                        break;
 
                     case R.id.myuploads:
                         //MyUploads fragment will be added
                         UploadFragment uploadFragment = UploadFragment.getInstance();
                         addDifferentFragments(uploadFragment);
-                        return true;
+                        break;
 
                     case R.id.leaderboard:
                         //Toast.makeText(SubjectListActivity.this,"leaderboard selected",Toast.LENGTH_SHORT).show();
                         //LeaderFragment will be added
-                        return true;
+                        break;
 
                     case R.id.contactUs:
                         //contactUs fragment will be added
-                        return true;
+                        break;
 
                     case R.id.aboutUs:
                         //aboutUs fragment will be added
-                        return true;
+                        break;
 
                     case R.id.logOut:
                         //logOut fragment will be added
-                        return true;
+                        break;
                 }
-                return false;
+                drawerLayout.closeDrawer(Gravity.START);
+                return true;
             }
         });
 
@@ -93,11 +98,15 @@ public class SubjectListActivity extends AppCompatActivity {
     void addDifferentFragments(Fragment replacableFragment){
         FragmentManager fragmentManager=getSupportFragmentManager();
         FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
+        // to set a custom animation in fragment
+        fragmentTransaction.setCustomAnimations(R.anim.fragment_open_enter,
+                R.anim.fragment_open_exit, R.anim.fragment_close_enter,
+                R.anim.fragment_close_exit);
         fragmentTransaction.replace(R.id.frameLayout,replacableFragment);
         fragmentTransaction.commit();
     }
 
-    //This below function is for the selection of item in action bar.
+    //This below function is used the selection of item in action bar.
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -106,5 +115,15 @@ public class SubjectListActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = findViewById(R.id.drawerLayout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        }else{
+            //exit from the app//
+        }
     }
 }
