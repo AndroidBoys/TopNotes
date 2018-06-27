@@ -1,18 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<!--android:focusable must be false so that when user
+press in listView it remain in the focus and we can use
+setOnItemClickListener in it-->
+
 <LinearLayout
+    android:focusable="false"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="90dp"
-    android:background="@color/lightSkyColor">
+    android:background="@color/lightSkyColor"
+    >
 
     <LinearLayout
+
+        android:focusable="false"
         android:layout_width="match_parent"
         android:orientation="horizontal"
         android:layout_weight="4"
         android:layout_height="70dp">
 
         <TextView
+
+            android:focusable="false"
             android:id="@+id/rowTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -31,6 +42,7 @@
     </LinearLayout>
 
     <Button
+        android:focusable="false"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_weight="1"

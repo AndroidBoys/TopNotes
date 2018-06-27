@@ -6,7 +6,6 @@
     android:background="@android:color/transparent">
 
     <TextView
-
         android:layout_width="match_parent"
         android:layout_height="10dp"
         android:layout_marginLeft="20dp"
@@ -15,7 +14,7 @@
         android:layout_marginTop="10dp"
         android:background="@drawable/curved_view"
         android:id="@+id/notes"
-        android:textSize="20sp"
+        android:textSize="30sp"
         android:textStyle="bold"
         android:text="Notes"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
@@ -35,7 +34,7 @@
         android:background="@drawable/curved_view"
         android:layout_width="match_parent"
         android:layout_height="10dp"
-        android:textSize="20sp"
+        android:textSize="30sp"
         android:textStyle="bold"
         android:text="Question Papers"
         android:textAlignment="center"
@@ -54,7 +53,7 @@
         android:padding="20dp"
         android:layout_width="match_parent"
         android:layout_height="10dp"
-        android:textSize="20sp"
+        android:textSize="30sp"
         android:text="Practical Files"
         android:textAlignment="center"
         android:layout_weight="1"
@@ -72,7 +71,7 @@
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
         android:layout_width="match_parent"
         android:layout_height="10dp"
-        android:textSize="20sp"
+        android:textSize="30sp"
         android:text="Resources"
         android:textAlignment="center"
         android:layout_weight="1"
