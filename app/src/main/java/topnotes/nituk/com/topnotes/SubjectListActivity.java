@@ -121,7 +121,7 @@ public class SubjectListActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed(){
-        addSubjectList();
+        addDifferentFragments(new MySubjects());
 
     }
 }
