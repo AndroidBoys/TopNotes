@@ -9,13 +9,10 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
-
-import java.util.Objects;
 
 public class SubjectListActivity extends AppCompatActivity {
 
@@ -40,9 +37,9 @@ public class SubjectListActivity extends AppCompatActivity {
         actionBarDrawerToggle.syncState();
 
         //Below one will set the icon on the action bar
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        addDifferentFragments(new MySubjects());//it will show the list of subjects when this activity will be opened.
+        addDifferentFragments(MySubjects.getInstance());//it will show the list of subjects when this activity will be opened.
 
         NavigationView navigationView=findViewById(R.id.navigationView);
 
@@ -109,11 +106,5 @@ public class SubjectListActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onBackPressed(){
-        addDifferentFragments(new MySubjects());
-
     }
 }
