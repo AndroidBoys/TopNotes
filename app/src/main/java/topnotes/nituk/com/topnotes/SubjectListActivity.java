@@ -9,13 +9,10 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
-
-import java.util.Objects;
 
 public class SubjectListActivity extends AppCompatActivity {
 
@@ -40,7 +37,7 @@ public class SubjectListActivity extends AppCompatActivity {
         actionBarDrawerToggle.syncState();
 
         //Below one will set the icon on the action bar
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         addDifferentFragments(MySubjects.getInstance());//it will show the list of subjects when this activity will be opened.
 
@@ -56,41 +53,34 @@ public class SubjectListActivity extends AppCompatActivity {
                     case R.id.mySubjects:
                         Toast.makeText(SubjectListActivity.this,"mySubject selected",Toast.LENGTH_SHORT).show();
                          MySubjects mySubjects = MySubjects.getInstance();
-                         drawerLayout.closeDrawer(Gravity.START,false);
                         addDifferentFragments(mySubjects);//it will set the subject list fragment in frameLayout.
                         return true;
 
                     case R.id.myDownloads:
                         //MyDownloads fragment will be added
-                        drawerLayout.closeDrawer(Gravity.START,false);
                         return true;
 
                     case R.id.myuploads:
                         //MyUploads fragment will be added
-                        //UploadFragment uploadFragment = UploadFragment.getInstance();
-                        //addDifferentFragments(uploadFragment);
-                        drawerLayout.closeDrawer(Gravity.START,false);
+                        UploadFragment uploadFragment = UploadFragment.getInstance();
+                        addDifferentFragments(uploadFragment);
                         return true;
 
                     case R.id.leaderboard:
                         //Toast.makeText(SubjectListActivity.this,"leaderboard selected",Toast.LENGTH_SHORT).show();
                         //LeaderFragment will be added
-                        drawerLayout.closeDrawer(Gravity.START,false);
                         return true;
 
                     case R.id.contactUs:
                         //contactUs fragment will be added
-                        drawerLayout.closeDrawer(Gravity.START,false);
                         return true;
 
                     case R.id.aboutUs:
                         //aboutUs fragment will be added
-                        drawerLayout.closeDrawer(Gravity.START,false);
                         return true;
 
                     case R.id.logOut:
                         //logOut fragment will be added
-                        drawerLayout.closeDrawer(Gravity.START,false);
                         return true;
                 }
                 return false;
@@ -103,8 +93,6 @@ public class SubjectListActivity extends AppCompatActivity {
     void addDifferentFragments(Fragment replacableFragment){
         FragmentManager fragmentManager=getSupportFragmentManager();
         FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
-        fragmentTransaction.setCustomAnimations(R.anim.fragment_open_enter,R.anim.fragment_open_exit,
-                R.anim.fragment_close_enter,R.anim.fragment_close_exit);
         fragmentTransaction.replace(R.id.frameLayout,replacableFragment);
         fragmentTransaction.commit();
     }
@@ -116,12 +104,7 @@ public class SubjectListActivity extends AppCompatActivity {
         if(actionBarDrawerToggle.onOptionsItemSelected(item)){
             return true;
         }
+
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onBackPressed(){
-        addDifferentFragments(new MySubjects());
-
     }
 }

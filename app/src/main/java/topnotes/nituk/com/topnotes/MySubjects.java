@@ -19,6 +19,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 public class MySubjects extends Fragment {
 
+    Context mySubjectContext;
 
     private ListView subjectListView;
     private int listViewClickCount=0;
@@ -70,7 +71,6 @@ public class MySubjects extends Fragment {
     public static MySubjects getInstance(){
         return new MySubjects();
     }
-
 
 
 }
