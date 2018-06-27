@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -54,33 +55,40 @@ public class SubjectListActivity extends AppCompatActivity {
                         Toast.makeText(SubjectListActivity.this,"mySubject selected",Toast.LENGTH_SHORT).show();
                          MySubjects mySubjects = MySubjects.getInstance();
                         addDifferentFragments(mySubjects);//it will set the subject list fragment in frameLayout.
+                        drawerLayout.closeDrawer(Gravity.START,false);//it will close the navigation drawer.
                         return true;
 
                     case R.id.myDownloads:
                         //MyDownloads fragment will be added
+                        drawerLayout.closeDrawer(Gravity.START,false);
                         return true;
 
                     case R.id.myuploads:
                         //MyUploads fragment will be added
                         UploadFragment uploadFragment = UploadFragment.getInstance();
                         addDifferentFragments(uploadFragment);
+                        drawerLayout.closeDrawer(Gravity.START,false);
                         return true;
 
                     case R.id.leaderboard:
                         //Toast.makeText(SubjectListActivity.this,"leaderboard selected",Toast.LENGTH_SHORT).show();
                         //LeaderFragment will be added
+                        drawerLayout.closeDrawer(Gravity.START,false);
                         return true;
 
                     case R.id.contactUs:
                         //contactUs fragment will be added
+                        drawerLayout.closeDrawer(Gravity.START,false);
                         return true;
 
                     case R.id.aboutUs:
                         //aboutUs fragment will be added
+                        drawerLayout.closeDrawer(Gravity.START,false);
                         return true;
 
                     case R.id.logOut:
                         //logOut fragment will be added
+                        drawerLayout.closeDrawer(Gravity.START,false);
                         return true;
                 }
                 return false;
@@ -93,11 +101,15 @@ public class SubjectListActivity extends AppCompatActivity {
     void addDifferentFragments(Fragment replacableFragment){
         FragmentManager fragmentManager=getSupportFragmentManager();
         FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
+        // to set a custom animation in fragment
+        fragmentTransaction.setCustomAnimations(R.anim.fragment_open_enter,
+                R.anim.fragment_open_exit, R.anim.fragment_close_enter,
+                R.anim.fragment_close_exit);
         fragmentTransaction.replace(R.id.frameLayout,replacableFragment);
         fragmentTransaction.commit();
     }
 
-    //This below function is for the selection of item in action bar.
+    //This below function is used the selection of item in action bar.
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
