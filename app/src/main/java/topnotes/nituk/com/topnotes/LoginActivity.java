@@ -18,6 +18,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.AuthCredential;
@@ -61,10 +62,13 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
+
                 // For testing purpose
-//                Intent intent = new Intent(LoginActivity.this,SubjectListActivity.class);
-//                startActivity(intent);
-              signIn();
+    
+                //Intent intent = new Intent(LoginActivity.this,SubjectListActivity.class);
+                //startActivity(intent);
+
+                signIn();
             }
         });
 
@@ -72,11 +76,21 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        // if the user is already signed in
         if(mAuth.getCurrentUser()!=null)
         {
             // Move to the SubjectListActivity
             moveToSubjectListActivity();
         }
+//        else
+//        {
+//            mGoogleSignInClient.signOut().addOnSuccessListener(new OnSuccessListener<Void>() {
+//                @Override
+//                public void onSuccess(Void aVoid) {
+//                    Toast.makeText(LoginActivity.this,"Sign out sucess!",Toast.LENGTH_SHORT).show();
+//                }
+//            });
+//        }
     }
     // Get a google sign in intent
     private void signIn() {

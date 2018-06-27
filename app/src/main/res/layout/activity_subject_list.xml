@@ -23,7 +23,9 @@
         app:menu="@menu/list_menu"
         app:headerLayout="@layout/drawer_header_layout"
         tools:layout_editor_absoluteX="8dp"
-        tools:layout_editor_absoluteY="8dp">
+        tools:layout_editor_absoluteY="8dp"
+        android:hardwareAccelerated="true"
+        android:checkableBehavior="single">
 
     </com.google.android.material.navigation.NavigationView>
 
