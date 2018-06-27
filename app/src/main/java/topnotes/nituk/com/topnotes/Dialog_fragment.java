@@ -27,9 +27,9 @@ public class Dialog_fragment extends DialogFragment implements View.OnClickListe
         practicalFileTextView=view.findViewById(R.id.practicalFiles);
 
         notesTextView.setOnClickListener(this);
-        notesTextView.setOnClickListener(this);
-        notesTextView.setOnClickListener(this);
-        notesTextView.setOnClickListener(this);
+        questionPaperTextView.setOnClickListener(this);
+        resourceTextView.setOnClickListener(this);
+        practicalFileTextView.setOnClickListener(this);
         return view;
     }
 
