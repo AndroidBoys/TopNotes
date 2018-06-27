@@ -42,9 +42,10 @@ public class DownloadFragment extends Fragment {
 
     private static final int PER_REQ_CODE = 1;
     private ListView mDownloadedFilesListView;
-    private ArrayAdapter mArrayAdapter;
+    //private ArrayAdapter mArrayAdapter;
     private List<File> fileList;  // field saves the list of all the download files
     private List<String> theNamesOfFiles; // field saves the name of all the download files
+    private ArrayList<String>  downloadsAuthorsNameArray;
 
 
     @Nullable
@@ -55,13 +56,28 @@ public class DownloadFragment extends Fragment {
 
         fileList = new ArrayList<>();
         theNamesOfFiles = new ArrayList<>();
+        downloadsAuthorsNameArray=new ArrayList<>();
+        downloadsAuthorsNameArray.add("Arvind Negi");
+        downloadsAuthorsNameArray.add("amit kishor");
+        downloadsAuthorsNameArray.add("sohan kathait");
+        downloadsAuthorsNameArray.add("Ayush Bisht");
+        downloadsAuthorsNameArray.add("Arvind Negi");
+        downloadsAuthorsNameArray.add("amit kishor");
+        downloadsAuthorsNameArray.add("sohan kathait");
+        downloadsAuthorsNameArray.add("Ayush Bisht");
+        downloadsAuthorsNameArray.add("Arvind Negi");
+        downloadsAuthorsNameArray.add("amit kishor");
+
         if(checkPermission(Manifest.permission.READ_EXTERNAL_STORAGE)&&checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE))
         {
             requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE},PER_REQ_CODE);
         }
         mDownloadedFilesListView = view.findViewById(R.id.downloadedfilelistview);
-        mArrayAdapter = new ArrayAdapter(getActivity(),android.R.layout.simple_list_item_1,theNamesOfFiles);
-        mDownloadedFilesListView.setAdapter(mArrayAdapter);
+        /*mArrayAdapter = new ArrayAdapter(getActivity(),android.R.layout.simple_list_item_1,theNamesOfFiles);
+        mDownloadedFilesListView.setAdapter(mArrayAdapter);*/
+
+        MyDownloadsArrayAdapter myDownloadsArrayAdapter=new MyDownloadsArrayAdapter(getActivity(),theNamesOfFiles,downloadsAuthorsNameArray);
+        mDownloadedFilesListView.setAdapter(myDownloadsArrayAdapter);
         listFiles();
         // Reference to the firebase storage
         return view;
@@ -93,7 +109,7 @@ public class DownloadFragment extends Fragment {
                 theNamesOfFiles.add(fileList.get(i).getName());
             }
 
-            mArrayAdapter.notifyDataSetChanged();
+            //mArrayAdapter.notifyDataSetChanged();
 
         }
     }

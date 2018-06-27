@@ -8,14 +8,15 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MyDownloadsArrayAdapter extends ArrayAdapter<String> {
 
 
-    ArrayList<String> downloadsNotesNameArray;
+    List<String> downloadsNotesNameArray;
     ArrayList<String> getDownloadsAuthorsNameArray;
     Context context;
-    public MyDownloadsArrayAdapter(Context context, ArrayList<String> downloadsNotesNameArray,ArrayList<String> getDownloadsAuthorsNameArray) {
+    public MyDownloadsArrayAdapter(Context context, List<String> downloadsNotesNameArray, ArrayList<String> getDownloadsAuthorsNameArray) {
         super(context,-1,downloadsNotesNameArray);
         this.downloadsNotesNameArray=downloadsNotesNameArray;
         this.getDownloadsAuthorsNameArray=getDownloadsAuthorsNameArray;
