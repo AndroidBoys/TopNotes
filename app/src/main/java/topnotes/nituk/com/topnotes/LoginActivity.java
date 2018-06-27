@@ -64,7 +64,7 @@ public class LoginActivity extends AppCompatActivity {
                 // For testing purpose
                 Intent intent = new Intent(LoginActivity.this,SubjectListActivity.class);
                 startActivity(intent);
-                //signIn();
+//                signIn();
             }
         });
 
