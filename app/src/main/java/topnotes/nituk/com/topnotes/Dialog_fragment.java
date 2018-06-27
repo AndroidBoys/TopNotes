@@ -40,7 +40,8 @@ public class Dialog_fragment extends DialogFragment implements View.OnClickListe
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.notes:
-                Toast.makeText(getActivity(), "notes", Toast.LENGTH_SHORT).show();
+                InternetAlertDialogfragment internetAlertDialogfragment=new InternetAlertDialogfragment();
+                internetAlertDialogfragment.show(getFragmentManager().beginTransaction(),"dilog");
                 break;
 
             case R.id.resources:
