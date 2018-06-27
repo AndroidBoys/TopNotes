@@ -61,9 +61,11 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
+
                 // For testing purpose
                 //Intent intent = new Intent(LoginActivity.this,SubjectListActivity.class);
                 //startActivity(intent);
+
                 signIn();
             }
         });
