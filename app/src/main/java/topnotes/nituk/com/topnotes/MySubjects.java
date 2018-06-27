@@ -7,9 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -31,8 +29,8 @@ public class MySubjects extends Fragment {
 
         View view = inflater.inflate(R.layout.my_subjects, container, false);
         subjectListView = view.findViewById(R.id.subjectListView);
-        MyCustomArrayAdapter myCustomArrayAdapter = new MyCustomArrayAdapter(getActivity(), getResources().getStringArray(R.array.subjectList));
-        subjectListView.setAdapter(myCustomArrayAdapter);
+        MySubjectArrayAdapter mySubjectArrayAdapter = new MySubjectArrayAdapter(getActivity(), getResources().getStringArray(R.array.subjectList));
+        subjectListView.setAdapter(mySubjectArrayAdapter);
         fragment=new Dialog_fragment();
 
         subjectListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

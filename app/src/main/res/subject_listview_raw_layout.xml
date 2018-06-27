@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<!--android:focusable must be false so that when user
-press in listView it remain in the focus and we can use
-setOnItemClickListener in it-->
-
+<!--To enable listview clicklistener we need to set focusable of every widget
+    false.-->
 <LinearLayout
     android:focusable="false"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="90dp">
+    android:layout_height="90dp"
+    android:background="@color/lightSkyColor">
 
     <LinearLayout
-
         android:focusable="false"
         android:layout_width="match_parent"
         android:orientation="horizontal"
@@ -34,7 +32,7 @@ setOnItemClickListener in it-->
             android:textAlignment="center"
             android:textColor="@color/blackColor"
             android:textSize="18dp"
-            android:textStyle="italic"/>
+            android:textStyle="bold"/>
 
     </LinearLayout>
 
