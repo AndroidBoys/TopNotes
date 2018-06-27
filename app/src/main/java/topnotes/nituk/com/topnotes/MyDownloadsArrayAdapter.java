@@ -13,9 +13,9 @@ import java.util.List;
 public class MyDownloadsArrayAdapter extends ArrayAdapter<String> {
 
 
-    List<String> downloadsNotesNameArray;
-    ArrayList<String> getDownloadsAuthorsNameArray;
-    Context context;
+    private List<String> downloadsNotesNameArray;
+    private ArrayList<String> getDownloadsAuthorsNameArray;
+    private Context context;
     public MyDownloadsArrayAdapter(Context context, List<String> downloadsNotesNameArray, ArrayList<String> getDownloadsAuthorsNameArray) {
         super(context,-1,downloadsNotesNameArray);
         this.downloadsNotesNameArray=downloadsNotesNameArray;

@@ -11,6 +11,8 @@
         android:layout_width="0dp"
         android:descendantFocusability="blocksDescendants"
         android:layout_height="0dp"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="5.0sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -19,7 +21,7 @@
     <FrameLayout
         android:id="@+id/Dialog_fragment_frameLayout"
         android:layout_width="match_parent"
-        android:layout_height="400dp"
+        android:layout_height="wrap_content"
         android:layout_margin="20dp"
         app:layout_constraintBottom_toTopOf="@+id/subjectListView"
         app:layout_constraintEnd_toEndOf="parent"

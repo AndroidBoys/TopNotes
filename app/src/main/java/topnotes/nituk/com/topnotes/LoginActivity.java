@@ -64,6 +64,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
                 // For testing purpose
+    
                 //Intent intent = new Intent(LoginActivity.this,SubjectListActivity.class);
                 //startActivity(intent);
 
@@ -119,7 +120,7 @@ public class LoginActivity extends AppCompatActivity {
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
-            Log.w("Failed:", "signInResult:failed code=" + e.getStatusCode());
+            Log.w("Failed:", e.toString());
             //Toast.makeText(LoginActivity.this,"Google sign in Failed!",Toast.LENGTH_SHORT).show();
 
         }
