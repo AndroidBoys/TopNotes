@@ -1,15 +1,20 @@
 package topnotes.nituk.com.topnotes;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,131 +25,98 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
-public class UploadFragment extends Fragment {
+//  Fragment showing the downloaded files of the user
+
+public class DownloadFragment extends Fragment {
 
 
-    private static final int FILE_SELECT_CODE = 0;
-    private Button mChooseButton;
-    private Button mUploadButton;
-    private TextView mPathTextView;
-    private StorageReference mStorageRef;
-    private Uri fileUri;
+    private static final int PER_REQ_CODE = 1;
+    private ListView mDownloadedFilesListView;
+    private ArrayAdapter mArrayAdapter;
+    private List<File> fileList;  // field saves the list of all the download files
+    private List<String> theNamesOfFiles; // field saves the name of all the download files
+
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_upload,container,false);
-        mChooseButton= view.findViewById(R.id.choosefilebutton);
-        mUploadButton = view.findViewById(R.id.uploadbutton);
-        mChooseButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-             chooseFile();
-            }
-        });
-        mUploadButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-               uploadFile(fileUri);
-            }
-        });
-        mPathTextView=view.findViewById(R.id.pathtextView);
+        View view = inflater.inflate(R.layout.fragment_download,container,false);
+
+        fileList = new ArrayList<>();
+        theNamesOfFiles = new ArrayList<>();
+        if(checkPermission(Manifest.permission.READ_EXTERNAL_STORAGE)&&checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE))
+        {
+            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE},PER_REQ_CODE);
+        }
+        mDownloadedFilesListView = view.findViewById(R.id.downloadedfilelistview);
+        mArrayAdapter = new ArrayAdapter(getActivity(),android.R.layout.simple_list_item_1,theNamesOfFiles);
+        mDownloadedFilesListView.setAdapter(mArrayAdapter);
+        listFiles();
         // Reference to the firebase storage
-        mStorageRef= FirebaseStorage.getInstance().getReference();
         return view;
     }
-
-    public UploadFragment()
+    public static DownloadFragment getInstance()
     {
-       if(fileUri!=null)
-       {
-           uploadFile(fileUri);
-       }
-       else
-       {
-           //Toast.makeText(getContext(),"Please choose a file first",Toast.LENGTH_SHORT).show();
-       }
+        return new DownloadFragment();
     }
 
-    // Static method to get an instance of this fragment
-    public static UploadFragment getInstance()
-    {
-        return new UploadFragment();
-    }
-    private void chooseFile()
-    {
-         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-         intent.setType("*/*");
-         intent.addCategory(Intent.CATEGORY_OPENABLE);
+    // list the downloaded files
+    private  void listFiles()
+    {   // Folder name where all the downloaded notes will be saved
+        String dirPath = "TopNotes";
+        // get the directory for the given folder name
+        File dir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS),dirPath);
+        // if no such folder exists create a new one with such name
+        if (!dir.exists()) {
+            if(dir.mkdirs())
+            Log.i("Folder created:",dir.getAbsolutePath());
+            else
+            Log.i("foleder creation failed",dir.getAbsolutePath());
 
-        try {
-            startActivityForResult(
-                    Intent.createChooser(intent, "Select a File to Upload"),
-                    FILE_SELECT_CODE);
-        } catch (android.content.ActivityNotFoundException ex) {
-            // Potentially direct the user to the Market with a Dialog
+        }
+        // otherwise pull all the files out of the directory, get their names and set on the list view
+        else {
+            Log.i("Already exists:",dir.getAbsolutePath());
+            fileList = Arrays.asList(dir.listFiles());
+            for (int i = 0; i < fileList.size(); i++) {
+                theNamesOfFiles.add(fileList.get(i).getName());
+            }
 
-            Toast.makeText(getContext(), "Please install a File Manager.",
-                    Toast.LENGTH_SHORT).show();
+            mArrayAdapter.notifyDataSetChanged();
+
         }
     }
-    private void uploadFile(Uri uri)
+    // check for runtime permission
+    private boolean checkPermission(String permission)
     {
-
-        //Uri file = Uri.fromFile(new File("path/to/images/rivers.jpg"));
-        StorageReference riversRef = mStorageRef.child("Notes/test1");
-        final ProgressDialog progressDialog = new ProgressDialog(getActivity());
-        progressDialog.setTitle("Uploading...");
-        progressDialog.show();
-        riversRef.putFile(uri)
-                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        // Get a URL to the uploaded content
-                     taskSnapshot.getStorage().getDownloadUrl().addOnSuccessListener(getActivity(), new OnSuccessListener<Uri>() {
-                         @Override
-                         public void onSuccess(Uri uri) {
-                          Toast.makeText(getActivity(),"File uploaded successfully, file url:"+uri.toString(),Toast.LENGTH_SHORT).show();
-                          Log.i("Upload success, Url:",uri.toString());
-                          progressDialog.dismiss();
-                          fileUri=null;
-                         }
-                     });
-
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        // Handle unsuccessful uploads
-                        Toast.makeText(getActivity(),"File upload Failed,"+ exception.getMessage(),Toast.LENGTH_SHORT).show();
-
-
-                    }
-                }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                double progress = (100*taskSnapshot.getBytesTransferred())/taskSnapshot.getTotalByteCount();
-                progressDialog.setMessage((int)progress+"% Uploaded");
-            }
-        });
+        return ActivityCompat.checkSelfPermission(getActivity(),permission)!=PackageManager.PERMISSION_GRANTED;
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == FILE_SELECT_CODE && resultCode == Activity.RESULT_OK && data!=null)
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if(requestCode==PER_REQ_CODE && grantResults.length>0)
         {
-            fileUri = data.getData();
-            mPathTextView.setText(fileUri.getPath());
-            Toast.makeText(getContext(),"File ready to upload  with uri:"+fileUri.getPath(),Toast.LENGTH_SHORT).show();
-
+            if(grantResults[0]== PackageManager.PERMISSION_GRANTED)
+            {
+                listFiles();
+            }
+            else
+            {
+                Toast.makeText(getActivity(),"Please grant the Read/Write permission first!",Toast.LENGTH_SHORT).show();
+            }
         }
 
-        super.onActivityResult(requestCode, resultCode, data);
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 }
