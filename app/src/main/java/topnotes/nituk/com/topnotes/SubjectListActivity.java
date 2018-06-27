@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class SubjectListActivity extends AppCompatActivity {
 
@@ -81,6 +82,7 @@ public class SubjectListActivity extends AppCompatActivity {
 
                     case R.id.logOut:
                         //logOut fragment will be added
+                        signOut();
                         return true;
                 }
                 return false;
@@ -106,5 +108,11 @@ public class SubjectListActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+    // sign out
+    private void signOut()
+    {
+        FirebaseAuth.getInstance().signOut();
+        finish();
     }
 }
