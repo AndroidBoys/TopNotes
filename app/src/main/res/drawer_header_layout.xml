@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="160dp"
+    android:background="@drawable/notes3">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/fontdiner_swanky"
+        android:text="Top Notes"
+        android:textColor="@color/colorPrimary"
+        android:layout_marginLeft="70dp"
+        android:layout_marginTop="60dp"
+        android:rotation="-20"
+        android:textSize="30dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TopNotes.co.in"
+        android:textColor="#100f0f"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="30dp"
+        android:textStyle="bold"/>
+
+
+
+
+
+</LinearLayout>
