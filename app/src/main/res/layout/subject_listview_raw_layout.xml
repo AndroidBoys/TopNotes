@@ -9,7 +9,9 @@ setOnItemClickListener in it-->
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="90dp">
+    android:layout_height="90dp"
+    android:background="@color/lightSkyColor"
+    >
 
     <LinearLayout
 
@@ -20,6 +22,7 @@ setOnItemClickListener in it-->
         android:layout_height="70dp">
 
         <TextView
+
             android:focusable="false"
             android:id="@+id/rowTextView"
             android:layout_width="match_parent"
@@ -34,7 +37,7 @@ setOnItemClickListener in it-->
             android:textAlignment="center"
             android:textColor="@color/blackColor"
             android:textSize="18dp"
-            android:textStyle="italic"/>
+            android:textStyle="bold"/>
 
     </LinearLayout>
 

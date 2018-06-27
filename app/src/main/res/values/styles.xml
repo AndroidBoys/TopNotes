@@ -6,10 +6,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <!--This below line is used for color changing of navigation view drawer items-->
         <item name="android:activatedBackgroundIndicator">@drawable/drawer_list_selector</item>
     </style>
-    
-
 
 </resources>

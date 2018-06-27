@@ -19,7 +19,7 @@
     <FrameLayout
         android:id="@+id/Dialog_fragment_frameLayout"
         android:layout_width="match_parent"
-        android:layout_height="400dp"
+        android:layout_height="wrap_content"
         android:layout_margin="20dp"
         app:layout_constraintBottom_toTopOf="@+id/subjectListView"
         app:layout_constraintEnd_toEndOf="parent"
