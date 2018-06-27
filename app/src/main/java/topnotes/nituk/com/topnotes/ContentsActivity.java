@@ -1,6 +1,7 @@
 package topnotes.nituk.com.topnotes;
 
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.os.Bundle;
 
 public class ContentsActivity extends AppCompatActivity {

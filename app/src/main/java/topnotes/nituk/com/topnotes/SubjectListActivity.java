@@ -62,6 +62,7 @@ public class SubjectListActivity extends AppCompatActivity {
                         break;
 
                     case R.id.myDownloads:
+                        addDifferentFragments(DownloadFragment.getInstance());
                         //MyDownloads fragment will be added
                         break;
 
@@ -125,10 +126,10 @@ public class SubjectListActivity extends AppCompatActivity {
         DrawerLayout drawer = findViewById(R.id.drawerLayout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else {
+        }else{
             //exit from the app//
         }
-    }
+
     // sign out
     private void signOut()
     {
