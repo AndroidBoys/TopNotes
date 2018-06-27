@@ -7,11 +7,11 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-public class MyCustomArrayAdapter extends ArrayAdapter<String> {
+public class MySubjectArrayAdapter extends ArrayAdapter<String> {
 
     private Context context;
     private String[] values;
-    public MyCustomArrayAdapter(Context context,String[] values) {
+    public MySubjectArrayAdapter(Context context, String[] values) {
         super(context,-1,values);
         this.context=context;
         this.values=values;
