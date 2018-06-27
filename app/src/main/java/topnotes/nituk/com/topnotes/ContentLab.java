@@ -4,7 +4,7 @@ import android.content.Context;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Random;
+
 
 // Singleton class representing the data model for a list of contents
 

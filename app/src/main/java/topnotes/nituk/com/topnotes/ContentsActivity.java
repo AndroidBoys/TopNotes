@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import java.util.List;
 
@@ -18,6 +19,7 @@ public class ContentsActivity extends AppCompatActivity {
     private ContentAdapter mContentAdapter;
     private List<Content> mContents;
     private Content mContent;
+    private TextView mTitleTextView,mAuthorTextView,mDateTextView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,8 +37,12 @@ public class ContentsActivity extends AppCompatActivity {
 
        public ContentHolder(LayoutInflater inflater, ViewGroup container)
        {
-           super(inflater.inflate(R.layout.activity_subject_list,container,false));
+           super(inflater.inflate(R.layout.recyclerview_content_raw_layout,container,false));
            // get reference to the views using the viewholder when the viewholders are created here
+
+           mTitleTextView=itemView.findViewById(R.id.recyclerNotesNameTextView);
+           mAuthorTextView=itemView.findViewById(R.id.recyclerAuthorNameTextView);
+           mDateTextView=itemView.findViewById(R.id.uploadDateTextView);
 
        }
 
@@ -90,5 +96,8 @@ public class ContentsActivity extends AppCompatActivity {
     {
        mContent = content;
        // bind your data to the views here
+        mTitleTextView.setText(content.getTitle());
+        mAuthorTextView.setText("Author : "+content.getAuthor());
+        mDateTextView.setText("Upload Date : "+content.getDate());
     }
 }
