@@ -5,17 +5,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
 public class MyDownloadsArrayAdapter extends ArrayAdapter<String> {
 
 
-    ArrayList<String> downloadsArray;
+    ArrayList<String> downloadsNotesNameArray;
+    ArrayList<String> getDownloadsAuthorsNameArray;
     Context context;
-    public MyDownloadsArrayAdapter(Context context, ArrayList<String> downloadsArray) {
-        super(context,-1,downloadsArray);
-        this.downloadsArray=downloadsArray;
+    public MyDownloadsArrayAdapter(Context context, ArrayList<String> downloadsNotesNameArray,ArrayList<String> getDownloadsAuthorsNameArray) {
+        super(context,-1,downloadsNotesNameArray);
+        this.downloadsNotesNameArray=downloadsNotesNameArray;
+        this.getDownloadsAuthorsNameArray=getDownloadsAuthorsNameArray;
         this.context=context;
     }
 
@@ -23,6 +26,11 @@ public class MyDownloadsArrayAdapter extends ArrayAdapter<String> {
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rowView = inflater.inflate(R.layout.downloads_listview_raw_layout, parent, false);
+        TextView notesNameTextView=rowView.findViewById(R.id.notesNameTextView);
+        TextView authorsNameTextView=rowView.findViewById(R.id.authorsNameTextView);
+
+        notesNameTextView.setText(downloadsNotesNameArray.get(position));
+        authorsNameTextView.setText("Author : "+getDownloadsAuthorsNameArray.get(position));
 
         return rowView;
     }
