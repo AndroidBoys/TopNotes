@@ -4,26 +4,40 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="160dp"
-    android:background="@drawable/notes3">
+    android:background="@drawable/navigation_header_color">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/userImageView"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="15dp"
+        android:src="@drawable/notes"
+        app:civ_border_color="@color/whiteColor"
+        app:civ_border_width="3dp" />
 
     <TextView
+        android:id="@+id/userNameTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/fontdiner_swanky"
-        android:text="Top Notes"
-        android:textColor="@color/blueColor"
-        android:layout_marginLeft="70dp"
-        android:layout_marginTop="60dp"
-        android:rotation="-20"
-        android:textSize="30dp"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TopNotes.co.in"
-        android:textColor="#100f0f"
+        android:text="name here"
+        android:textColor="@color/whiteColor"
         android:layout_marginTop="20dp"
         android:layout_marginLeft="30dp"
+        android:textStyle="bold"/>
+    
+
+    <TextView
+        android:id="@+id/userEmailTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="example@gmail.com"
+        android:textColor="@color/whiteColor"
+        android:layout_marginTop="7dp"
+        android:layout_marginLeft="20dp"
         android:textStyle="bold"/>
 
 

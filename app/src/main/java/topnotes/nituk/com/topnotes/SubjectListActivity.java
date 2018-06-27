@@ -3,6 +3,7 @@ package topnotes.nituk.com.topnotes;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -55,43 +56,37 @@ public class SubjectListActivity extends AppCompatActivity {
                         Toast.makeText(SubjectListActivity.this,"mySubject selected",Toast.LENGTH_SHORT).show();
                          MySubjects mySubjects = MySubjects.getInstance();
                         addDifferentFragments(mySubjects);//it will set the subject list fragment in frameLayout.
-                        drawerLayout.closeDrawer(Gravity.START,false);//it will close the navigation drawer.
-                        return true;
+                        break;
 
                     case R.id.myDownloads:
                         //MyDownloads fragment will be added
-                        drawerLayout.closeDrawer(Gravity.START,false);
-                        return true;
+                        break;
 
                     case R.id.myuploads:
                         //MyUploads fragment will be added
                         UploadFragment uploadFragment = UploadFragment.getInstance();
                         addDifferentFragments(uploadFragment);
-                        drawerLayout.closeDrawer(Gravity.START,false);
-                        return true;
+                        break;
 
                     case R.id.leaderboard:
                         //Toast.makeText(SubjectListActivity.this,"leaderboard selected",Toast.LENGTH_SHORT).show();
                         //LeaderFragment will be added
-                        drawerLayout.closeDrawer(Gravity.START,false);
-                        return true;
+                        break;
 
                     case R.id.contactUs:
                         //contactUs fragment will be added
-                        drawerLayout.closeDrawer(Gravity.START,false);
-                        return true;
+                        break;
 
                     case R.id.aboutUs:
                         //aboutUs fragment will be added
-                        drawerLayout.closeDrawer(Gravity.START,false);
-                        return true;
+                        break;
 
                     case R.id.logOut:
                         //logOut fragment will be added
-                        drawerLayout.closeDrawer(Gravity.START,false);
-                        return true;
+                        break;
                 }
-                return false;
+                drawerLayout.closeDrawer(Gravity.START);
+                return true;
             }
         });
 
@@ -118,5 +113,15 @@ public class SubjectListActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = findViewById(R.id.drawerLayout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        }else{
+            //exit from the app
+        }
     }
 }

@@ -62,9 +62,9 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 // For testing purpose
-                Intent intent = new Intent(LoginActivity.this,SubjectListActivity.class);
-                startActivity(intent);
-//                signIn();
+                //Intent intent = new Intent(LoginActivity.this,SubjectListActivity.class);
+                //startActivity(intent);
+                signIn();
             }
         });
 
