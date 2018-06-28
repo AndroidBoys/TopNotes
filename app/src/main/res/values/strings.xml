@@ -5,6 +5,8 @@
     <string name="close">Close</string>
     <string name="your_name">Your Name?</string>
     <string name="r_n">Roll number</string>
+    <string name="error">Please check your internet
+         connection</string>
 
 
     <string-array name="subjectList">

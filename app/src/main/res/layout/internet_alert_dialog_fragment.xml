@@ -24,8 +24,7 @@
         android:layout_gravity="center"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
         android:textAlignment="center"
-        android:text="Please check your internet
-         connection"/>
+        android:text="@string/error"/>
     <Button
         android:focusable="true"
         android:id="@+id/retryButton"

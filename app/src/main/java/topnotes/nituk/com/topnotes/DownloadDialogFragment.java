@@ -18,6 +18,8 @@ public class DownloadDialogFragment extends Dialog_fragment{
 
         //it will remove title bar from the dialog
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        getDialog().getWindow().setWindowAnimations(R.style.dialog_animation_fade);
+
         View view=inflater.inflate(R.layout.download_dialog_fragment,container,false);
         Button downloadButton=view.findViewById(R.id.downloadButton);
         downloadButton.setOnClickListener(new View.OnClickListener() {
