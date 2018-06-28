@@ -94,7 +94,7 @@ public class SubjectListActivity extends AppCompatActivity {
                 drawerLayout.closeDrawer(Gravity.START);
                 return true;
             }
-        });
+        });//
 
 
     }
