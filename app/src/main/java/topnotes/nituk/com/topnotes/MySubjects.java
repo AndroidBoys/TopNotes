@@ -31,35 +31,13 @@ public class MySubjects extends Fragment {
         subjectListView = view.findViewById(R.id.subjectListView);
         MySubjectArrayAdapter mySubjectArrayAdapter = new MySubjectArrayAdapter(getActivity(), getResources().getStringArray(R.array.subjectList));
         subjectListView.setAdapter(mySubjectArrayAdapter);
-        fragment=new Dialog_fragment();
 
         subjectListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Dialog_fragment dialog_fragment=Dialog_fragment.getInstance();
+                dialog_fragment.show(getFragmentManager(),"dialog_fragment");
 
-                FragmentManager fragmentManager = getFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-                // to set a custom animation in fragment
-                fragmentTransaction.setCustomAnimations(R.anim.fragment_open_enter,
-                        R.anim.fragment_open_exit, R.anim.fragment_close_enter,
-                        R.anim.fragment_close_exit);
-
-                if(listViewClickCount==0) {
-                    listViewClickCount=1;
-                    subjectListView.setAlpha((float) 0.4);// make subjectlistView transparent
-
-                    Log.d("subjectlistclicked", "sdfasdfasdfasd");
-
-
-                    fragmentTransaction.replace(R.id.Dialog_fragment_frameLayout, fragment).commit();
-                }
-
-                else{
-                    listViewClickCount=0;
-                    subjectListView.setAlpha((float) 1);// make subjectlistView transparent
-                    fragmentTransaction.remove(fragment).commit();//removing existing fragment
-                }
             }
         });
 

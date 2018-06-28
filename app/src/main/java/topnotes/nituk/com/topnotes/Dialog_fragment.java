@@ -1,11 +1,14 @@
 package topnotes.nituk.com.topnotes;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +26,10 @@ public class Dialog_fragment extends DialogFragment implements View.OnClickListe
             //by using view you can find the id of the widgets present in R.layout.dialog_fragment
         View view=inflater.inflate(R.layout.dialog_fragment,container,false);
 
+        getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        getDialog().getWindow().setWindowAnimations(
+                R.style.dialog_animation_fade);
         notesTextView=view.findViewById(R.id.notes);
         questionPaperTextView=view.findViewById(R.id.questionPaper);
         resourceTextView=view.findViewById(R.id.resources);
@@ -32,6 +39,7 @@ public class Dialog_fragment extends DialogFragment implements View.OnClickListe
         questionPaperTextView.setOnClickListener(this);
         resourceTextView.setOnClickListener(this);
         practicalFileTextView.setOnClickListener(this);
+
         return view;
     }
 
@@ -66,5 +74,9 @@ public class Dialog_fragment extends DialogFragment implements View.OnClickListe
     {   Log.i("moving...","to contentActivity with context"+getActivity());
         Intent intent = new Intent(getActivity(),ContentsActivity.class);
         startActivity(intent);
+    }
+
+    static Dialog_fragment getInstance(){
+        return new Dialog_fragment();
     }
 }
