@@ -6,9 +6,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import java.util.List;
 
@@ -16,8 +18,9 @@ public class ContentsActivity extends AppCompatActivity {
 
     private RecyclerView mRecyclerView;
     private ContentAdapter mContentAdapter;
-    private List<Content> mContents;
+    private List<Content> contents;
     private Content mContent;
+    private TextView mTitleTextView,mAuthorTextView,mDateTextView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,6 +29,7 @@ public class ContentsActivity extends AppCompatActivity {
         mRecyclerView= findViewById(R.id.contentsRecyclerView);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         // set Adapter to the recycler view with appropriate dataset
+        Log.i("onCreate::","withing contentActivity");
         updateUI();
 
 
@@ -35,8 +39,12 @@ public class ContentsActivity extends AppCompatActivity {
 
        public ContentHolder(LayoutInflater inflater, ViewGroup container)
        {
-           super(inflater.inflate(R.layout.activity_subject_list,container,false));
+           super(inflater.inflate(R.layout.recyclerview_content_raw_layout,container,false));
            // get reference to the views using the viewholder when the viewholders are created here
+
+           mTitleTextView=itemView.findViewById(R.id.recyclerNotesNameTextView);
+           mAuthorTextView=itemView.findViewById(R.id.recyclerAuthorNameTextView);
+           mDateTextView=itemView.findViewById(R.id.uploadDateTextView);
 
        }
 
@@ -82,6 +90,7 @@ public class ContentsActivity extends AppCompatActivity {
     {
        ContentLab contentLab = ContentLab.getInstance(this);
        List<Content> contents = contentLab.getContents();
+       Log.i("updating ui",contents.toString());
        mContentAdapter = new ContentAdapter(contents);
        mRecyclerView.setAdapter(mContentAdapter);
     }
@@ -90,5 +99,8 @@ public class ContentsActivity extends AppCompatActivity {
     {
        mContent = content;
        // bind your data to the views here
+        mTitleTextView.setText(content.getTitle());
+        mAuthorTextView.setText("Author : "+content.getAuthor());
+        mDateTextView.setText("Upload Date : "+content.getDate());
     }
 }

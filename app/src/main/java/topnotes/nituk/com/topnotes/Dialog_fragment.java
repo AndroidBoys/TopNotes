@@ -1,6 +1,8 @@
 package topnotes.nituk.com.topnotes;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,6 +48,7 @@ public class Dialog_fragment extends DialogFragment implements View.OnClickListe
 
             case R.id.resources:
                 Toast.makeText(getActivity(), "notes", Toast.LENGTH_SHORT).show();
+                moveToContentActivity();
                 break;
             case R.id.practicalFiles:
                 Toast.makeText(getActivity(), "notes", Toast.LENGTH_SHORT).show();
@@ -57,5 +60,11 @@ public class Dialog_fragment extends DialogFragment implements View.OnClickListe
 
         }
 
+    }
+
+    public void moveToContentActivity()
+    {   Log.i("moving...","to contentActivity with context"+getActivity());
+        Intent intent = new Intent(getActivity(),ContentsActivity.class);
+        startActivity(intent);
     }
 }
