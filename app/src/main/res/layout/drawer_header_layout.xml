@@ -9,13 +9,12 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/fontdiner_swanky"
-        android:text="Top Notes"
-        android:textColor="@color/colorPrimary"
-        android:layout_marginLeft="70dp"
-        android:layout_marginTop="60dp"
-        android:rotation="-20"
-        android:textSize="30dp"/>
+        android:text="name here"
+        android:textColor="@color/whiteColor"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="30dp"
+        android:textStyle="bold"/>
+
 
     <TextView
         android:layout_width="wrap_content"

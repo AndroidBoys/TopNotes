@@ -56,7 +56,7 @@ public class Dialog_fragment extends DialogFragment implements View.OnClickListe
 
             case R.id.questionPaper:
                 Toast.makeText(getActivity(), "notes", Toast.LENGTH_SHORT).show();
-                break;
+
 
         }
 
