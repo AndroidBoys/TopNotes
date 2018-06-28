@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/download_dialog_fragment"
+
+    >
+
+    <TextView
+        android:id="@+id/title"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+        android:textStyle="bold"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:text="photocopied notes"
+        android:textAlignment="center"
+        android:textSize="30sp"
+        />
+
+    android:textAlignment="center"
+    />
+
+    <LinearLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+
+        <TextView
+
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="SUBJECT :"
+            android:textStyle="bold" />
+
+        <TextView
+
+            android:layout_weight="1"
+            android:id="@+id/subject"
+            android:text="Applied physics"
+            android:padding="5dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="SIZE :"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_weight="1"
+            android:id="@+id/size"
+            android:text="Applied physics"
+
+            android:padding="5dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="DOWNLOADS :"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_weight="1"
+            android:id="@+id/downloads"
+            android:text="Applied physics"
+
+            android:padding="5dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="AUTHOR :"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_weight="1"
+            android:id="@+id/author"
+            android:text="Applied physics"
+            android:padding="5dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="DATE :"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_weight="1"
+            android:id="@+id/date"
+            android:text="Applied physics"
+            android:padding="5dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="CREDITS :"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_weight="1"
+            android:id="@+id/credits"
+            android:text="Applied physics"
+            android:padding="5dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/downloadButton"
+        android:text="DOWNLOAD"
+        android:layout_margin="20dp"
+        android:textStyle="bold"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/download_dialog_fragment"/>
+
+
+</LinearLayout>

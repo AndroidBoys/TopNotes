@@ -2,6 +2,7 @@ package topnotes.nituk.com.topnotes;
 
 import android.content.Context;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -10,11 +11,10 @@ import java.util.List;
 
 public class ContentLab {
     private static ContentLab sContentLab;
-    private List<Content> mContents;
+    private List<Content> mContents=new ArrayList<>();
 
     private ContentLab(Context context)
     {
-       sContentLab = new ContentLab(context);
        // sample data
        for(int i=0;i<20;i++)
        {
@@ -29,7 +29,7 @@ public class ContentLab {
     public static ContentLab getInstance(Context context)
     {
         if(sContentLab== null) {
-            return new ContentLab(context);
+            sContentLab =new ContentLab(context);
         }
         return sContentLab;
     }
