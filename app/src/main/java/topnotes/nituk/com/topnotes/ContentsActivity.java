@@ -5,13 +5,29 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.downloader.Error;
+import com.downloader.OnCancelListener;
+import com.downloader.OnDownloadListener;
+import com.downloader.OnPauseListener;
+import com.downloader.OnProgressListener;
+import com.downloader.OnStartOrResumeListener;
+import com.downloader.PRDownloader;
+import com.downloader.PRDownloaderConfig;
+import com.downloader.Progress;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.List;
 
@@ -21,6 +37,8 @@ public class ContentsActivity extends AppCompatActivity {
     private ContentAdapter mContentAdapter;
     private List<Content> contents;
     private Content mContent;
+    private FirebaseStorage firebaseStorage;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,9 +49,14 @@ public class ContentsActivity extends AppCompatActivity {
         // set Adapter to the recycler view with appropriate dataset
         Log.i("onCreate::","withing contentActivity");
         updateUI();
+        // get the firebase storage
+        firebaseStorage = FirebaseStorage.getInstance();
 
 
     }
+
+
+
     // ViewHolder for the recycler view which inflates our own view
     private class ContentHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView mTitleTextView,mAuthorTextView,mDateTextView;
@@ -63,10 +86,8 @@ public class ContentsActivity extends AppCompatActivity {
         @Override
         public void onClick(View view) {
             new DownloadDialogFragment().show(getSupportFragmentManager(),"Download dialog");
-            Toast.makeText(getApplicationContext(),"Item clicked",Toast.LENGTH_SHORT).show();
 
-
-        }
+            }
 
 
     }

@@ -23,7 +23,9 @@ public class DownloadDialogFragment extends Dialog_fragment{
         downloadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getActivity(), "download", Toast.LENGTH_SHORT).show();
+                // Download the content
+                Toast.makeText(getActivity(),"::Download process begins::",Toast.LENGTH_SHORT).show();
+                new ContentDownloader(getActivity());
             }
         });
 
