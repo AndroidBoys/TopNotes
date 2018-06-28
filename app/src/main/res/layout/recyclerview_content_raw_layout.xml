@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="horizontal"
+              android:background="@drawable/round_corner"
+              android:layout_width="match_parent"
+              android:layout_height="120dp">
+
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:src="@drawable/my_downloads"/>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_weight="3"
+        android:layout_marginLeft="5dp"
+        android:orientation="vertical"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/recyclerNotesNameTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_weight="2"
+            android:text="Operating system"
+            android:drawableEnd="@drawable/smile_face"
+            android:textColor="@color/whiteColor"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+            android:textStyle="bold"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/blackColor"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:src="@drawable/person_image"/>
+
+            <TextView
+
+                android:id="@+id/recyclerAuthorNameTextView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Author : Arvind Negi"
+                android:layout_weight="5"
+                android:textColor="@color/whiteColor"
+                android:textSize="15dp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:src="@drawable/calender_image"/>
+
+            <TextView
+
+                android:id="@+id/uploadDateTextView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Upload Date : "
+                android:layout_weight="5"
+                android:textColor="@color/whiteColor"
+                android:textSize="15dp"/>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</LinearLayout>
+
+

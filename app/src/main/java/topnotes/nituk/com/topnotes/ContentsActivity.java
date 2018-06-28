@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +18,7 @@ public class ContentsActivity extends AppCompatActivity {
 
     private RecyclerView mRecyclerView;
     private ContentAdapter mContentAdapter;
-    private List<Content> mContents;
+    private List<Content> contents;
     private Content mContent;
     private TextView mTitleTextView,mAuthorTextView,mDateTextView;
     @Override
@@ -28,6 +29,7 @@ public class ContentsActivity extends AppCompatActivity {
         mRecyclerView= findViewById(R.id.contentsRecyclerView);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         // set Adapter to the recycler view with appropriate dataset
+        Log.i("onCreate::","withing contentActivity");
         updateUI();
 
 
@@ -88,6 +90,7 @@ public class ContentsActivity extends AppCompatActivity {
     {
        ContentLab contentLab = ContentLab.getInstance(this);
        List<Content> contents = contentLab.getContents();
+       Log.i("updating ui",contents.toString());
        mContentAdapter = new ContentAdapter(contents);
        mRecyclerView.setAdapter(mContentAdapter);
     }
