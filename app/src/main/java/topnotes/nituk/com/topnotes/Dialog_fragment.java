@@ -51,7 +51,7 @@ public class Dialog_fragment extends DialogFragment implements View.OnClickListe
                 moveToContentActivity();
                 break;
             case R.id.practicalFiles:
-                Toast.makeText(getActivity(), "notes", Toast.LENGTH_SHORT).show();
+                new DownloadDialogFragment().show(getFragmentManager(),"Download dialog");
                 break;
 
             case R.id.questionPaper:
