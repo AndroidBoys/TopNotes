@@ -7,6 +7,12 @@
     <string name="r_n">Roll number</string>
     <string name="error">Please check your internet
          connection</string>
+    <string name="connecting">Connecting...</string>
+    <string name="enter_your_roll_nol">enter your Roll.Nol</string>
+    <string name="roll_no">ROLL.NO.:</string>
+    <string name="enter_your_name">enter your name</string>
+    <string name="username">USERNAME:</string>
+    <string name="sign_in">SIGN IN</string>
 
 
     <string-array name="subjectList">
