@@ -38,6 +38,8 @@ public class InternetAlertDialogfragment extends DialogFragment {
        // to remove title from the dialog
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        getDialog().getWindow().setWindowAnimations(R.style.dialog_animation_fade);
+
         return view;
     }
 }

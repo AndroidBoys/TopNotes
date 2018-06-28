@@ -12,6 +12,7 @@ import androidx.fragment.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
@@ -137,5 +138,6 @@ public class SubjectListActivity extends AppCompatActivity {
         FirebaseAuth.getInstance().signOut();
         finish();
 
+        LoginActivity.mConnectingTextView.setVisibility(View.INVISIBLE);
     }
 }
