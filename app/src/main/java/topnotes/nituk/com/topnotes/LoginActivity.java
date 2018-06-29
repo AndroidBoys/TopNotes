@@ -215,6 +215,7 @@ public class LoginActivity extends AppCompatActivity {
     {
         Intent intent = new Intent(LoginActivity.this,SubjectListActivity.class);
         startActivity(intent);
+        //
     }
 
     // Don't go to the splash on pressing the back button
@@ -224,7 +225,7 @@ public class LoginActivity extends AppCompatActivity {
     }
     public void saveUserInfo(FirebaseUser user)
     {
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users");
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users").child(mAuth.getCurrentUser().getUid());
         Map<String,String> map=new HashMap<>();
         String name = mNameEditText.getText().toString();
         String displayName = user.getDisplayName();

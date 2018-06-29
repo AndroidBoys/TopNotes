@@ -21,17 +21,19 @@
         <item>Computer Networks</item>
         <item>Network Security</item>
         <item>Real Time System</item>
-        <item>Industrial and Society</item>
-        <item>DataBase Management System</item>
-        <item>Computer Networks</item>
-        <item>Network Security</item>
-        <item>Real Time System</item>
-        <item>Industrial and Society</item>
-        <item>DataBase Management System</item>
-        <item>Computer Networks</item>
-        <item>Network Security</item>
-        <item>Real Time System</item>
-        <item>Industrial and Society</item>
+        <item>Computer Graphics</item>
+        <item>Industry and Society</item>
+        <item>Image Processing</item>
+        <!--<item>DataBase Management System</item>-->
+        <!--<item>Computer Networks</item>-->
+        <!--<item>Network Security</item>-->
+        <!--<item>Real Time System</item>-->
+        <!--<item>Industrial and Society</item>-->
+        <!--<item>DataBase Management System</item>-->
+        <!--<item>Computer Networks</item>-->
+        <!--<item>Network Security</item>-->
+        <!--<item>Real Time System</item>-->
+        <!--<item>Industrial and Society</item>-->
 
     </string-array>
 
@@ -61,6 +63,26 @@
         <item>Resources</item>
 
     </string-array>
+
+    <string-array name="subjectToken">
+        <item>DBMS</item>
+        <item>CN</item>
+        <item>NS</item>
+        <item>RTS</item>
+        <item>CG</item>
+        <item>IAS</item>
+        <item>IP</item>
+    </string-array>
+
+    <string-array name="typeToken">
+        <item>N</item>
+        <item>Q</item>
+        <item>P</item>
+        <item>R</item>
+
+    </string-array>
+
+
 
 
 

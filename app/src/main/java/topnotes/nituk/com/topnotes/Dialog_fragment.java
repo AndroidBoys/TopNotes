@@ -20,6 +20,7 @@ import androidx.fragment.app.Fragment;
 public class Dialog_fragment extends DialogFragment implements View.OnClickListener {
 
     protected TextView notesTextView,questionPaperTextView,resourceTextView,practicalFileTextView;
+    private int choosenSubject;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -41,6 +42,9 @@ public class Dialog_fragment extends DialogFragment implements View.OnClickListe
         resourceTextView.setOnClickListener(this);
         practicalFileTextView.setOnClickListener(this);
 
+        // retrieve the choosen subject number passed to this fragment
+        choosenSubject=getArguments().getInt("subject");
+
         return view;
     }
 
@@ -55,6 +59,17 @@ public class Dialog_fragment extends DialogFragment implements View.OnClickListe
 
         switch (view.getId()){
             case R.id.notes:
+
+                Toast.makeText(getActivity(), "notes selected", Toast.LENGTH_SHORT).show();
+//                InternetAlertDialogfragment internetAlertDialogfragment=new InternetAlertDialogfragment();
+//                internetAlertDialogfragment.show(getFragmentManager().beginTransaction(),"dilog");
+                moveToContentActivity(0);
+                break;
+
+            case R.id.questionPaper:
+                Toast.makeText(getActivity(), "questionpaper selected", Toast.LENGTH_SHORT).show();
+                moveToContentActivity(1);
+
                 if(NetworkCheck.isNetworkAvailable(getActivity())){
                     //Move the user into notes Page
 
@@ -81,7 +96,17 @@ public class Dialog_fragment extends DialogFragment implements View.OnClickListe
                 }
 
                 break;
+
             case R.id.practicalFiles:
+
+                Toast.makeText(getActivity(), "practicalFiles selected", Toast.LENGTH_SHORT).show();
+                //new DownloadDialogFragment().show(getFragmentManager(),"Download dialog");
+                moveToContentActivity(2);
+                break;
+
+            case R.id.resources:
+                Toast.makeText(getActivity(), "resources selected", Toast.LENGTH_SHORT).show();
+                moveToContentActivity(3);
                 if(NetworkCheck.isNetworkAvailable(getActivity())){
                     //Move the user into notes activity
                     new DownloadDialogFragment().show(getFragmentManager(),"Download dialog");
@@ -109,17 +134,25 @@ public class Dialog_fragment extends DialogFragment implements View.OnClickListe
                 }
 
 
+
         }
 
     }
 
-    public void moveToContentActivity()
+    public void moveToContentActivity(int type)
     {   Log.i("moving...","to contentActivity with context"+getActivity());
         Intent intent = new Intent(getActivity(),ContentsActivity.class);
+        intent.putExtra("type",type);
+        intent.putExtra("subject",choosenSubject);
         startActivity(intent);
     }
 
-    static Dialog_fragment getInstance(){
-        return new Dialog_fragment();
+    static Dialog_fragment getInstance(int i)
+    {
+        Bundle bundle = new Bundle();
+        bundle.putInt("subject",i);
+        Dialog_fragment fragment = new Dialog_fragment();
+        fragment.setArguments(bundle);
+        return fragment;
     }
 }

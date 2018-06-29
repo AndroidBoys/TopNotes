@@ -78,17 +78,27 @@ public class DownloadFragment extends Fragment {
         /*mArrayAdapter = new ArrayAdapter(getActivity(),android.R.layout.simple_list_item_1,theNamesOfFiles);
         mDownloadedFilesListView.setAdapter(mArrayAdapter);*/
 
-        MyDownloadAnotherArrayAdapter myDownloadsAnotherArrayAdapter=new MyDownloadAnotherArrayAdapter(getActivity(),getResources().getStringArray(R.array.subjectList));
-        mDownloadedFilesListView.setAdapter(myDownloadsAnotherArrayAdapter);
+        MyDownloadsArrayAdapter myDownloadsArrayAdapter=new MyDownloadsArrayAdapter(getActivity(),theNamesOfFiles,downloadsAuthorsNameArray);
+        mDownloadedFilesListView.setAdapter(myDownloadsArrayAdapter);
         mDownloadedFilesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                openFile(theNamesOfFiles.get(i));
+                Log.i("clicked:",""+i);
+                Log.i("file:",theNamesOfFiles.get(i));
+         // changes by negi     
+//         MyDownloadAnotherArrayAdapter myDownloadsAnotherArrayAdapter=new MyDownloadAnotherArrayAdapter(getActivity(),getResources().getStringArray(R.array.subjectList));
+//         mDownloadedFilesListView.setAdapter(myDownloadsAnotherArrayAdapter);
+//         mDownloadedFilesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//             @Override
+//             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                FragmentManager fragmentManager=getFragmentManager();
-                DownloadPopUpDialogFragment downloadPopUpDialogFragment=DownloadPopUpDialogFragment.getInstance();
-                downloadPopUpDialogFragment.show(fragmentManager,"download_dialog");
-            }
-        });
+//                 FragmentManager fragmentManager=getFragmentManager();
+//                 DownloadPopUpDialogFragment downloadPopUpDialogFragment=DownloadPopUpDialogFragment.getInstance();
+//                 downloadPopUpDialogFragment.show(fragmentManager,"download_dialog");
+
+//             }
+//         });
         listFiles();
         // Reference to the firebase storage
         return view;
@@ -145,5 +155,21 @@ public class DownloadFragment extends Fragment {
         }
 
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+    public void openFile(String file)
+    {
+
+        File pdfFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getPath(),"TopNotes/"+file);
+        Log.i("pdfFile:",pdfFile.toString());
+        Uri path = Uri.fromFile(pdfFile);
+        Log.i("uri:",path.toString());
+
+        // Setting the intent for pdf reader
+        Intent pdfIntent = new Intent(Intent.ACTION_VIEW);
+        pdfIntent.setDataAndType(path, "application/pdf");
+        pdfIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+
+        startActivity(pdfIntent);
     }
 }

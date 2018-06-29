@@ -6,24 +6,33 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
+
+import java.util.Date;
+import java.util.UUID;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -37,6 +46,12 @@ public class UploadDialogFragment extends DialogFragment {
     private Button uploadButton;
     private StorageReference mStorageRef;
     private Uri fileUri;
+
+    private ImageView uploadUserImageView;
+    private TextView uploadUserNameTextView;
+    private int choosenSubject;
+    private int choosenType;
+
     private EditText titleEditText;
 
     public UploadDialogFragment()
@@ -73,19 +88,52 @@ public class UploadDialogFragment extends DialogFragment {
 
         View view=inflater.inflate(R.layout.duplicate,container,true);
 
+        // setup the uploader profile on the upload fragment
+        uploadUserImageView=view.findViewById(R.id.uploadUserImageView);
+        uploadUserNameTextView=view.findViewById(R.id.uploadUserName);
+        uploadUserNameTextView.setText(User.getUser().getName());
+        Picasso.get().load(User.getUser().getImageUrl()).into(uploadUserImageView);
+
+
         uploadButton=view.findViewById(R.id.uploadButton);
         chooseFileImageViewButton=view.findViewById(R.id.chooseFileImageViewButton);
         mStorageRef= FirebaseStorage.getInstance().getReference();
+
+
         titleEditText=view.findViewById(R.id.uploadTitleEditText);
+
+
 
         //To show dropdown list in our app we need to use spinner widget.
         final Spinner subjectSpinner=view.findViewById(R.id.subjectSpinner);
         ArrayAdapter<String> subjectSpinnerAdapter=new ArrayAdapter<>(getActivity(),android.R.layout.simple_spinner_dropdown_item,getResources().getStringArray(R.array.spinnerSubjectList));
         subjectSpinner.setAdapter(subjectSpinnerAdapter);
+        subjectSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                choosenSubject=i;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
 
         final Spinner categorySpinner=view.findViewById(R.id.categorySpinner);
         ArrayAdapter<String> categorysSpinnerAdapter=new ArrayAdapter<>(getActivity(),android.R.layout.simple_spinner_dropdown_item,getResources().getStringArray(R.array.spinnerCategoryList));
         categorySpinner.setAdapter(categorysSpinnerAdapter);
+        categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                choosenType=i;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
 
 
 
@@ -149,7 +197,10 @@ public class UploadDialogFragment extends DialogFragment {
     {
 
         //Uri file = Uri.fromFile(new File("path/to/images/rivers.jpg"));
-        StorageReference riversRef = mStorageRef.child("Notes/test1");
+        StorageReference riversRef = mStorageRef.child("courses")
+                .child(getResources().getStringArray(R.array.subjectList)[choosenType])
+                .child(getResources().getStringArray(R.array.categoryList)[choosenType])
+                .child(titleEditText.getText().toString());
         final ProgressDialog progressDialog = new ProgressDialog(getActivity());
         progressDialog.setTitle("Uploading...");
         progressDialog.show();
@@ -163,6 +214,7 @@ public class UploadDialogFragment extends DialogFragment {
                             public void onSuccess(Uri uri) {
                                 Toast.makeText(getActivity(),"File uploaded successfully, file url:"+uri.toString(),Toast.LENGTH_SHORT).show();
                                 Log.i("Upload success, Url:",uri.toString());
+                                makeEntryToFBDB(uri.toString());
                                 progressDialog.dismiss();
                                 fileUri=null;
                             }
@@ -185,6 +237,7 @@ public class UploadDialogFragment extends DialogFragment {
                 progressDialog.setMessage((int)progress+"% Uploaded");
             }
         });
+
     }
 
     @Override
@@ -198,6 +251,20 @@ public class UploadDialogFragment extends DialogFragment {
         }
 
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    // The method saves the upload file's metadata to firebasedatabase
+    public void makeEntryToFBDB(String url)
+    {   UUID contentUUID = UUID.randomUUID();
+        Content content = new Content();
+        content.setTitle(titleEditText.getText().toString());
+        content.setDate(DateFormat.getDateFormat(getActivity()).format(new Date()));
+        content.setAuthor(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+        content.setDownloadUrl(url);
+        FirebaseDatabase.getInstance().getReference("courses").child(getResources().getStringArray(R.array.subjectToken)[choosenSubject])
+                .child(getResources().getStringArray(R.array.typeToken)[choosenType])
+                .child(contentUUID.toString())
+                .setValue(content);
     }
 }
 
