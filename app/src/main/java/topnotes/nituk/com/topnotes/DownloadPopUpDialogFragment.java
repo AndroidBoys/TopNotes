@@ -16,14 +16,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
-public class Dialog_fragment extends DialogFragment implements View.OnClickListener {
+public class DownloadPopUpDialogFragment extends DialogFragment implements View.OnClickListener {
 
     protected TextView notesTextView,questionPaperTextView,resourceTextView,practicalFileTextView;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-            //by using view you can find the id of the widgets present in R.layout.dialog_fragment
+        //by using view you can find the id of the widgets present in R.layout.dialog_fragment
         View view=inflater.inflate(R.layout.dialog_fragment,container,false);
 
         getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -43,68 +43,51 @@ public class Dialog_fragment extends DialogFragment implements View.OnClickListe
         return view;
     }
 
-    public Dialog_fragment() {
+    public DownloadPopUpDialogFragment() {
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.notes:
-                if(NetworkCheck.isNetworkAvailable(getActivity())){
-                    //Move the user into notes Page
-                }
-                else {
+                if(NetworkCheck.isNetworkAvailable(getActivity())) {
+                    //Go to downloaded notes  of user
+                }else{
                     InternetAlertDialogfragment internetAlertDialogfragment = new InternetAlertDialogfragment();
                     internetAlertDialogfragment.show(getFragmentManager().beginTransaction(), "dilog");
                 }
                 break;
 
             case R.id.resources:
-                if(NetworkCheck.isNetworkAvailable(getActivity())){
-                    //Move the user into resource Page
-                    moveToContentActivity();
-                }
-                else {
+                if(NetworkCheck.isNetworkAvailable(getActivity())) {
+                    //Go to downloaded Resources  of user
+                }else{
                     InternetAlertDialogfragment internetAlertDialogfragment = new InternetAlertDialogfragment();
                     internetAlertDialogfragment.show(getFragmentManager().beginTransaction(), "dilog");
                 }
-                //Toast.makeText(getActivity(), "notes", Toast.LENGTH_SHORT).show();
-
                 break;
             case R.id.practicalFiles:
-                if(NetworkCheck.isNetworkAvailable(getActivity())){
-                    //Move the user into notes activity
-                    new DownloadDialogFragment().show(getFragmentManager(),"Download dialog");
-                }
-                else {
+                if(NetworkCheck.isNetworkAvailable(getActivity())) {
+                    //Go to downloaded Practical Files  of user
+                }else{
                     InternetAlertDialogfragment internetAlertDialogfragment = new InternetAlertDialogfragment();
                     internetAlertDialogfragment.show(getFragmentManager().beginTransaction(), "dilog");
                 }
-
                 break;
 
             case R.id.questionPaper:
-                if(NetworkCheck.isNetworkAvailable(getActivity())){
-                    //Move the user into notes activity
-                }
-                else {
+                if(NetworkCheck.isNetworkAvailable(getActivity())) {
+                    //Go to downloaded question Paper  of user
+                }else{
                     InternetAlertDialogfragment internetAlertDialogfragment = new InternetAlertDialogfragment();
                     internetAlertDialogfragment.show(getFragmentManager().beginTransaction(), "dilog");
                 }
-               // Toast.makeText(getActivity(), "notes", Toast.LENGTH_SHORT).show();
-
-
+                break;
         }
 
     }
 
-    public void moveToContentActivity()
-    {   Log.i("moving...","to contentActivity with context"+getActivity());
-        Intent intent = new Intent(getActivity(),ContentsActivity.class);
-        startActivity(intent);
-    }
-
-    static Dialog_fragment getInstance(){
-        return new Dialog_fragment();
+    public static DownloadPopUpDialogFragment getInstance(){
+        return new DownloadPopUpDialogFragment();
     }
 }

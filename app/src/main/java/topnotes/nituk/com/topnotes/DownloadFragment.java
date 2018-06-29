@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -34,6 +35,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 //  Fragment showing the downloaded files of the user
 
@@ -76,8 +78,17 @@ public class DownloadFragment extends Fragment {
         /*mArrayAdapter = new ArrayAdapter(getActivity(),android.R.layout.simple_list_item_1,theNamesOfFiles);
         mDownloadedFilesListView.setAdapter(mArrayAdapter);*/
 
-        MyDownloadsArrayAdapter myDownloadsArrayAdapter=new MyDownloadsArrayAdapter(getActivity(),theNamesOfFiles,downloadsAuthorsNameArray);
-        mDownloadedFilesListView.setAdapter(myDownloadsArrayAdapter);
+        MyDownloadAnotherArrayAdapter myDownloadsAnotherArrayAdapter=new MyDownloadAnotherArrayAdapter(getActivity(),getResources().getStringArray(R.array.subjectList));
+        mDownloadedFilesListView.setAdapter(myDownloadsAnotherArrayAdapter);
+        mDownloadedFilesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                FragmentManager fragmentManager=getFragmentManager();
+                DownloadPopUpDialogFragment downloadPopUpDialogFragment=DownloadPopUpDialogFragment.getInstance();
+                downloadPopUpDialogFragment.show(fragmentManager,"Dialog");
+            }
+        });
         listFiles();
         // Reference to the firebase storage
         return view;

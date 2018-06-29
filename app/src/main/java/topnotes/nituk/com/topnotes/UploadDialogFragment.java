@@ -89,7 +89,12 @@ public class UploadDialogFragment extends DialogFragment {
         chooseFileImageViewButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                chooseFile();
+                if(NetworkCheck.isNetworkAvailable(getActivity())) {
+                    chooseFile();
+                }else{
+                    InternetAlertDialogfragment internetAlertDialogfragment = new InternetAlertDialogfragment();
+                    internetAlertDialogfragment.show(getFragmentManager().beginTransaction(), "dilog");
+                }
             }
         });
 
