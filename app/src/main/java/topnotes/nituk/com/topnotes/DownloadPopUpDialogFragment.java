@@ -50,39 +50,19 @@ public class DownloadPopUpDialogFragment extends DialogFragment implements View.
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.notes:
-                if(NetworkCheck.isNetworkAvailable(getActivity())) {
                     //Go to downloaded notes  of user
-                }else{
-                    InternetAlertDialogfragment internetAlertDialogfragment = new InternetAlertDialogfragment();
-                    internetAlertDialogfragment.show(getFragmentManager().beginTransaction(), "dilog");
-                }
                 break;
-
             case R.id.resources:
-                if(NetworkCheck.isNetworkAvailable(getActivity())) {
                     //Go to downloaded Resources  of user
-                }else{
-                    InternetAlertDialogfragment internetAlertDialogfragment = new InternetAlertDialogfragment();
-                    internetAlertDialogfragment.show(getFragmentManager().beginTransaction(), "dilog");
-                }
                 break;
             case R.id.practicalFiles:
-                if(NetworkCheck.isNetworkAvailable(getActivity())) {
                     //Go to downloaded Practical Files  of user
-                }else{
-                    InternetAlertDialogfragment internetAlertDialogfragment = new InternetAlertDialogfragment();
-                    internetAlertDialogfragment.show(getFragmentManager().beginTransaction(), "dilog");
-                }
                 break;
 
             case R.id.questionPaper:
-                if(NetworkCheck.isNetworkAvailable(getActivity())) {
-                    //Go to downloaded question Paper  of user
-                }else{
-                    InternetAlertDialogfragment internetAlertDialogfragment = new InternetAlertDialogfragment();
-                    internetAlertDialogfragment.show(getFragmentManager().beginTransaction(), "dilog");
-                }
+                //Go to downloaded question Paper  of user
                 break;
+
         }
 
     }
