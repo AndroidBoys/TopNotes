@@ -45,7 +45,8 @@ public class UploadDialogFragment extends DialogFragment {
         }
         else
         {
-            //Toast.makeText(getContext(),"Please choose a file first",Toast.LENGTH_SHORT).show();
+            ////Toast.makeText(getContext(),"Please choose a file first",Toast.LENGTH_SHORT).show();
+            //
         }
     }
 
@@ -60,6 +61,7 @@ public class UploadDialogFragment extends DialogFragment {
 
         dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         return dialog;
+        //
     }
 
 //    String spinnerList[]={"mohan","rohan","sohan","dohan","gohangohan gohan gohan","johan","pagal","dagal"};
@@ -89,7 +91,12 @@ public class UploadDialogFragment extends DialogFragment {
         chooseFileImageViewButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                chooseFile();
+                if(NetworkCheck.isNetworkAvailable(getActivity())) {
+                    chooseFile();
+                }else{
+                    InternetAlertDialogfragment internetAlertDialogfragment = new InternetAlertDialogfragment();
+                    internetAlertDialogfragment.show(getFragmentManager().beginTransaction(), "dilog");
+                }
             }
         });
 

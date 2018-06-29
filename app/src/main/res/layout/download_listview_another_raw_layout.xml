@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--android:focusable must be false so that when user
+press in listView it remain in the focus and we can use
+setOnItemClickListener in it-->
+
+<LinearLayout
+    android:focusable="false"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="80dp">
+
+    <LinearLayout
+
+        android:focusable="false"
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_weight="4"
+        android:background="@drawable/upload_background_color"
+        android:layout_height="70dp">
+
+        <!--<TextView-->
+            <!--android:focusable="false"-->
+            <!--android:id="@+id/rowTextView"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginStart="5dp"-->
+            <!--android:layout_marginTop="20dp"-->
+            <!--android:layout_marginEnd="8dp"-->
+            <!--android:layout_weight="3"-->
+            <!--android:drawableStart="@drawable/assignment_image"-->
+            <!--android:drawableEnd="@drawable/menu"-->
+            <!--android:text="Subject Name Here"-->
+            <!--android:textColor="@color/blackColor"-->
+            <!--android:textSize="18dp"-->
+            <!--android:textStyle="italic"/>-->
+
+
+        <ImageView
+            android:focusable="false"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".5"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/assignment_image"/>
+
+        <TextView
+            android:id="@+id/downloadSubjectTextView"
+            android:focusable="false"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="18dp"
+            android:layout_marginTop="17dp"
+            android:layout_marginLeft="3dp"
+            android:text="Subject Name Here"
+            android:textColor="@color/blackColor"
+            android:layout_weight="2"/>
+
+        <ImageView
+            android:focusable="false"
+            android:layout_width="0dp"
+            android:layout_marginTop="18dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/menu"
+            android:layout_weight="0.5"/>
+
+    </LinearLayout>
+
+    <Button
+        android:focusable="false"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_weight="1"
+        android:background="@color/blackColor"
+        android:layout_marginTop="6dp"
+        android:layout_marginBottom="1dp"/>
+
+</LinearLayout>

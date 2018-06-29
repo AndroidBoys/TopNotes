@@ -60,7 +60,15 @@ public class SubjectListActivity extends AppCompatActivity {
         //Below one will set the icon on the action bar
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
-        addDifferentFragments(MySubjects.getInstance());//it will show the list of subjects when this activity will be opened.
+
+        if(NetworkCheck.isNetworkAvailable(getApplicationContext())) {
+            //if network is connected then user will move into Mysubject fragment
+            addDifferentFragments(MySubjects.getInstance());//it will show the list of subjects when this activity will be opened.
+        }else{
+            //if network is not connected then user will move into DownloadFragment.
+            addDifferentFragments(DownloadFragment.getInstance());
+        }
+
 
         NavigationView navigationView=findViewById(R.id.navigationView);
 

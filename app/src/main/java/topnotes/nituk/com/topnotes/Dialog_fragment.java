@@ -50,20 +50,48 @@ public class Dialog_fragment extends DialogFragment implements View.OnClickListe
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.notes:
-                InternetAlertDialogfragment internetAlertDialogfragment=new InternetAlertDialogfragment();
-                internetAlertDialogfragment.show(getFragmentManager().beginTransaction(),"dilog");
+                if(NetworkCheck.isNetworkAvailable(getActivity())){
+                    //Move the user into notes Page
+                }
+                else {
+                    InternetAlertDialogfragment internetAlertDialogfragment = new InternetAlertDialogfragment();
+                    internetAlertDialogfragment.show(getFragmentManager().beginTransaction(), "dilog");
+                }
                 break;
 
             case R.id.resources:
-                Toast.makeText(getActivity(), "notes", Toast.LENGTH_SHORT).show();
-                moveToContentActivity();
+                if(NetworkCheck.isNetworkAvailable(getActivity())){
+                    //Move the user into resource Page
+                    moveToContentActivity();
+                }
+                else {
+                    InternetAlertDialogfragment internetAlertDialogfragment = new InternetAlertDialogfragment();
+                    internetAlertDialogfragment.show(getFragmentManager().beginTransaction(), "dilog");
+                }
+                //Toast.makeText(getActivity(), "notes", Toast.LENGTH_SHORT).show();
+
                 break;
             case R.id.practicalFiles:
-                new DownloadDialogFragment().show(getFragmentManager(),"Download dialog");
+                if(NetworkCheck.isNetworkAvailable(getActivity())){
+                    //Move the user into notes activity
+                    new DownloadDialogFragment().show(getFragmentManager(),"Download dialog");
+                }
+                else {
+                    InternetAlertDialogfragment internetAlertDialogfragment = new InternetAlertDialogfragment();
+                    internetAlertDialogfragment.show(getFragmentManager().beginTransaction(), "dilog");
+                }
+
                 break;
 
             case R.id.questionPaper:
-                Toast.makeText(getActivity(), "notes", Toast.LENGTH_SHORT).show();
+                if(NetworkCheck.isNetworkAvailable(getActivity())){
+                    //Move the user into notes activity
+                }
+                else {
+                    InternetAlertDialogfragment internetAlertDialogfragment = new InternetAlertDialogfragment();
+                    internetAlertDialogfragment.show(getFragmentManager().beginTransaction(), "dilog");
+                }
+               // Toast.makeText(getActivity(), "notes", Toast.LENGTH_SHORT).show();
 
 
         }
