@@ -20,23 +20,6 @@ setOnItemClickListener in it-->
         android:background="@drawable/upload_background_color"
         android:layout_height="70dp">
 
-        <!--<TextView-->
-            <!--android:focusable="false"-->
-            <!--android:id="@+id/rowTextView"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginStart="5dp"-->
-            <!--android:layout_marginTop="20dp"-->
-            <!--android:layout_marginEnd="8dp"-->
-            <!--android:layout_weight="3"-->
-            <!--android:drawableStart="@drawable/assignment_image"-->
-            <!--android:drawableEnd="@drawable/menu"-->
-            <!--android:text="Subject Name Here"-->
-            <!--android:textColor="@color/blackColor"-->
-            <!--android:textSize="18dp"-->
-            <!--android:textStyle="italic"/>-->
-
-
         <ImageView
             android:focusable="false"
             android:layout_width="0dp"
@@ -62,7 +45,7 @@ setOnItemClickListener in it-->
             android:layout_width="0dp"
             android:layout_marginTop="18dp"
             android:layout_height="wrap_content"
-            android:src="@drawable/menu"
+            android:src="@drawable/menu1"
             android:layout_weight="0.5"/>
 
     </LinearLayout>

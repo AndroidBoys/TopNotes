@@ -48,19 +48,28 @@ public class DownloadPopUpDialogFragment extends DialogFragment implements View.
 
     @Override
     public void onClick(View view) {
+        //This below code will dismiss the dialogFragment after pressing the button
+        DialogFragment dialog = (DialogFragment)getFragmentManager().findFragmentByTag("download_dialog");
+
         switch (view.getId()){
+
             case R.id.notes:
                     //Go to downloaded notes  of user
+                dialog.dismiss();//it will dismiss the fragment
+
                 break;
             case R.id.resources:
                     //Go to downloaded Resources  of user
+                dialog.dismiss();//it will dismiss the fragment
                 break;
             case R.id.practicalFiles:
                     //Go to downloaded Practical Files  of user
+                dialog.dismiss();//it will dismiss the fragment
                 break;
 
             case R.id.questionPaper:
                 //Go to downloaded question Paper  of user
+                dialog.dismiss();//it will dismiss the fragment
                 break;
 
         }
