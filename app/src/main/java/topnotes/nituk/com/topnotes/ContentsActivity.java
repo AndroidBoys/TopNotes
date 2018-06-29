@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -68,9 +69,7 @@ public class ContentsActivity extends AppCompatActivity {
 
         mRecyclerView= findViewById(R.id.contentsRecyclerView);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        // set Adapter to the recycler view with appropriate dataset
-        Log.i("onCreate::","withing contentActivity");
-        updateUI();
+
         // get the firebase storage
         firebaseStorage = FirebaseStorage.getInstance();
 
@@ -79,6 +78,10 @@ public class ContentsActivity extends AppCompatActivity {
         choosenType=getIntent().getIntExtra("type",0);
         Toast.makeText(this,"Subject:"+choosenSubject+"Type:"+choosenType,Toast.LENGTH_SHORT).show();
         loadContent();
+
+        // set Adapter to the recycler view with appropriate dataset
+        Log.i("onCreate::","withing contentActivity");
+        updateUI();
 
 
     }
@@ -113,10 +116,9 @@ public class ContentsActivity extends AppCompatActivity {
         // implement the recycler view list item click action here
         @Override
         public void onClick(View view) {
-            new DownloadDialogFragment().show(getSupportFragmentManager(),"Download dialog");
+            DownloadDialogFragment.getInstance(fetchedContentList.get(getAdapterPosition())).show(getSupportFragmentManager(),"Download");
 
             }
-
 
     }
     // Adapter for recycler view
@@ -154,10 +156,10 @@ public class ContentsActivity extends AppCompatActivity {
     // The method gets the list of all Content objects
     public void updateUI()
     {
-       ContentLab contentLab = ContentLab.getInstance(this);
-       List<Content> contents = contentLab.getContents();
-       Log.i("updating ui",contents.toString());
-       mContentAdapter = new ContentAdapter(contents);
+//       ContentLab contentLab = ContentLab.getInstance(this);
+//       List<Content> contents = contentLab.getContents();
+//       Log.i("updating ui",contents.toString());
+       mContentAdapter = new ContentAdapter(fetchedContentList);
        mRecyclerView.setAdapter(mContentAdapter);
     }
 
@@ -175,6 +177,7 @@ public class ContentsActivity extends AppCompatActivity {
                         {   Log.i("note id:",dataSnapshot.getKey());
                             Log.i("fetched:",content.getTitle()+" "+content.getAuthor()+" "+content.getDate());
                           fetchedContentList.add(content);
+                          mContentAdapter.notifyDataSetChanged();
                         }
                     }
 

@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -78,6 +79,14 @@ public class DownloadFragment extends Fragment {
 
         MyDownloadsArrayAdapter myDownloadsArrayAdapter=new MyDownloadsArrayAdapter(getActivity(),theNamesOfFiles,downloadsAuthorsNameArray);
         mDownloadedFilesListView.setAdapter(myDownloadsArrayAdapter);
+        mDownloadedFilesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                openFile(theNamesOfFiles.get(i));
+                Log.i("clicked:",""+i);
+                Log.i("file:",theNamesOfFiles.get(i));
+            }
+        });
         listFiles();
         // Reference to the firebase storage
         return view;
@@ -134,5 +143,21 @@ public class DownloadFragment extends Fragment {
         }
 
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+    public void openFile(String file)
+    {
+
+        File pdfFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getPath(),"TopNotes/"+file);
+        Log.i("pdfFile:",pdfFile.toString());
+        Uri path = Uri.fromFile(pdfFile);
+        Log.i("uri:",path.toString());
+
+        // Setting the intent for pdf reader
+        Intent pdfIntent = new Intent(Intent.ACTION_VIEW);
+        pdfIntent.setDataAndType(path, "application/pdf");
+        pdfIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+
+        startActivity(pdfIntent);
     }
 }

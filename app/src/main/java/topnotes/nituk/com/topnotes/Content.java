@@ -1,12 +1,13 @@
 package topnotes.nituk.com.topnotes;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
 // Model for a single Content(e.g- Notes,Question Paper etc.)
-public class Content {
+public class Content implements Serializable {
     private String title;
     private String author;
     private String date;
