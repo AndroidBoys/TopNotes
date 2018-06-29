@@ -28,8 +28,8 @@ public class Dialog_fragment extends DialogFragment implements View.OnClickListe
 
         getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-        getDialog().getWindow().setWindowAnimations(
-                R.style.dialog_animation_fade);
+        getDialog().getWindow().setWindowAnimations(R.style.dialog_animation_fade);
+
         notesTextView=view.findViewById(R.id.notes);
         questionPaperTextView=view.findViewById(R.id.questionPaper);
         resourceTextView=view.findViewById(R.id.resources);

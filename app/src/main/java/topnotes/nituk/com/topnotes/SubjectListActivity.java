@@ -203,5 +203,6 @@ public class SubjectListActivity extends AppCompatActivity {
         FirebaseAuth.getInstance().signOut();
         finish();
 
+        LoginActivity.mConnectingTextView.setVisibility(View.INVISIBLE);
     }
 }
