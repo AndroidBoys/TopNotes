@@ -36,12 +36,32 @@
     </string-array>
 
     <string-array name="categoryList">
+
         <item>Notes</item>
         <item>Question Papers</item>
         <item>Practical Files</item>
         <item>Resources</item>
 
     </string-array>
+
+    <string-array name="spinnerSubjectList">
+        <item>Select</item>
+        <item>DataBase Management System</item>
+        <item>Computer Networks</item>
+        <item>Network Security</item>
+        <item>Real Time System</item>
+        <item>Industrial and Society</item>
+    </string-array>
+
+    <string-array name="spinnerCategoryList">
+        <item>Select</item>
+        <item>Notes</item>
+        <item>Question Papers</item>
+        <item>Practical Files</item>
+        <item>Resources</item>
+
+    </string-array>
+
 
 
 

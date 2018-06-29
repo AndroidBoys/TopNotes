@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -36,6 +37,7 @@ public class UploadDialogFragment extends DialogFragment {
     private Button uploadButton;
     private StorageReference mStorageRef;
     private Uri fileUri;
+    private EditText titleEditText;
 
     public UploadDialogFragment()
     {
@@ -74,15 +76,15 @@ public class UploadDialogFragment extends DialogFragment {
         uploadButton=view.findViewById(R.id.uploadButton);
         chooseFileImageViewButton=view.findViewById(R.id.chooseFileImageViewButton);
         mStorageRef= FirebaseStorage.getInstance().getReference();
-
+        titleEditText=view.findViewById(R.id.uploadTitleEditText);
 
         //To show dropdown list in our app we need to use spinner widget.
-        Spinner subjectSpinner=view.findViewById(R.id.subjectSpinner);
-        ArrayAdapter<String> subjectSpinnerAdapter=new ArrayAdapter<>(getActivity(),android.R.layout.simple_spinner_dropdown_item,getResources().getStringArray(R.array.subjectList));
+        final Spinner subjectSpinner=view.findViewById(R.id.subjectSpinner);
+        ArrayAdapter<String> subjectSpinnerAdapter=new ArrayAdapter<>(getActivity(),android.R.layout.simple_spinner_dropdown_item,getResources().getStringArray(R.array.spinnerSubjectList));
         subjectSpinner.setAdapter(subjectSpinnerAdapter);
 
-        Spinner categorySpinner=view.findViewById(R.id.categorySpinner);
-        ArrayAdapter<String> categorysSpinnerAdapter=new ArrayAdapter<>(getActivity(),android.R.layout.simple_spinner_dropdown_item,getResources().getStringArray(R.array.categoryList));
+        final Spinner categorySpinner=view.findViewById(R.id.categorySpinner);
+        ArrayAdapter<String> categorysSpinnerAdapter=new ArrayAdapter<>(getActivity(),android.R.layout.simple_spinner_dropdown_item,getResources().getStringArray(R.array.spinnerCategoryList));
         categorySpinner.setAdapter(categorysSpinnerAdapter);
 
 
@@ -103,10 +105,21 @@ public class UploadDialogFragment extends DialogFragment {
         uploadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(fileUri!=null) {
-                    uploadFile(fileUri);
-                }else {
+
+                if(fileUri==null){
                     Toast.makeText(getActivity(), "Please first choose the file", Toast.LENGTH_SHORT).show();
+                }
+                else if(getResources().getStringArray(R.array.spinnerSubjectList)[subjectSpinner.getSelectedItemPosition()].equals("Select")){
+                    Toast.makeText(getActivity(),"Please first Choose subject !",Toast.LENGTH_SHORT).show();
+                }else if(getResources().getStringArray(R.array.spinnerCategoryList)[categorySpinner.getSelectedItemPosition()].equals("Select")){
+                    Toast.makeText(getActivity(),"Please first Choose category !",Toast.LENGTH_SHORT).show();
+                }else if(titleEditText.getText().toString().equals("")){
+                    Toast.makeText(getActivity(),"Please Write the title name !",Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    uploadFile(fileUri);
+                    DialogFragment dialog = (DialogFragment)getFragmentManager().findFragmentByTag("upload");
+                    dialog.dismiss();
                 }
             }
         });
