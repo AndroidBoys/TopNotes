@@ -36,7 +36,7 @@ public class MyUploadsArrayAdapter extends ArrayAdapter<String> {
         notesNameTextView.setText(myUploadsNotesNameArray.get(position));
         subjectNameTextView.setText("Subject : "+myUploadsSubjectNameArray.get(position));
         uploadDateTextView.setText("Upload Date : "+myUploadsUploadDateArray.get(position));
-        //
+        ////
         return rowView;
     }
 }
