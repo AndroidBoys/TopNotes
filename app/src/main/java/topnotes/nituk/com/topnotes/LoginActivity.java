@@ -199,6 +199,7 @@ public class LoginActivity extends AppCompatActivity {
     {
         Intent intent = new Intent(LoginActivity.this,SubjectListActivity.class);
         startActivity(intent);
+        //
     }
 
     // Don't go to the splash on pressing the back button
