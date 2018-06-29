@@ -46,6 +46,7 @@ public class UploadDialogFragment extends DialogFragment {
         else
         {
             ////Toast.makeText(getContext(),"Please choose a file first",Toast.LENGTH_SHORT).show();
+            //
         }
     }
 
