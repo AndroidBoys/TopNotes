@@ -1,9 +1,12 @@
 package topnotes.nituk.com.topnotes;
 
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -31,6 +34,12 @@ public class InternetAlertDialogfragment extends DialogFragment {
                Toast.makeText(getActivity(), "try again clicked", Toast.LENGTH_SHORT).show();
            }
        });
+
+       // to remove title from the dialog
+        getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        getDialog().getWindow().setWindowAnimations(R.style.dialog_animation_fade);
+
         return view;
     }
 }
