@@ -1,36 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/pathtextView"
-        android:layout_width="224dp"
-        android:layout_height="30dp"
-        android:layout_marginTop="36dp"
-        android:hint="Choose your file "
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <!--This below widget (AppBarLayout) is just for
+    putting actionbar on top of the app-->
 
-    <Button
-        android:id="@+id/choosefilebutton"
-        style="@style/Widget.AppCompat.Button.Colored"
+    <include layout="@layout/fragment_upload_secondone_layout"/>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floatingActionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Choose file"
-        app:layout_constraintEnd_toStartOf="@+id/uploadbutton"
-        app:layout_constraintTop_toBottomOf="@+id/pathtextView" />
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        android:src="@drawable/add_image"/>
 
-    <Button
-        android:id="@+id/uploadbutton"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Upload"
-        app:layout_constraintStart_toEndOf="@+id/choosefilebutton"
-        app:layout_constraintTop_toBottomOf="@+id/pathtextView" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

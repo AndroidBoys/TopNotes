@@ -5,13 +5,29 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.downloader.Error;
+import com.downloader.OnCancelListener;
+import com.downloader.OnDownloadListener;
+import com.downloader.OnPauseListener;
+import com.downloader.OnProgressListener;
+import com.downloader.OnStartOrResumeListener;
+import com.downloader.PRDownloader;
+import com.downloader.PRDownloaderConfig;
+import com.downloader.Progress;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.List;
 
@@ -21,7 +37,8 @@ public class ContentsActivity extends AppCompatActivity {
     private ContentAdapter mContentAdapter;
     private List<Content> contents;
     private Content mContent;
-    private TextView mTitleTextView,mAuthorTextView,mDateTextView;
+    private FirebaseStorage firebaseStorage;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,15 +49,22 @@ public class ContentsActivity extends AppCompatActivity {
         // set Adapter to the recycler view with appropriate dataset
         Log.i("onCreate::","withing contentActivity");
         updateUI();
+        // get the firebase storage
+        firebaseStorage = FirebaseStorage.getInstance();
 
 
     }
-    // ViewHolder for the recycler view which inflates our own view
-    private class ContentHolder extends RecyclerView.ViewHolder{
 
-       public ContentHolder(LayoutInflater inflater, ViewGroup container)
+
+
+    // ViewHolder for the recycler view which inflates our own view
+    private class ContentHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        private TextView mTitleTextView,mAuthorTextView,mDateTextView;
+
+        public ContentHolder(LayoutInflater inflater, ViewGroup container)
        {
            super(inflater.inflate(R.layout.recyclerview_content_raw_layout,container,false));
+           itemView.setOnClickListener(this);
            // get reference to the views using the viewholder when the viewholders are created here
 
            mTitleTextView=itemView.findViewById(R.id.recyclerNotesNameTextView);
@@ -48,12 +72,28 @@ public class ContentsActivity extends AppCompatActivity {
            mDateTextView=itemView.findViewById(R.id.uploadDateTextView);
 
        }
+        // The method binds the data to the viewholder
+        public void bind(Content content)
+        {
+            mContent = content;
+            // bind your data to the views here
+            mTitleTextView.setText(content.getTitle());
+            mAuthorTextView.setText("Author : "+content.getAuthor());
+            mDateTextView.setText("Upload Date : "+content.getDate());
+        }
+
+        // implement the recycler view list item click action here
+        @Override
+        public void onClick(View view) {
+            new DownloadDialogFragment().show(getSupportFragmentManager(),"Download dialog");
+
+            }
 
 
     }
     // Adapter for recycler view
 
-    private class ContentAdapter extends RecyclerView.Adapter<ContentHolder> implements View.OnClickListener {
+    private class ContentAdapter extends RecyclerView.Adapter<ContentHolder>  {
 
         private List mContents;
         public ContentAdapter(List<Content> contents)
@@ -72,7 +112,7 @@ public class ContentsActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(@NonNull ContentHolder holder, int position) {
           Content content = (Content)mContents.get(position);
-          bind(content);
+          holder.bind(content);
 
         }
 
@@ -80,14 +120,8 @@ public class ContentsActivity extends AppCompatActivity {
         public int getItemCount() {
             return mContents.size();
         }
-        // implement the recycler view list item click action here
-        @Override
-        public void onClick(View view) {
-            //new DownloadDialogFragment().show(,"Download dialog");
-            Toast.makeText(getApplicationContext(),"Item clicked",Toast.LENGTH_SHORT).show();
 
 
-        }
     }
     // The method gets the list of all Content objects
     public void updateUI()
@@ -98,13 +132,5 @@ public class ContentsActivity extends AppCompatActivity {
        mContentAdapter = new ContentAdapter(contents);
        mRecyclerView.setAdapter(mContentAdapter);
     }
-    // The method binds the data to the viewholder
-    public void bind(Content content)
-    {
-       mContent = content;
-       // bind your data to the views here
-        mTitleTextView.setText(content.getTitle());
-        mAuthorTextView.setText("Author : "+content.getAuthor());
-        mDateTextView.setText("Upload Date : "+content.getDate());
-    }
+
 }

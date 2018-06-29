@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.TextUtils;
@@ -30,6 +31,12 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -41,6 +48,7 @@ public class LoginActivity extends AppCompatActivity {
     private ProgressDialog mProgressDialog;
     private GoogleSignInClient mGoogleSignInClient;
     private static final int RC_SIGN_IN=1;
+    private SharedPreferences sharedPreferences;
 
 
     @Override
@@ -52,6 +60,8 @@ public class LoginActivity extends AppCompatActivity {
         mRNEditText = findViewById(R.id.rnEditText);
         mSignInButton = findViewById(R.id.googlesigninbutton);
         mConnectingTextView=findViewById(R.id.connectiong);
+
+         sharedPreferences= getSharedPreferences("topnotes.nituk.com.topnotes",MODE_PRIVATE);
 
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
@@ -97,8 +107,13 @@ public class LoginActivity extends AppCompatActivity {
         // if the user is already signed in
         if(mAuth.getCurrentUser()!=null)
         {
-            // Move to the SubjectListActivity
+           // initialise the user object & Move to the SubjectListActivity
+            initUser(sharedPreferences.getString("Name","username"),
+                    sharedPreferences.getString("Rn","BT16XXX"),
+                    sharedPreferences.getString("Email","example@gmail.com"),
+                    sharedPreferences.getString("Imageurl",null));
             moveToSubjectListActivity();
+
         }
 //        else
 //        {
@@ -167,8 +182,9 @@ public class LoginActivity extends AppCompatActivity {
                              mProgressDialog.dismiss();
 
                             Log.d("success:", "signInWithCredential:success");
-                            moveToSubjectListActivity();
                             FirebaseUser user = mAuth.getCurrentUser();
+                            saveUserInfo(user);
+
                         } else {
                             // If sign in fails, display a message to the user.
                             Toast.makeText(LoginActivity.this,"Google sign in Failed at server due to:"+task.getException(),Toast.LENGTH_SHORT).show();
@@ -189,5 +205,45 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         // Do nothing as of now
+    }
+    public void saveUserInfo(FirebaseUser user)
+    {
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users");
+        Map<String,String> map=new HashMap<>();
+        String name = mNameEditText.getText().toString();
+        String displayName = user.getDisplayName();
+        String rn =mRNEditText.getText().toString();
+        String email = user.getEmail();
+        String imageurl = user.getPhotoUrl().toString();
+
+        map.put("Name",displayName);
+        map.put("Rn",rn);
+        map.put("Email",email);
+        map.put("Imageurl",imageurl);
+        // initialise the current user object
+        initUser(displayName,rn,email,imageurl);
+        // save the user info in sharedPreferences to remember the user
+        sharedPreferences.edit()
+                .putString("Name",displayName)
+                .putString("Rn",rn)
+                .putString("Email",email)
+                .putString("Imageurl",imageurl).apply();
+
+         databaseReference.setValue(map).addOnSuccessListener(this, new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                // move with all proper information
+                moveToSubjectListActivity();
+            }
+        });
+//        databaseReference.child("Name").setValue(mNameEditText.getText());
+//        databaseReference.child("Rn").setValue(mRNEditText.getText());
+//        databaseReference.child("Email").setValue(user.getEmail());
+//        databaseReference.child("Imageurl").setValue(user.getPhotoUrl());
+
+    }
+    public void initUser(String name,String rn,String email,String imageurl)
+    {
+        User.getUser(name,rn,email,imageurl);
     }
 }

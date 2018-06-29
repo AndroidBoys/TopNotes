@@ -11,7 +11,7 @@
         android:layout_width="0dp"
         android:layout_weight="0.8"
         android:layout_height="match_parent"
-        android:src="@drawable/my_downloads"/>
+        android:src="@drawable/my_uploads"/>
 
     <LinearLayout
         android:layout_width="0dp"
@@ -21,7 +21,7 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/recyclerNotesNameTextView"
+            android:id="@+id/uploadNotesNameTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -46,17 +46,17 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:src="@drawable/person_image"/>
+                android:src="@drawable/subject_image"/>
 
             <TextView
 
-                android:id="@+id/recyclerAuthorNameTextView"
+                android:id="@+id/uploadSubjectNameTextView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Author : Arvind Negi"
+                android:text="Subject : Real Time System"
                 android:layout_weight="5"
                 android:textColor="@color/whiteColor"
-                android:textSize="15dp"/>
+                android:textSize="15sp"/>
 
         </LinearLayout>
 
@@ -73,7 +73,7 @@
 
             <TextView
 
-                android:id="@+id/uploadDateTextView"
+                android:id="@+id/uploadFragmentDateTextView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="Upload Date : "

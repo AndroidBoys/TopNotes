@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="450dp"
+              android:background="@drawable/upload_background_color"
+              >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/uploadUserImageView"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:src="@drawable/notes"
+            app:civ_border_color="@color/whiteColor"
+            app:civ_border_width="3dp" />
+
+        <TextView
+            android:id="@+id/uploadUserName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Arvind Negi"
+            android:textColor="@color/blackColor"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="10dp"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_margin="10dp"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp"
+        android:background="@drawable/upload_round_corner"
+        android:layout_marginRight="20dp"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/chooseFileImageViewButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="3"
+            android:src="@drawable/my_uploads"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_marginTop="8dp"
+            android:layout_height="30dp"
+            android:text="Click Above to choose your document"
+            android:textColor="@color/blackColor"
+            android:textSize="16dp"
+            android:layout_weight="1"
+            android:textAlignment="center"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
+
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Subject : "
+            android:textSize="16dp"
+            android:textStyle="bold"
+            android:textColor="@color/blackColor"
+            android:layout_weight="1"
+            android:layout_marginTop="7dp"/>
+        <Spinner
+            android:id="@+id/subjectSpinner"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_marginTop="13dp"
+            android:layout_height="wrap_content">
+        </Spinner>
+
+        <EditText
+
+            android:id="@+id/uploadTitleEditText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.7"
+            android:hint="Title name"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="20dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_weight="1.1"
+            android:text="Category : "
+            android:textColor="@color/blackColor"
+            android:textSize="16dp"
+            android:textStyle="bold"/>
+
+        <Spinner
+            android:id="@+id/categorySpinner"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="130dp"
+            android:layout_weight="1.4">
+        </Spinner>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/uploadButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="50dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/round_corner"
+        android:text="upload"/>
+
+
+</LinearLayout>
