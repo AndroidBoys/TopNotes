@@ -21,7 +21,6 @@ public class MySubjects extends Fragment {
 
     private ListView subjectListView;
     private int listViewClickCount=0;
-     Fragment fragment;
     //private ArrayList<String> allSubjects=new ArrayList<>();
     @Nullable
     @Override
@@ -35,7 +34,7 @@ public class MySubjects extends Fragment {
         subjectListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Dialog_fragment dialog_fragment=Dialog_fragment.getInstance();
+                Dialog_fragment dialog_fragment=Dialog_fragment.getInstance(i);
                 dialog_fragment.show(getFragmentManager(),"dialog_fragment");
 
             }

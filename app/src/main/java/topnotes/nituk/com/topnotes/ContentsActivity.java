@@ -1,6 +1,7 @@
 package topnotes.nituk.com.topnotes;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,23 +28,43 @@ import com.downloader.PRDownloaderConfig;
 import com.downloader.Progress;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ContentsActivity extends AppCompatActivity {
 
     private RecyclerView mRecyclerView;
     private ContentAdapter mContentAdapter;
-    private List<Content> contents;
+    private List<Content> fetchedContentList;
     private Content mContent;
     private FirebaseStorage firebaseStorage;
+    private int choosenSubject;
+    private int choosenType;
+    private String subjectTokenArray[];
+    private String typeTokenArray[];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contents);
+
+        // initialise
+        fetchedContentList= new ArrayList<>();
+
+        subjectTokenArray=getResources().getStringArray(R.array.subjectToken);
+        typeTokenArray=getResources().getStringArray(R.array.typeToken);
 
         mRecyclerView= findViewById(R.id.contentsRecyclerView);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -51,6 +73,12 @@ public class ContentsActivity extends AppCompatActivity {
         updateUI();
         // get the firebase storage
         firebaseStorage = FirebaseStorage.getInstance();
+
+        // retrieve the choosen subject and choosen type from the intent
+        choosenSubject= getIntent().getIntExtra("subject",0);
+        choosenType=getIntent().getIntExtra("type",0);
+        Toast.makeText(this,"Subject:"+choosenSubject+"Type:"+choosenType,Toast.LENGTH_SHORT).show();
+        loadContent();
 
 
     }
@@ -133,4 +161,45 @@ public class ContentsActivity extends AppCompatActivity {
        mRecyclerView.setAdapter(mContentAdapter);
     }
 
+    // The method targets a metadata request from FirebaseDB or Sqlite for a content
+    public void loadContent()
+    {
+        DatabaseReference databaseReference=FirebaseDatabase.getInstance().getReference("courses");
+        databaseReference.child(subjectTokenArray[choosenSubject])
+                .child(typeTokenArray[choosenType])
+                .addChildEventListener(new ChildEventListener() {
+                    @Override
+                    public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                        Content content=dataSnapshot.getValue(Content.class);
+                        if(content!=null)
+                        {   Log.i("note id:",dataSnapshot.getKey());
+                            Log.i("fetched:",content.getTitle()+" "+content.getAuthor()+" "+content.getDate());
+                          fetchedContentList.add(content);
+                        }
+                    }
+
+                    @Override
+                    public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                    }
+
+                    @Override
+                    public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+                    }
+
+                    @Override
+                    public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+
+
+    }
 }

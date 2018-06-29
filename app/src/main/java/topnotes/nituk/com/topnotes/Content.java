@@ -1,26 +1,32 @@
 package topnotes.nituk.com.topnotes;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 // Model for a single Content(e.g- Notes,Question Paper etc.)
 public class Content {
-    private String Title;
+    private String title;
     private String author;
-    private Date date;
+    private String date;
+    private String downloadUrl;
+
+
 
 
     public Content() {
 
+        }
 
-    }
 
 
     public String getTitle() {
-        return Title;
+        return title;
     }
 
     public void setTitle(String title) {
-        Title = title;
+        this.title = title;
     }
 
     public String getAuthor() {
@@ -31,14 +37,19 @@ public class Content {
         this.author = author;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
-
+    public String getDownloadUrl() {
+        return downloadUrl;
+    }
+    public void setDownloadUrl(String downloadUrl) {
+        this.downloadUrl = downloadUrl;
+    }
 
 }
