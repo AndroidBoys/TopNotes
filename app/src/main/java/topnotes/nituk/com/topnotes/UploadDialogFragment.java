@@ -15,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -23,6 +24,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -36,6 +38,8 @@ public class UploadDialogFragment extends DialogFragment {
     private Button uploadButton;
     private StorageReference mStorageRef;
     private Uri fileUri;
+    private ImageView uploadUserImageView;
+    private TextView uploadUserNameTextView;
 
     public UploadDialogFragment()
     {
@@ -68,6 +72,13 @@ public class UploadDialogFragment extends DialogFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view=inflater.inflate(R.layout.duplicate,container,true);
+
+        // setup the uploader profile on the upload fragment
+        uploadUserImageView=view.findViewById(R.id.uploadUserImageView);
+        uploadUserNameTextView=view.findViewById(R.id.uploadUserName);
+        uploadUserNameTextView.setText(User.getUser().getName());
+        Picasso.get().load(User.getUser().getImageUrl()).into(uploadUserImageView);
+
 
         uploadButton=view.findViewById(R.id.uploadButton);
         chooseFileImageViewButton=view.findViewById(R.id.chooseFileImageViewButton);
