@@ -35,6 +35,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 //  Fragment showing the downloaded files of the user
 
@@ -85,8 +86,19 @@ public class DownloadFragment extends Fragment {
                 openFile(theNamesOfFiles.get(i));
                 Log.i("clicked:",""+i);
                 Log.i("file:",theNamesOfFiles.get(i));
-            }
-        });
+         // changes by negi     
+//         MyDownloadAnotherArrayAdapter myDownloadsAnotherArrayAdapter=new MyDownloadAnotherArrayAdapter(getActivity(),getResources().getStringArray(R.array.subjectList));
+//         mDownloadedFilesListView.setAdapter(myDownloadsAnotherArrayAdapter);
+//         mDownloadedFilesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//             @Override
+//             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+//                 FragmentManager fragmentManager=getFragmentManager();
+//                 DownloadPopUpDialogFragment downloadPopUpDialogFragment=DownloadPopUpDialogFragment.getInstance();
+//                 downloadPopUpDialogFragment.show(fragmentManager,"download_dialog");
+
+//             }
+//         });
         listFiles();
         // Reference to the firebase storage
         return view;

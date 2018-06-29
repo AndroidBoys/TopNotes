@@ -8,7 +8,7 @@
     <string name="error">Please check your internet
          connection</string>
     <string name="connecting">Connecting...</string>
-    <string name="enter_your_roll_nol">enter your Roll.Nol</string>
+    <string name="enter_your_roll_nol">enter your Roll.No</string>
     <string name="roll_no">ROLL.NO.:</string>
     <string name="enter_your_name">enter your name</string>
     <string name="username">USERNAME:</string>
@@ -38,6 +38,25 @@
     </string-array>
 
     <string-array name="categoryList">
+
+        <item>Notes</item>
+        <item>Question Papers</item>
+        <item>Practical Files</item>
+        <item>Resources</item>
+
+    </string-array>
+
+    <string-array name="spinnerSubjectList">
+        <item>Select</item>
+        <item>DataBase Management System</item>
+        <item>Computer Networks</item>
+        <item>Network Security</item>
+        <item>Real Time System</item>
+        <item>Industrial and Society</item>
+    </string-array>
+
+    <string-array name="spinnerCategoryList">
+        <item>Select</item>
         <item>Notes</item>
         <item>Question Papers</item>
         <item>Practical Files</item>
@@ -62,6 +81,7 @@
         <item>R</item>
 
     </string-array>
+
 
 
 

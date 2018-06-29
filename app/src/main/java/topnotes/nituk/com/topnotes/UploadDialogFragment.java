@@ -46,10 +46,12 @@ public class UploadDialogFragment extends DialogFragment {
     private Button uploadButton;
     private StorageReference mStorageRef;
     private Uri fileUri;
+
     private ImageView uploadUserImageView;
     private TextView uploadUserNameTextView;
     private int choosenSubject;
     private int choosenType;
+
     private EditText titleEditText;
 
     public UploadDialogFragment()
@@ -60,7 +62,8 @@ public class UploadDialogFragment extends DialogFragment {
         }
         else
         {
-            //Toast.makeText(getContext(),"Please choose a file first",Toast.LENGTH_SHORT).show();
+            ////Toast.makeText(getContext(),"Please choose a file first",Toast.LENGTH_SHORT).show();
+            //
         }
     }
 
@@ -75,6 +78,7 @@ public class UploadDialogFragment extends DialogFragment {
 
         dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         return dialog;
+        //
     }
 
 //    String spinnerList[]={"mohan","rohan","sohan","dohan","gohangohan gohan gohan","johan","pagal","dagal"};
@@ -95,12 +99,14 @@ public class UploadDialogFragment extends DialogFragment {
         chooseFileImageViewButton=view.findViewById(R.id.chooseFileImageViewButton);
         mStorageRef= FirebaseStorage.getInstance().getReference();
 
+
         titleEditText=view.findViewById(R.id.uploadTitleEditText);
 
 
+
         //To show dropdown list in our app we need to use spinner widget.
-        Spinner subjectSpinner=view.findViewById(R.id.subjectSpinner);
-        ArrayAdapter<String> subjectSpinnerAdapter=new ArrayAdapter<>(getActivity(),android.R.layout.simple_spinner_dropdown_item,getResources().getStringArray(R.array.subjectList));
+        final Spinner subjectSpinner=view.findViewById(R.id.subjectSpinner);
+        ArrayAdapter<String> subjectSpinnerAdapter=new ArrayAdapter<>(getActivity(),android.R.layout.simple_spinner_dropdown_item,getResources().getStringArray(R.array.spinnerSubjectList));
         subjectSpinner.setAdapter(subjectSpinnerAdapter);
         subjectSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -114,8 +120,8 @@ public class UploadDialogFragment extends DialogFragment {
             }
         });
 
-        Spinner categorySpinner=view.findViewById(R.id.categorySpinner);
-        ArrayAdapter<String> categorysSpinnerAdapter=new ArrayAdapter<>(getActivity(),android.R.layout.simple_spinner_dropdown_item,getResources().getStringArray(R.array.categoryList));
+        final Spinner categorySpinner=view.findViewById(R.id.categorySpinner);
+        ArrayAdapter<String> categorysSpinnerAdapter=new ArrayAdapter<>(getActivity(),android.R.layout.simple_spinner_dropdown_item,getResources().getStringArray(R.array.spinnerCategoryList));
         categorySpinner.setAdapter(categorysSpinnerAdapter);
         categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -135,17 +141,33 @@ public class UploadDialogFragment extends DialogFragment {
         chooseFileImageViewButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                chooseFile();
+                if(NetworkCheck.isNetworkAvailable(getActivity())) {
+                    chooseFile();
+                }else{
+                    InternetAlertDialogfragment internetAlertDialogfragment = new InternetAlertDialogfragment();
+                    internetAlertDialogfragment.show(getFragmentManager().beginTransaction(), "dilog");
+                }
             }
         });
 
         uploadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(fileUri!=null) {
-                    uploadFile(fileUri);
-                }else {
+
+                if(fileUri==null){
                     Toast.makeText(getActivity(), "Please first choose the file", Toast.LENGTH_SHORT).show();
+                }
+                else if(getResources().getStringArray(R.array.spinnerSubjectList)[subjectSpinner.getSelectedItemPosition()].equals("Select")){
+                    Toast.makeText(getActivity(),"Please first Choose subject !",Toast.LENGTH_SHORT).show();
+                }else if(getResources().getStringArray(R.array.spinnerCategoryList)[categorySpinner.getSelectedItemPosition()].equals("Select")){
+                    Toast.makeText(getActivity(),"Please first Choose category !",Toast.LENGTH_SHORT).show();
+                }else if(titleEditText.getText().toString().equals("")){
+                    Toast.makeText(getActivity(),"Please Write the title name !",Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    uploadFile(fileUri);
+                    DialogFragment dialog = (DialogFragment)getFragmentManager().findFragmentByTag("upload");
+                    dialog.dismiss();
                 }
             }
         });
