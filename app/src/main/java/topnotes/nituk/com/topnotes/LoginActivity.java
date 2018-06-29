@@ -84,22 +84,38 @@ public class LoginActivity extends AppCompatActivity {
     
                 //Intent intent = new Intent(LoginActivity.this,SubjectListActivity.class);
                 //startActivity(intent);
+                String rollNumber=mRNEditText.getText().toString();
 
                 if(TextUtils.isEmpty(mNameEditText.getText().toString())){
                     mNameEditText.setError("Empty field");
                 }
                 else if(TextUtils.isEmpty(mRNEditText.getText().toString())){
                         mRNEditText.setError("Empty field");
-                }
-
-                else{
-
+                }else if(validatingRollnumber(rollNumber)){
                     signIn();
                     mConnectingTextView.setVisibility(View.VISIBLE);
+                }
+                else{
+                    Toast.makeText(getApplicationContext(),"Please Enter Valid Roll Number ! ",Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
+    }
+
+    boolean validatingRollnumber(String rollNumber){
+        String upper=rollNumber.toUpperCase();
+        Log.i("Roll",upper.substring(0,8));
+
+        if(upper.substring(0,8).equals("BT16CSE0")&&(upper.charAt(8)<=54&&upper.charAt(8)>=48)) {
+            if(upper.charAt(8)==54 &&(upper.charAt(9)>=48&&upper.charAt(9)<=50)||(upper.charAt(8)<=53&&upper.charAt(8)>=48)) {
+                return true;
+            }else{
+               return false;
+            }
+        }
+        else
+            return false;
     }
     @Override
     protected void onStart() {
