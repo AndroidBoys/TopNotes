@@ -3,12 +3,16 @@ package topnotes.nituk.com.topnotes;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -31,8 +35,10 @@ public class LoginActivity extends AppCompatActivity {
 
     private EditText mNameEditText;
     private EditText mRNEditText;
-    private SignInButton mSignInButton;
+    private Button mSignInButton;
+    static TextView mConnectingTextView;
     private FirebaseAuth mAuth;
+    private ProgressDialog mProgressDialog;
     private GoogleSignInClient mGoogleSignInClient;
     private static final int RC_SIGN_IN=1;
 
@@ -45,6 +51,7 @@ public class LoginActivity extends AppCompatActivity {
         mNameEditText = findViewById(R.id.nameEditText);
         mRNEditText = findViewById(R.id.rnEditText);
         mSignInButton = findViewById(R.id.googlesigninbutton);
+        mConnectingTextView=findViewById(R.id.connectiong);
 
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
@@ -68,7 +75,18 @@ public class LoginActivity extends AppCompatActivity {
                 //Intent intent = new Intent(LoginActivity.this,SubjectListActivity.class);
                 //startActivity(intent);
 
-                signIn();
+                if(TextUtils.isEmpty(mNameEditText.getText().toString())){
+                    mNameEditText.setError("Empty field");
+                }
+                else if(TextUtils.isEmpty(mRNEditText.getText().toString())){
+                        mRNEditText.setError("Empty field");
+                }
+
+                else{
+
+                    signIn();
+                    mConnectingTextView.setVisibility(View.VISIBLE);
+                }
             }
         });
 
@@ -94,18 +112,27 @@ public class LoginActivity extends AppCompatActivity {
     }
     // Get a google sign in intent
     private void signIn() {
+
+        mProgressDialog = new ProgressDialog(LoginActivity.this);
+        mProgressDialog.setMessage("Loading...");
+        mProgressDialog.show();
+
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
         super.onActivityResult(requestCode, resultCode, data);
 
         // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
             // The Task returned from this call is always completed, no need to attach
             // a listener.
+
+            mProgressDialog.show();
+
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             handleSignInResult(task);
         }
@@ -137,6 +164,7 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                              Toast.makeText(LoginActivity.this,"Google sign in sucessfull! Details:"+acct.getEmail(),Toast.LENGTH_SHORT).show();
+                             mProgressDialog.dismiss();
 
                             Log.d("success:", "signInWithCredential:success");
                             moveToSubjectListActivity();
@@ -144,7 +172,7 @@ public class LoginActivity extends AppCompatActivity {
                         } else {
                             // If sign in fails, display a message to the user.
                             Toast.makeText(LoginActivity.this,"Google sign in Failed at server due to:"+task.getException(),Toast.LENGTH_SHORT).show();
-
+                            mProgressDialog.dismiss();
                             Log.w("failed:", "signInWithCredential:failure", task.getException());
                         }
                     }
