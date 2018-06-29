@@ -86,7 +86,7 @@ public class SubjectListActivity extends AppCompatActivity {
                         break;
 
                     case R.id.logOut:
-                        //logOut fragment will be adde
+                        //logOut fragment will be added
                         signOut();
                         break;
 
@@ -127,7 +127,8 @@ public class SubjectListActivity extends AppCompatActivity {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            //exit from the app//
+            //exit from the app
+            finish();
         }
     }
 
