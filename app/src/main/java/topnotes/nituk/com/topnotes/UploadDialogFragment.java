@@ -3,6 +3,7 @@ package topnotes.nituk.com.topnotes;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -51,6 +52,7 @@ public class UploadDialogFragment extends DialogFragment {
     private TextView uploadUserNameTextView;
     private int choosenSubject;
     private int choosenType;
+    private Context mContext;
 
     private EditText titleEditText;
 
@@ -106,7 +108,7 @@ public class UploadDialogFragment extends DialogFragment {
 
         //To show dropdown list in our app we need to use spinner widget.
         final Spinner subjectSpinner=view.findViewById(R.id.subjectSpinner);
-        ArrayAdapter<String> subjectSpinnerAdapter=new ArrayAdapter<>(getActivity(),android.R.layout.simple_spinner_dropdown_item,getResources().getStringArray(R.array.spinnerSubjectList));
+        ArrayAdapter<String> subjectSpinnerAdapter=new ArrayAdapter<>(mContext,android.R.layout.simple_spinner_dropdown_item,getResources().getStringArray(R.array.spinnerSubjectList));
         subjectSpinner.setAdapter(subjectSpinnerAdapter);
         subjectSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -121,7 +123,7 @@ public class UploadDialogFragment extends DialogFragment {
         });
 
         final Spinner categorySpinner=view.findViewById(R.id.categorySpinner);
-        ArrayAdapter<String> categorysSpinnerAdapter=new ArrayAdapter<>(getActivity(),android.R.layout.simple_spinner_dropdown_item,getResources().getStringArray(R.array.spinnerCategoryList));
+        ArrayAdapter<String> categorysSpinnerAdapter=new ArrayAdapter<>(mContext,android.R.layout.simple_spinner_dropdown_item,getResources().getStringArray(R.array.spinnerCategoryList));
         categorySpinner.setAdapter(categorysSpinnerAdapter);
         categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -141,7 +143,7 @@ public class UploadDialogFragment extends DialogFragment {
         chooseFileImageViewButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(NetworkCheck.isNetworkAvailable(getActivity())) {
+                if(NetworkCheck.isNetworkAvailable(mContext)) {
                     chooseFile();
                 }else{
                     InternetAlertDialogfragment internetAlertDialogfragment = new InternetAlertDialogfragment();
@@ -198,7 +200,7 @@ public class UploadDialogFragment extends DialogFragment {
 
         //Uri file = Uri.fromFile(new File("path/to/images/rivers.jpg"));
         StorageReference riversRef = mStorageRef.child("courses")
-                .child(getResources().getStringArray(R.array.subjectList)[choosenType])
+                .child(getResources().getStringArray(R.array.subjectList)[choosenSubject])
                 .child(getResources().getStringArray(R.array.categoryList)[choosenType])
                 .child(titleEditText.getText().toString());
         final ProgressDialog progressDialog = new ProgressDialog(getActivity());
@@ -209,7 +211,7 @@ public class UploadDialogFragment extends DialogFragment {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         // Get a URL to the uploaded content
-                        taskSnapshot.getStorage().getDownloadUrl().addOnSuccessListener(getActivity(), new OnSuccessListener<Uri>() {
+                        taskSnapshot.getStorage().getDownloadUrl().addOnSuccessListener(getActivity(),new OnSuccessListener<Uri>() {
                             @Override
                             public void onSuccess(Uri uri) {
                                 Toast.makeText(getActivity(),"File uploaded successfully, file url:"+uri.toString(),Toast.LENGTH_SHORT).show();
@@ -265,6 +267,16 @@ public class UploadDialogFragment extends DialogFragment {
                 .child(getResources().getStringArray(R.array.typeToken)[choosenType])
                 .child(contentUUID.toString())
                 .setValue(content);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if(context!=null)
+        {
+            mContext = context;
+        }
+
     }
 }
 

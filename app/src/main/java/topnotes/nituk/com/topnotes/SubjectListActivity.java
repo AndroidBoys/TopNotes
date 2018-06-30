@@ -10,8 +10,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
-import android.preference.PreferenceActivity;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,11 +19,6 @@ import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.Objects;
@@ -66,7 +59,7 @@ public class SubjectListActivity extends AppCompatActivity {
             addDifferentFragments(MySubjects.getInstance());//it will show the list of subjects when this activity will be opened.
         }else{
             //if network is not connected then user will move into DownloadFragment.
-            addDifferentFragments(DownloadFragment.getInstance());
+            addDifferentFragments(DownloadFirstFragment.getInstance());
         }
 
 
@@ -91,7 +84,7 @@ public class SubjectListActivity extends AppCompatActivity {
                         break;
 
                     case R.id.myDownloads:
-                        addDifferentFragments(DownloadFragment.getInstance());
+                        addDifferentFragments(DownloadFirstFragment.getInstance());
                         //MyDownloads fragment will be added
                         break;
 
@@ -181,7 +174,7 @@ public class SubjectListActivity extends AppCompatActivity {
                 R.anim.fragment_open_exit, R.anim.fragment_close_enter,
                 R.anim.fragment_close_exit);
         fragmentTransaction.replace(R.id.frameLayout,replacableFragment);
-        fragmentTransaction.commit();
+        fragmentTransaction.commitNow();
     }
 
     //This below function is used the selection of item in action bar.

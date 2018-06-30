@@ -1,17 +1,21 @@
 package topnotes.nituk.com.topnotes;
 
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.RemoteViews;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,7 +28,6 @@ public class DownloadDialogFragment extends Dialog_fragment {
 
     private String notificationChannelId = "DOWNLOAD_NOTIFICATION";
     private int notificationId = 1;
-
     private TextView titleTextView;
     private TextView subjectTextView;
     private TextView sizeTextView;
@@ -32,6 +35,8 @@ public class DownloadDialogFragment extends Dialog_fragment {
     private TextView authorTextView;
     private TextView dateTextView;
     private TextView creditsTextView;
+    private int choosenSubject;
+    private int choosenType;
 
 
     @Nullable
@@ -42,8 +47,19 @@ public class DownloadDialogFragment extends Dialog_fragment {
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         getDialog().getWindow().setWindowAnimations(R.style.dialog_animation_fade);
 
-        View view=inflater.inflate(R.layout.download_dialog_fragment,container,false);
-        Button downloadButton=view.findViewById(R.id.downloadButton);
+        View view = inflater.inflate(R.layout.download_dialog_fragment, container, false);
+        Button downloadButton = view.findViewById(R.id.downloadButton);
+        downloadButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                showDownloadNotification(); //show notification to user and track the download progress
+
+                // Download the content
+                Toast.makeText(getActivity(), "::Download process begins::", Toast.LENGTH_SHORT).show();
+                new ContentDownloader(getActivity());
+            }
+        });
 
 
         titleTextView =view.findViewById(R.id.title);
@@ -63,18 +79,20 @@ public class DownloadDialogFragment extends Dialog_fragment {
         creditsTextView.setText("me :)");
         dateTextView.setText(content.getDate());
 
+        choosenSubject=getArguments().getInt("subject");
+        choosenType=getArguments().getInt("type");
+
         downloadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                showDownloadNotification(); //show notification to user and track the download progress
-
                 // Download the content
                 Toast.makeText(getActivity(),"::Download process begins:: with url:"+content.getDownloadUrl(),Toast.LENGTH_SHORT).show();
                 Log.i("url:",content.getDownloadUrl());
-                new ContentDownloader(getActivity()).downloadFile(content.getDownloadUrl(),content.getTitle());
+                new ContentDownloader(getActivity()).downloadFile(content.getDownloadUrl(),content.getTitle(),choosenSubject,choosenType);
             }
         });
+
+
 
         return view;
 
@@ -83,9 +101,11 @@ public class DownloadDialogFragment extends Dialog_fragment {
     public DownloadDialogFragment() {
     }
 
-    public static DownloadDialogFragment getInstance(Content content){
+    public static DownloadDialogFragment getInstance(Content content,int subject,int type){
         Bundle bundle = new Bundle();
         bundle.putSerializable("content",content);
+        bundle.putInt("subject",subject);
+        bundle.putInt("type",type);
         DownloadDialogFragment fragment=new DownloadDialogFragment();
         fragment.setArguments(bundle);
         return fragment;

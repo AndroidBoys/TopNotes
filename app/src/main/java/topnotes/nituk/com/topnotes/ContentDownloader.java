@@ -22,6 +22,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 // This class object encapsulates the task of downloading a single item from firebase with firebase and external download library
 
@@ -40,9 +41,12 @@ public class ContentDownloader {
         PRDownloader.initialize(mContext, config);
         //getDownloadUrl();
     }
-    public void downloadFile(String url,String title)
+    public void downloadFile(String url,String title,int subject,int type)
     {
-        downloadId = PRDownloader.download(url,Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getPath()+"/TopNotes",title+".jpg")
+        downloadId = PRDownloader.download(url,Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getPath()+"/TopNotes/"+
+                mContext.getResources().getStringArray(R.array.subjectList)[subject]+"/"+
+                mContext.getResources().getStringArray(R.array.categoryList)[type]
+                ,title+".jpg")
                 .build()
                 .setOnStartOrResumeListener(new OnStartOrResumeListener() {
                     @Override
