@@ -9,9 +9,16 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.ColorFilter;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.os.PersistableBundle;
+
 import android.view.Gravity;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -29,6 +36,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class SubjectListActivity extends AppCompatActivity {
@@ -80,16 +88,24 @@ public class SubjectListActivity extends AppCompatActivity {
         userImageView=header.findViewById(R.id.userImageView);
         userEmailTextView=header.findViewById(R.id.userEmailTextView);
 
-        //This below method is used for click events of navigaiton menu
+        //This below method is used for click events of navigaiton
+
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            MenuItem lastMenuItemSelected=null;
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                if(lastMenuItemSelected!=null){
+                    lastMenuItemSelected.setChecked(false);
+
+                }
+                menuItem.setChecked(true);
+                lastMenuItemSelected=menuItem;
+
                 switch (menuItem.getItemId())
                 {
 
                     case R.id.mySubjects:
-                        //navigationView.setCheckedItem(R.id.mySubjects);
-                        Toast.makeText(SubjectListActivity.this,"mySubject selected",Toast.LENGTH_SHORT).show();
+
                          MySubjects mySubjects = MySubjects.getInstance();
                         addDifferentFragments(mySubjects);//it will set the subject list fragment in frameLayout.
                         break;
@@ -124,6 +140,7 @@ public class SubjectListActivity extends AppCompatActivity {
                         break;
 
                 }
+
                 drawerLayout.closeDrawer(Gravity.START);
                 return true;
             }
@@ -133,6 +150,38 @@ public class SubjectListActivity extends AppCompatActivity {
 
 
     }
+
+    /*public void onSaveInstance(Bundle outState) {
+        ArrayList positions = findSelectedPosition();
+        if(positions.size()>0) {
+            outState.putIntegerArrayList(STATE_SELECTED_POSITION, positions);
+        }
+    }
+
+    private ArrayList findSelectedPosition() {
+        Menu menu = navDrawerFirstPart.getMenu();
+        int count = menu.size();
+        ArrayList result = new ArrayList<>();
+        for (int i = 0; i < count; i++) {
+            if(menu.getItem(i).isChecked()){
+                result.add(i);
+            }
+        }
+        return result;
+    }
+
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        if(savedInstanceState.containsKey(STATE_SELECTED_POSITION)){
+            restoreSelectedPosition(savedInstanceState.getIntegerArrayList(STATE_SELECTED_POSITION));
+        }
+    }
+
+    private void restoreSelectedPosition(ArrayList<Integer> positions) {
+        Menu menu = navDrawerFirstPart.getMenu();
+        for(int i=0; i<positions.size(); i++){
+            menu.getItem(positions.get(i)).setChecked(true);
+        }
+    }*/
 
     private void setCurrentUserInfo() {
 //        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users");
