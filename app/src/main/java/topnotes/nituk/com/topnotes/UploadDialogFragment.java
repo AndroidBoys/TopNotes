@@ -39,10 +39,15 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+/***
+PRO TIP: WHEN NETWORKING ON FRAGMENT AND TRYING TO ACCESS THE SYSTEM RESOURCES , BE CAREFUL WITH THE CONTEXT..
+ AS THE HOSTING ACTIVITY MAY HAVE BEEN DETACHED ON COMPLETION OF NETWORK TASK
+ ***/
 public class UploadDialogFragment extends DialogFragment {
 
 
     private static final int FILE_SELECT_CODE = 0;
+    public  static final int REQ_CODE =1 ;
     private ImageView chooseFileImageViewButton;
     private Button uploadButton;
     private StorageReference mStorageRef;
@@ -52,26 +57,16 @@ public class UploadDialogFragment extends DialogFragment {
     private TextView uploadUserNameTextView;
     private int choosenSubject;
     private int choosenType;
-    private Context mContext;
+    private Activity activity;
+
 
     private EditText titleEditText;
 
     public UploadDialogFragment()
     {
-        if(fileUri!=null)
-        {
-            uploadFile(fileUri);
-        }
-        else
-        {
-            ////Toast.makeText(getContext(),"Please choose a file first",Toast.LENGTH_SHORT).show();
-            //
-        }
+
     }
 
-    public static UploadDialogFragment getInstance(){
-        return  new UploadDialogFragment();
-    }
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
@@ -83,12 +78,22 @@ public class UploadDialogFragment extends DialogFragment {
         //
     }
 
+    public static UploadDialogFragment getInstance()
+    {
+        return new UploadDialogFragment();
+    }
+
 //    String spinnerList[]={"mohan","rohan","sohan","dohan","gohangohan gohan gohan","johan","pagal","dagal"};
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view=inflater.inflate(R.layout.duplicate,container,true);
+
+        // This context should be use throughout the fragment to acess any resources related to the hosting activity
+        // There was a bug in uploading due to null (getActivity) which occurs due to completion of HTTP request and detachment of
+        // the base activity
+        activity=getActivity();
 
         // setup the uploader profile on the upload fragment
         uploadUserImageView=view.findViewById(R.id.uploadUserImageView);
@@ -104,16 +109,19 @@ public class UploadDialogFragment extends DialogFragment {
 
         titleEditText=view.findViewById(R.id.uploadTitleEditText);
 
+        Log.i("activity:::",getActivity().toString());
+
 
 
         //To show dropdown list in our app we need to use spinner widget.
         final Spinner subjectSpinner=view.findViewById(R.id.subjectSpinner);
-        ArrayAdapter<String> subjectSpinnerAdapter=new ArrayAdapter<>(mContext,android.R.layout.simple_spinner_dropdown_item,getResources().getStringArray(R.array.spinnerSubjectList));
+        ArrayAdapter<String> subjectSpinnerAdapter=new ArrayAdapter<>(getActivity(),android.R.layout.simple_spinner_dropdown_item,getResources().getStringArray(R.array.spinnerSubjectList));
         subjectSpinner.setAdapter(subjectSpinnerAdapter);
         subjectSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                choosenSubject=i;
+                // since the select option in also included
+                choosenSubject=i-1;
             }
 
             @Override
@@ -123,12 +131,14 @@ public class UploadDialogFragment extends DialogFragment {
         });
 
         final Spinner categorySpinner=view.findViewById(R.id.categorySpinner);
-        ArrayAdapter<String> categorysSpinnerAdapter=new ArrayAdapter<>(mContext,android.R.layout.simple_spinner_dropdown_item,getResources().getStringArray(R.array.spinnerCategoryList));
+        ArrayAdapter<String> categorysSpinnerAdapter=new ArrayAdapter<>(getActivity(),android.R.layout.simple_spinner_dropdown_item,getResources().getStringArray(R.array.spinnerCategoryList));
         categorySpinner.setAdapter(categorysSpinnerAdapter);
         categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                choosenType=i;
+               // since the select option is also included..
+                choosenType=i-1;
+
             }
 
             @Override
@@ -143,7 +153,7 @@ public class UploadDialogFragment extends DialogFragment {
         chooseFileImageViewButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(NetworkCheck.isNetworkAvailable(mContext)) {
+                if(NetworkCheck.isNetworkAvailable(getActivity())) {
                     chooseFile();
                 }else{
                     InternetAlertDialogfragment internetAlertDialogfragment = new InternetAlertDialogfragment();
@@ -159,9 +169,9 @@ public class UploadDialogFragment extends DialogFragment {
                 if(fileUri==null){
                     Toast.makeText(getActivity(), "Please first choose the file", Toast.LENGTH_SHORT).show();
                 }
-                else if(getResources().getStringArray(R.array.spinnerSubjectList)[subjectSpinner.getSelectedItemPosition()].equals("Select")){
+                else if(activity.getResources().getStringArray(R.array.spinnerSubjectList)[subjectSpinner.getSelectedItemPosition()].equals("Select")){
                     Toast.makeText(getActivity(),"Please first Choose subject !",Toast.LENGTH_SHORT).show();
-                }else if(getResources().getStringArray(R.array.spinnerCategoryList)[categorySpinner.getSelectedItemPosition()].equals("Select")){
+                }else if(activity.getResources().getStringArray(R.array.spinnerCategoryList)[categorySpinner.getSelectedItemPosition()].equals("Select")){
                     Toast.makeText(getActivity(),"Please first Choose category !",Toast.LENGTH_SHORT).show();
                 }else if(titleEditText.getText().toString().equals("")){
                     Toast.makeText(getActivity(),"Please Write the title name !",Toast.LENGTH_SHORT).show();
@@ -205,16 +215,19 @@ public class UploadDialogFragment extends DialogFragment {
                 .child(titleEditText.getText().toString());
         final ProgressDialog progressDialog = new ProgressDialog(getActivity());
         progressDialog.setTitle("Uploading...");
+        //Log.i("activity again::",getActivity().toString());
+        // context for the sucess listener
         progressDialog.show();
         riversRef.putFile(uri)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         // Get a URL to the uploaded content
-                        taskSnapshot.getStorage().getDownloadUrl().addOnSuccessListener(getActivity(),new OnSuccessListener<Uri>() {
+
+                        taskSnapshot.getStorage().getDownloadUrl().addOnSuccessListener(activity,new OnSuccessListener<Uri>() {
                             @Override
                             public void onSuccess(Uri uri) {
-                                Toast.makeText(getActivity(),"File uploaded successfully, file url:"+uri.toString(),Toast.LENGTH_SHORT).show();
+                                Toast.makeText(activity,"File uploaded successfully, file url:"+uri.toString(),Toast.LENGTH_SHORT).show();
                                 Log.i("Upload success, Url:",uri.toString());
                                 makeEntryToFBDB(uri.toString());
                                 progressDialog.dismiss();
@@ -263,20 +276,22 @@ public class UploadDialogFragment extends DialogFragment {
         content.setDate(DateFormat.getDateFormat(getActivity()).format(new Date()));
         content.setAuthor(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
         content.setDownloadUrl(url);
-        FirebaseDatabase.getInstance().getReference("courses").child(getResources().getStringArray(R.array.subjectToken)[choosenSubject])
-                .child(getResources().getStringArray(R.array.typeToken)[choosenType])
+        // update the myupload list
+        sendResult(content);
+        FirebaseDatabase.getInstance().getReference("courses").child(activity.getResources().getStringArray(R.array.subjectToken)[choosenSubject])
+                .child(activity.getResources().getStringArray(R.array.typeToken)[choosenType])
                 .child(contentUUID.toString())
                 .setValue(content);
     }
+    private void sendResult(Content content)
+    {
+        Intent intent = new Intent();
+        intent.putExtra("content",content);
+        Log.i("content with title:",content.getTitle());
+        getTargetFragment().onActivityResult(getTargetRequestCode(),REQ_CODE,intent);
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if(context!=null)
-        {
-            mContext = context;
-        }
 
     }
+
 }
 

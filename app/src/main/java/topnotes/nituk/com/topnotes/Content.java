@@ -14,12 +14,9 @@ public class Content implements Serializable {
     private String downloadUrl;
 
 
-
-
     public Content() {
 
-        }
-
+    }
 
 
     public String getTitle() {

@@ -22,6 +22,7 @@ public class MyUploadsArrayAdapter extends ArrayAdapter<String> {
         this.myUploadsNotesNameArray=myUploadsNotesNameArray;
         this.myUploadsSubjectNameArray=myUploadsSubjectNameArray;
         this.myUploadsUploadDateArray=myUploadsUploadDateArray;
+        this.context=context;
     }
 
     @Override

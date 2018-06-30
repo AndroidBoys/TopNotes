@@ -86,11 +86,19 @@ public class LoginActivity extends AppCompatActivity {
                 //startActivity(intent);
                 String rollNumber=mRNEditText.getText().toString();
 
-                if((mNameEditText.getText().toString().trim().length())==0){
+                if(TextUtils.isEmpty(mNameEditText.getText().toString())){
                     mNameEditText.setError("Empty field");
                 }
                 else if(TextUtils.isEmpty(mRNEditText.getText().toString())){
                         mRNEditText.setError("Empty field");
+                }else if(validatingRollnumber(rollNumber)){
+                    mGoogleSignInClient.signOut().addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                           // Toast.makeText(LoginActivity.this,"Sign out sucess!",Toast.LENGTH_SHORT).show();
+                            signIn();
+                        }
+                    });
                 }else if(rollNumber.length()<10||rollNumber.length()>10){
                     Toast.makeText(getApplicationContext(),"Please Enter Valid Roll Number ! ",Toast.LENGTH_SHORT).show();
                 }
@@ -139,15 +147,8 @@ public class LoginActivity extends AppCompatActivity {
             moveToSubjectListActivity();
 
         }
-//        else
-//        {
-//            mGoogleSignInClient.signOut().addOnSuccessListener(new OnSuccessListener<Void>() {
-//                @Override
-//                public void onSuccess(Void aVoid) {
-//                    Toast.makeText(LoginActivity.this,"Sign out sucess!",Toast.LENGTH_SHORT).show();
-//                }
-//            });
-//        }
+
+
     }
     // Get a google sign in intent
     private void signIn() {
