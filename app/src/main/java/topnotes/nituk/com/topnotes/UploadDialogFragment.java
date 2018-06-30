@@ -147,7 +147,7 @@ public class UploadDialogFragment extends DialogFragment {
                     chooseFile();
                 }else{
                     InternetAlertDialogfragment internetAlertDialogfragment = new InternetAlertDialogfragment();
-                    internetAlertDialogfragment.show(getFragmentManager().beginTransaction(), "dilog");
+                    internetAlertDialogfragment.show(getFragmentManager().beginTransaction(), "net_dialog");
                 }
             }
         });
