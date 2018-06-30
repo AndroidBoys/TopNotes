@@ -102,7 +102,7 @@ public class DownloadfinalFragment extends Fragment {
             if(dir.mkdirs())
             Log.i("Folder created:",dir.getAbsolutePath());
             else
-            Log.i("foleder creation failed",dir.getAbsolutePath());
+            Log.i("folder creation failed",dir.getAbsolutePath());
 
         }
         // otherwise pull all the files out of the directory, get their names and set on the list view

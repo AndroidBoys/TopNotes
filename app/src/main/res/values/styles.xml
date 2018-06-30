@@ -9,9 +9,12 @@
         <item name="android:activatedBackgroundIndicator">@drawable/drawer_list_selector</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+    <style name="ThemeOverlay.AppCompat.navTheme">
+        <!--<item name="colorPrimary">@color/blueColor</item>-->
+        <item name="colorControlHighlight">#628be4</item>
+    </style>
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+
     <style
         name="dialog_animation_fade" >
         <item name="android:windowEnterAnimation">@anim/fade_in_dialog</item>
