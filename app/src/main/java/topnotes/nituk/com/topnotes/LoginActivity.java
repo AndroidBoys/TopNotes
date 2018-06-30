@@ -86,12 +86,15 @@ public class LoginActivity extends AppCompatActivity {
                 //startActivity(intent);
                 String rollNumber=mRNEditText.getText().toString();
 
-                if(TextUtils.isEmpty(mNameEditText.getText().toString())){
+                if((mNameEditText.getText().toString().trim().length())==0){
                     mNameEditText.setError("Empty field");
                 }
                 else if(TextUtils.isEmpty(mRNEditText.getText().toString())){
                         mRNEditText.setError("Empty field");
-                }else if(validatingRollnumber(rollNumber)){
+                }else if(rollNumber.length()<10||rollNumber.length()>10){
+                    Toast.makeText(getApplicationContext(),"Please Enter Valid Roll Number ! ",Toast.LENGTH_SHORT).show();
+                }
+                else if(validatingRollnumber(rollNumber)){
                     signIn();
                     mConnectingTextView.setVisibility(View.VISIBLE);
                 }
