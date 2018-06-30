@@ -33,16 +33,16 @@ public class ContentDownloader {
     public ContentDownloader(Context context) {
         mContext = context;
         PRDownloaderConfig config = PRDownloaderConfig.newBuilder()
-                .setReadTimeout(30_000)
-                .setConnectTimeout(30_000)
-                .setDatabaseEnabled(true)
+                //.setReadTimeout(30_000)
+                //.setConnectTimeout(30_000)
+                //.setDatabaseEnabled(true)
                 .build();
         PRDownloader.initialize(mContext, config);
-        getDownloadUrl();
+        //getDownloadUrl();
     }
-    public void downloadFile(Uri uri)
+    public void downloadFile(String url,String title)
     {
-        downloadId = PRDownloader.download(uri.toString(),Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getPath()+"/TopNotes","NotesSample.jpg")
+        downloadId = PRDownloader.download(url,Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getPath()+"/TopNotes",title+".jpg")
                 .build()
                 .setOnStartOrResumeListener(new OnStartOrResumeListener() {
                     @Override
@@ -79,7 +79,7 @@ public class ContentDownloader {
 
                     @Override
                     public void onError(Error error) {
-                        Toast.makeText(mContext,"Download failed:"+error.toString(),Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mContext,"Download failed:Connection error:"+error.isConnectionError()+"Server error:"+error.isServerError(),Toast.LENGTH_SHORT).show();
 
                     }
 
@@ -110,20 +110,20 @@ public class ContentDownloader {
     {
         PRDownloader.cleanUp(days);
     }
-    public void getDownloadUrl()
-    {
-        StorageReference storageReference = FirebaseStorage.getInstance().getReference();
-        storageReference.child("Notes/test1").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-                Log.i("file url:",uri.toString());
-                downloadFile(uri);
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.i("Url fetch failed:",e.getMessage());
-            }
-        });
-    }
+//    public void getDownloadUrl()
+//    {
+//        StorageReference storageReference = FirebaseStorage.getInstance().getReference();
+//        storageReference.child("Notes/test1").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+//            @Override
+//            public void onSuccess(Uri uri) {
+//                Log.i("file url:",uri.toString());
+//                downloadFile(uri);
+//            }
+//        }).addOnFailureListener(new OnFailureListener() {
+//            @Override
+//            public void onFailure(@NonNull Exception e) {
+//                Log.i("Url fetch failed:",e.getMessage());
+//            }
+//        });
+//    }
 }

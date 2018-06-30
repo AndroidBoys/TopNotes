@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -34,6 +35,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 //  Fragment showing the downloaded files of the user
 
@@ -52,11 +54,11 @@ public class DownloadFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_download,container,false);
+        View view = inflater.inflate(R.layout.fragment_download, container, false);
 
         fileList = new ArrayList<>();
         theNamesOfFiles = new ArrayList<>();
-        downloadsAuthorsNameArray=new ArrayList<>();
+        downloadsAuthorsNameArray = new ArrayList<>();
         downloadsAuthorsNameArray.add("Arvind Negi");
         downloadsAuthorsNameArray.add("amit kishor");
         downloadsAuthorsNameArray.add("sohan kathait");
@@ -68,18 +70,36 @@ public class DownloadFragment extends Fragment {
         downloadsAuthorsNameArray.add("Arvind Negi");
         downloadsAuthorsNameArray.add("amit kishor");
 
-        if(checkPermission(Manifest.permission.READ_EXTERNAL_STORAGE)&&checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE))
-        {
-            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE},PER_REQ_CODE);
+        if (checkPermission(Manifest.permission.READ_EXTERNAL_STORAGE) && checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, PER_REQ_CODE);
         }
         mDownloadedFilesListView = view.findViewById(R.id.downloadedfilelistview);
         /*mArrayAdapter = new ArrayAdapter(getActivity(),android.R.layout.simple_list_item_1,theNamesOfFiles);
         mDownloadedFilesListView.setAdapter(mArrayAdapter);*/
 
-        MyDownloadsArrayAdapter myDownloadsArrayAdapter=new MyDownloadsArrayAdapter(getActivity(),theNamesOfFiles,downloadsAuthorsNameArray);
+        MyDownloadsArrayAdapter myDownloadsArrayAdapter = new MyDownloadsArrayAdapter(getActivity(), theNamesOfFiles, downloadsAuthorsNameArray);
         mDownloadedFilesListView.setAdapter(myDownloadsArrayAdapter);
+        mDownloadedFilesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                openFile(theNamesOfFiles.get(i));
+                Log.i("clicked:", "" + i);
+                Log.i("file:", theNamesOfFiles.get(i));
+            }
+            // changes by negi
+//         MyDownloadAnotherArrayAdapter myDownloadsAnotherArrayAdapter=new MyDownloadAnotherArrayAdapter(getActivity(),getResources().getStringArray(R.array.subjectList));
+//         mDownloadedFilesListView.setAdapter(myDownloadsAnotherArrayAdapter);
+//         mDownloadedFilesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//             @Override
+//             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+//                 FragmentManager fragmentManager=getFragmentManager();
+//                 DownloadPopUpDialogFragment downloadPopUpDialogFragment=DownloadPopUpDialogFragment.getInstance();
+//                 downloadPopUpDialogFragment.show(fragmentManager,"download_dialog");
+
+//             }
+        });
         listFiles();
-        // Reference to the firebase storage
         return view;
     }
     public static DownloadFragment getInstance()
@@ -134,5 +154,21 @@ public class DownloadFragment extends Fragment {
         }
 
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+    public void openFile(String file)
+    {
+
+        File pdfFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getPath(),"TopNotes/"+file);
+        Log.i("pdfFile:",pdfFile.toString());
+        Uri path = Uri.fromFile(pdfFile);
+        Log.i("uri:",path.toString());
+
+        // Setting the intent for pdf reader
+        Intent pdfIntent = new Intent(Intent.ACTION_VIEW);
+        pdfIntent.setDataAndType(path, "application/pdf");
+        pdfIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+
+        startActivity(pdfIntent);
     }
 }

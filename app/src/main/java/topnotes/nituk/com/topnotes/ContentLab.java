@@ -2,6 +2,7 @@ package topnotes.nituk.com.topnotes;
 
 import android.content.Context;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -20,7 +21,7 @@ public class ContentLab {
        {
           Content content = new Content();
           content.setAuthor("Student"+i);
-          content.setDate(new Date());
+          content.setDate(DateFormat.getDateInstance().format(new Date()));
           content.setTitle("Title"+i);
           mContents.add(content);
 
