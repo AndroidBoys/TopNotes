@@ -15,12 +15,9 @@ public class Content implements Serializable {
 
 
     public Content() {
-//        this.setTitle(title);
-//        this.setAuthor(author);
-//        this.setDate(date);
-//        this.setDownloadUrl(downloadUrl);
 
-}
+    }
+
 
     public String getTitle() {
         return title;

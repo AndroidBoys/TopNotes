@@ -1,5 +1,6 @@
 package topnotes.nituk.com.topnotes;
 
+import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -26,8 +27,8 @@ import androidx.core.app.NotificationManagerCompat;
 
 public class DownloadDialogFragment extends Dialog_fragment {
 
-    private String notificationChannelId = "DOWNLOAD_NOTIFICATION";
-    private int notificationId = 1;
+    private static String notificationChannelId = "DOWNLOAD_NOTIFICATION";
+    private static int notificationId = 1;
     private TextView titleTextView;
     private TextView subjectTextView;
     private TextView sizeTextView;
@@ -37,7 +38,7 @@ public class DownloadDialogFragment extends Dialog_fragment {
     private TextView creditsTextView;
     private int choosenSubject;
     private int choosenType;
-    public static  NotificationCompat.Builder notificationBuilder;
+    private static Activity activity;
 
 
     @Nullable
@@ -48,8 +49,21 @@ public class DownloadDialogFragment extends Dialog_fragment {
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         getDialog().getWindow().setWindowAnimations(R.style.dialog_animation_fade);
 
+        activity=getActivity();
+
         View view = inflater.inflate(R.layout.download_dialog_fragment, container, false);
         Button downloadButton = view.findViewById(R.id.downloadButton);
+        downloadButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                showDownloadNotification(); //show notification to user and track the download progress
+
+                // Download the content
+                Toast.makeText(getActivity(), "::Download process begins::", Toast.LENGTH_SHORT).show();
+                new ContentDownloader(getActivity());
+            }
+        });
 
 
         titleTextView =view.findViewById(R.id.title);
@@ -75,7 +89,6 @@ public class DownloadDialogFragment extends Dialog_fragment {
         downloadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showDownloadNotification(); //show notification to user and track the download progress
                 // Download the content
                 Toast.makeText(getActivity(),"::Download process begins:: with url:"+content.getDownloadUrl(),Toast.LENGTH_SHORT).show();
                 Log.i("url:",content.getDownloadUrl());
@@ -103,15 +116,15 @@ public class DownloadDialogFragment extends Dialog_fragment {
     }
 
 
-    public void showDownloadNotification() {
+    public  static void showDownloadNotification() {
 
         createNotificationChannel(); //notification won't work without this in android version above 8.0+
 
-       notificationBuilder = new NotificationCompat.Builder(getActivity(), notificationChannelId);
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(activity, notificationChannelId);
         //this channelid should be unique and it is used to track the notification
 
-        Intent intent = new Intent(getActivity(),SubjectListActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(getActivity(), 0, intent, 0);
+        Intent intent = new Intent(activity,SubjectListActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(activity, 0, intent, 0);
 
         notificationBuilder.setSmallIcon(R.drawable.ic_arrow_downward_black_24dp)
                 .setContentTitle("Downloading in Progress...")
@@ -121,17 +134,17 @@ public class DownloadDialogFragment extends Dialog_fragment {
                 .addAction(R.drawable.light_blue_color,"Stop",pendingIntent)
                 .addAction(R.drawable.light_blue_color,"cancel",pendingIntent)
                 .setContentText("Downloading...")
-                ;
+                .setProgress(10,5,false);
 
         //to display notification
-        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(getActivity());
+        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(activity);
 
         notificationManagerCompat.notify(notificationId, notificationBuilder.build());
         // to track the current notification
 
     }
 
-    private void createNotificationChannel() {
+    private static void createNotificationChannel() {
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -140,7 +153,7 @@ public class DownloadDialogFragment extends Dialog_fragment {
             channel.setDescription("none");
             // Register the channel with the system; you can't change the importance
             // or other notification behaviors after this
-            NotificationManager notificationManager = getActivity().getSystemService(NotificationManager.class);
+            NotificationManager notificationManager = activity.getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }
     }

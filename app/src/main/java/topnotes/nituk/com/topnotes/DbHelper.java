@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 import android.view.View;
 
 import org.apache.commons.lang3.SerializationUtils;
@@ -47,11 +48,29 @@ public class DbHelper extends SQLiteOpenHelper {
     }
 
     public void saveContentList(List<Content> contentList, int subjectNumber, int subjectTypeNumber) {
-
         DbHelper dbHelper=new DbHelper(context);
         SQLiteDatabase sqLiteDatabase=dbHelper.getWritableDatabase();
+
+        List<Content> list = readContentList(subjectNumber,subjectTypeNumber);
+        List<String> titleList = new ArrayList<>();
+        for(int i=0;i<list.size();i++)
+        {
+            titleList.add(list.get(i).getTitle());
+        }
         ContentValues contentValues = new ContentValues();
-        for (int i = 0; i < contentList.size(); i++) {
+//        for (int i = 0; i < contentList.size(); i++) {
+//            for(j=0;j<list.size();j++){
+//                if(contentList.get(i).equals(list.get(j)))
+//                    break;
+//
+//            }
+//            if(j!=list.size())
+//                continue;
+        for(int i=0;i<contentList.size();i++) {
+            if(titleList.contains(contentList.get(i).getTitle())) {
+                continue;
+            }
+            Log.i("i::"," "+i);
             byte[] data = SerializationUtils.serialize(contentList.get(i));
             contentValues.put(DbContract.CONTENT, data);
             contentValues.put(DbContract.SUBJECT_NUMBER, subjectNumber);
@@ -86,4 +105,16 @@ public class DbHelper extends SQLiteOpenHelper {
 
 
     }
+
+//    public boolean checkAlreadyExist()
+//    {
+//        String query = SELECT + YOUR_EMAIL_COLUMN + FROM + TABLE_NAME + WHERE + YOUR_EMAIL_COLUMN + " =?";
+//        Cursor cursor = db.rawQuery(query, new String[]{email});
+//        if (cursor.getCount() > 0)
+//        {
+//            return false;
+//        }
+//        else
+//            return true;
+//    }
 }
