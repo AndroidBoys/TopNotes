@@ -15,5 +15,10 @@
         android:fromYDelta="0"
         android:toYDelta="50%"
         android:duration="200"
-        />
+        /><rotate
+    android:fromDegrees="0" android:toDegrees="360"
+    android:pivotX="0%p" android:pivotY="0%p"
+    android:fillEnabled="true"
+    android:fillBefore="true" android:fillAfter="true"
+    android:duration="500" />
 </set>
