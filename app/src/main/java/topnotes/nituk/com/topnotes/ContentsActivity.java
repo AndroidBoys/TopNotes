@@ -55,6 +55,8 @@ public class ContentsActivity extends AppCompatActivity {
     private int choosenType;
     private String subjectTokenArray[];
     private String typeTokenArray[];
+    private DbHelper dbHelper;
+    private boolean isInDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +64,12 @@ public class ContentsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_contents);
 
         // initialise
-        fetchedContentList= new ArrayList<>();
+
+
+        dbHelper = new DbHelper(this);
+
+
+        fetchedContentList= dbHelper.readContentList(choosenSubject,choosenType);
 
         subjectTokenArray=getResources().getStringArray(R.array.subjectToken);
         typeTokenArray=getResources().getStringArray(R.array.typeToken);
@@ -167,9 +174,10 @@ public class ContentsActivity extends AppCompatActivity {
     public void loadContent()
     {
         DatabaseReference databaseReference=FirebaseDatabase.getInstance().getReference("courses");
-        databaseReference.child(subjectTokenArray[choosenSubject])
-                .child(typeTokenArray[choosenType])
-                .addChildEventListener(new ChildEventListener() {
+        DatabaseReference ref=databaseReference.child(subjectTokenArray[choosenSubject])
+                .child(typeTokenArray[choosenType]);
+
+                ref.addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                         Content content=dataSnapshot.getValue(Content.class);
@@ -202,7 +210,24 @@ public class ContentsActivity extends AppCompatActivity {
                     }
                 });
 
+                ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        Toast.makeText(ContentsActivity.this,"Fetching done!",Toast.LENGTH_SHORT).show();
+                        addToDB();
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
 
 
+
+    }
+    public void addToDB()
+    {
+        dbHelper.saveContentList(fetchedContentList,choosenSubject,choosenType);
     }
 }
