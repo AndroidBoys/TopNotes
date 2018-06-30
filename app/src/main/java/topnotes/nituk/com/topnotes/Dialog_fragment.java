@@ -53,48 +53,17 @@ public class Dialog_fragment extends DialogFragment implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
-        //This below code will dismiss the dialogFragment after pressing the button
-        DialogFragment dialog = (DialogFragment)getFragmentManager().findFragmentByTag("dialog_fragment");
-
 
         switch (view.getId()){
             case R.id.notes:
 
                 Toast.makeText(getActivity(), "notes selected", Toast.LENGTH_SHORT).show();
-//                InternetAlertDialogfragment internetAlertDialogfragment=new InternetAlertDialogfragment();
-//                internetAlertDialogfragment.show(getFragmentManager().beginTransaction(),"dilog");
                 moveToContentActivity(0);
                 break;
 
             case R.id.questionPaper:
                 Toast.makeText(getActivity(), "questionpaper selected", Toast.LENGTH_SHORT).show();
                 moveToContentActivity(1);
-
-                if(NetworkCheck.isNetworkAvailable(getActivity())){
-                    //Move the user into notes Page
-
-                    //This below code will dismiss the dialogFragment after pressing the button
-                    dialog.dismiss();//it will dismiss the fragment
-                }
-                else {
-                    InternetAlertDialogfragment internetAlertDialogfragment = new InternetAlertDialogfragment();
-                    internetAlertDialogfragment.show(getFragmentManager().beginTransaction(), "dilog");
-                }
-                break;
-
-            case R.id.resources:
-                if(NetworkCheck.isNetworkAvailable(getActivity())){
-                    //Move the user into resource Page
-                    moveToContentActivity();
-                    //This below code will dismiss the dialogFragment after pressing the button
-                    dialog.dismiss();//it will dismiss the fragment
-
-                }
-                else {
-                    InternetAlertDialogfragment internetAlertDialogfragment = new InternetAlertDialogfragment();
-                    internetAlertDialogfragment.show(getFragmentManager().beginTransaction(), "dilog");
-                }
-
                 break;
 
             case R.id.practicalFiles:
@@ -107,44 +76,29 @@ public class Dialog_fragment extends DialogFragment implements View.OnClickListe
             case R.id.resources:
                 Toast.makeText(getActivity(), "resources selected", Toast.LENGTH_SHORT).show();
                 moveToContentActivity(3);
-                if(NetworkCheck.isNetworkAvailable(getActivity())){
-                    //Move the user into notes activity
-                    new DownloadDialogFragment().show(getFragmentManager(),"Download dialog");
-
-                    //This below code will dismiss the dialogFragment after pressing the button
-                    dialog.dismiss();//it will dismiss the fragment
-                }
-                else {
-                    InternetAlertDialogfragment internetAlertDialogfragment = new InternetAlertDialogfragment();
-                    internetAlertDialogfragment.show(getFragmentManager().beginTransaction(), "dilog");
-                }
-
                 break;
-
-            case R.id.questionPaper:
-                if(NetworkCheck.isNetworkAvailable(getActivity())){
-                    //Move the user into notes activity
-
-                    //This below code will dismiss the dialogFragment after pressing the button
-                    dialog.dismiss();//it will dismiss the fragment
                 }
-                else {
-                    InternetAlertDialogfragment internetAlertDialogfragment = new InternetAlertDialogfragment();
-                    internetAlertDialogfragment.show(getFragmentManager().beginTransaction(), "dilog");
-                }
-
-
-
-        }
 
     }
 
     public void moveToContentActivity(int type)
-    {   Log.i("moving...","to contentActivity with context"+getActivity());
-        Intent intent = new Intent(getActivity(),ContentsActivity.class);
-        intent.putExtra("type",type);
-        intent.putExtra("subject",choosenSubject);
-        startActivity(intent);
+    {
+        //This below code will dismiss the dialogFragment after pressing the button
+        DialogFragment dialog = (DialogFragment)getFragmentManager().findFragmentByTag("dialog_fragment");
+        if(NetworkCheck.isNetworkAvailable(getActivity())){
+            //Move the user into notes activity
+            Log.i("moving...","to contentActivity with context"+getActivity());
+            Intent intent = new Intent(getActivity(),ContentsActivity.class);
+            intent.putExtra("type",type);
+            intent.putExtra("subject",choosenSubject);
+            startActivity(intent);
+            //This below code will dismiss the dialogFragment after pressing the button
+            dialog.dismiss();//it will dismiss the fragment
+        }
+        else {
+            InternetAlertDialogfragment internetAlertDialogfragment = new InternetAlertDialogfragment();
+            internetAlertDialogfragment.show(getFragmentManager().beginTransaction(), "dilog");
+        }
     }
 
     static Dialog_fragment getInstance(int i)

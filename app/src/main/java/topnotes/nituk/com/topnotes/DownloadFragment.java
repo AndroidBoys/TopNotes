@@ -54,11 +54,11 @@ public class DownloadFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_download,container,false);
+        View view = inflater.inflate(R.layout.fragment_download, container, false);
 
         fileList = new ArrayList<>();
         theNamesOfFiles = new ArrayList<>();
-        downloadsAuthorsNameArray=new ArrayList<>();
+        downloadsAuthorsNameArray = new ArrayList<>();
         downloadsAuthorsNameArray.add("Arvind Negi");
         downloadsAuthorsNameArray.add("amit kishor");
         downloadsAuthorsNameArray.add("sohan kathait");
@@ -70,23 +70,23 @@ public class DownloadFragment extends Fragment {
         downloadsAuthorsNameArray.add("Arvind Negi");
         downloadsAuthorsNameArray.add("amit kishor");
 
-        if(checkPermission(Manifest.permission.READ_EXTERNAL_STORAGE)&&checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE))
-        {
-            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE},PER_REQ_CODE);
+        if (checkPermission(Manifest.permission.READ_EXTERNAL_STORAGE) && checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, PER_REQ_CODE);
         }
         mDownloadedFilesListView = view.findViewById(R.id.downloadedfilelistview);
         /*mArrayAdapter = new ArrayAdapter(getActivity(),android.R.layout.simple_list_item_1,theNamesOfFiles);
         mDownloadedFilesListView.setAdapter(mArrayAdapter);*/
 
-        MyDownloadsArrayAdapter myDownloadsArrayAdapter=new MyDownloadsArrayAdapter(getActivity(),theNamesOfFiles,downloadsAuthorsNameArray);
+        MyDownloadsArrayAdapter myDownloadsArrayAdapter = new MyDownloadsArrayAdapter(getActivity(), theNamesOfFiles, downloadsAuthorsNameArray);
         mDownloadedFilesListView.setAdapter(myDownloadsArrayAdapter);
         mDownloadedFilesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 openFile(theNamesOfFiles.get(i));
-                Log.i("clicked:",""+i);
-                Log.i("file:",theNamesOfFiles.get(i));
-         // changes by negi     
+                Log.i("clicked:", "" + i);
+                Log.i("file:", theNamesOfFiles.get(i));
+            }
+            // changes by negi
 //         MyDownloadAnotherArrayAdapter myDownloadsAnotherArrayAdapter=new MyDownloadAnotherArrayAdapter(getActivity(),getResources().getStringArray(R.array.subjectList));
 //         mDownloadedFilesListView.setAdapter(myDownloadsAnotherArrayAdapter);
 //         mDownloadedFilesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -98,9 +98,8 @@ public class DownloadFragment extends Fragment {
 //                 downloadPopUpDialogFragment.show(fragmentManager,"download_dialog");
 
 //             }
-//         });
+        });
         listFiles();
-        // Reference to the firebase storage
         return view;
     }
     public static DownloadFragment getInstance()
