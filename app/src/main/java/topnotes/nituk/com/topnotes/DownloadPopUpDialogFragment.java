@@ -95,7 +95,7 @@ public class DownloadPopUpDialogFragment extends DialogFragment implements View.
         fragment.setArguments(bundle);
         return fragment;
     }
-    void addDifferentFragments(Fragment replacableFragment){
+   private void addDifferentFragments(Fragment replacableFragment){
         FragmentManager fragmentManager=getActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
         // to set a custom animation in fragment
