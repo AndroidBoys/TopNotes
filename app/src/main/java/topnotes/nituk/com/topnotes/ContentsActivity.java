@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -57,6 +58,7 @@ public class ContentsActivity extends AppCompatActivity {
     private String typeTokenArray[];
     private DbHelper dbHelper;
     private boolean isInDB;
+    private List<Content> localContentList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,8 +70,8 @@ public class ContentsActivity extends AppCompatActivity {
 
         dbHelper = new DbHelper(this);
 
-
-        fetchedContentList= dbHelper.readContentList(choosenSubject,choosenType);
+        fetchedContentList= new ArrayList<>();
+        localContentList= dbHelper.readContentList(choosenSubject,choosenType);
 
         subjectTokenArray=getResources().getStringArray(R.array.subjectToken);
         typeTokenArray=getResources().getStringArray(R.array.typeToken);
@@ -84,11 +86,13 @@ public class ContentsActivity extends AppCompatActivity {
         choosenSubject= getIntent().getIntExtra("subject",0);
         choosenType=getIntent().getIntExtra("type",0);
         Toast.makeText(this,"Subject:"+choosenSubject+"Type:"+choosenType,Toast.LENGTH_SHORT).show();
+        updateUI();
+
         loadContent();
 
         // set Adapter to the recycler view with appropriate dataset
         Log.i("onCreate::","withing contentActivity");
-        updateUI();
+
 
 
     }
@@ -166,7 +170,7 @@ public class ContentsActivity extends AppCompatActivity {
 //       ContentLab contentLab = ContentLab.getInstance(this);
 //       List<Content> contents = contentLab.getContents();
 //       Log.i("updating ui",contents.toString());
-       mContentAdapter = new ContentAdapter(fetchedContentList);
+       mContentAdapter = new ContentAdapter(localContentList);
        mRecyclerView.setAdapter(mContentAdapter);
     }
 
@@ -185,7 +189,11 @@ public class ContentsActivity extends AppCompatActivity {
                         {   Log.i("note id:",dataSnapshot.getKey());
                             Log.i("fetched:",content.getTitle()+" "+content.getAuthor()+" "+content.getDate());
                           fetchedContentList.add(content);
-                          mContentAdapter.notifyDataSetChanged();
+                          if(localContentList.size()<fetchedContentList.size())
+                          {
+                           localContentList.add(content);
+                           mContentAdapter.notifyDataSetChanged();
+                          }
                         }
                     }
 
@@ -214,7 +222,16 @@ public class ContentsActivity extends AppCompatActivity {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         Toast.makeText(ContentsActivity.this,"Fetching done!",Toast.LENGTH_SHORT).show();
-                        addToDB();
+                        if(fetchedContentList.equals(localContentList))
+                        {
+                           // pass
+                        }
+                        else {
+                            localContentList=fetchedContentList;
+                            mContentAdapter.notifyDataSetChanged();
+                            addToDB();
+
+                        }
                     }
 
                     @Override
@@ -230,4 +247,5 @@ public class ContentsActivity extends AppCompatActivity {
     {
         dbHelper.saveContentList(fetchedContentList,choosenSubject,choosenType);
     }
+
 }
