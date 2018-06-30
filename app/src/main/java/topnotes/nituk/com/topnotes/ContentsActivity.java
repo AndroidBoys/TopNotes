@@ -116,7 +116,7 @@ public class ContentsActivity extends AppCompatActivity {
         // implement the recycler view list item click action here
         @Override
         public void onClick(View view) {
-            DownloadDialogFragment.getInstance(fetchedContentList.get(getAdapterPosition())).show(getSupportFragmentManager(),"Download");
+            DownloadDialogFragment.getInstance(fetchedContentList.get(getAdapterPosition()),choosenSubject,choosenType).show(getSupportFragmentManager(),"Download");
 
             }
 

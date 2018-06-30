@@ -1,8 +1,6 @@
 package topnotes.nituk.com.topnotes;
 
 import android.Manifest;
-import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -13,18 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
-
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -35,19 +23,19 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 
 //  Fragment showing the downloaded files of the user
 
-public class DownloadFragment extends Fragment {
+public class DownloadfinalFragment extends Fragment {
 
 
     private static final int PER_REQ_CODE = 1;
     private ListView mDownloadedFilesListView;
-    //private ArrayAdapter mArrayAdapter;
     private List<File> fileList;  // field saves the list of all the download files
     private List<String> theNamesOfFiles; // field saves the name of all the download files
     private ArrayList<String>  downloadsAuthorsNameArray;
+    private int choosenSubject;
+    private int choosenType;
 
 
     @Nullable
@@ -74,43 +62,39 @@ public class DownloadFragment extends Fragment {
             requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, PER_REQ_CODE);
         }
         mDownloadedFilesListView = view.findViewById(R.id.downloadedfilelistview);
-        /*mArrayAdapter = new ArrayAdapter(getActivity(),android.R.layout.simple_list_item_1,theNamesOfFiles);
-        mDownloadedFilesListView.setAdapter(mArrayAdapter);*/
-
         MyDownloadsArrayAdapter myDownloadsArrayAdapter = new MyDownloadsArrayAdapter(getActivity(), theNamesOfFiles, downloadsAuthorsNameArray);
         mDownloadedFilesListView.setAdapter(myDownloadsArrayAdapter);
         mDownloadedFilesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                openFile(theNamesOfFiles.get(i));
+                openFile(getResources().getStringArray(R.array.subjectList)[choosenSubject]+"/"
+                        +getResources().getStringArray(R.array.categoryList)[choosenType]+"/"
+                        +theNamesOfFiles.get(i));
                 Log.i("clicked:", "" + i);
                 Log.i("file:", theNamesOfFiles.get(i));
             }
-            // changes by negi
-//         MyDownloadAnotherArrayAdapter myDownloadsAnotherArrayAdapter=new MyDownloadAnotherArrayAdapter(getActivity(),getResources().getStringArray(R.array.subjectList));
-//         mDownloadedFilesListView.setAdapter(myDownloadsAnotherArrayAdapter);
-//         mDownloadedFilesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//             @Override
-//             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-//                 FragmentManager fragmentManager=getFragmentManager();
-//                 DownloadPopUpDialogFragment downloadPopUpDialogFragment=DownloadPopUpDialogFragment.getInstance();
-//                 downloadPopUpDialogFragment.show(fragmentManager,"download_dialog");
-
-//             }
         });
+        choosenSubject=getArguments().getInt("subject");
+        choosenType=getArguments().getInt("type");
+
         listFiles();
         return view;
     }
-    public static DownloadFragment getInstance()
+    public static DownloadfinalFragment getInstance(int subject,int type)
     {
-        return new DownloadFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt("subject",subject);
+        bundle.putInt("type",type);
+        DownloadfinalFragment fragment = new DownloadfinalFragment();
+        fragment.setArguments(bundle);
+        return fragment;
     }
 
     // list the downloaded files
     private  void listFiles()
     {   // Folder name where all the downloaded notes will be saved
-        String dirPath = "TopNotes";
+        String dirPath = "TopNotes/"+getResources().getStringArray(R.array.subjectList)[choosenSubject]+"/"+
+                getResources().getStringArray(R.array.categoryList)[choosenType];
         // get the directory for the given folder name
         File dir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS),dirPath);
         // if no such folder exists create a new one with such name
@@ -129,7 +113,6 @@ public class DownloadFragment extends Fragment {
                 theNamesOfFiles.add(fileList.get(i).getName());
             }
 
-            //mArrayAdapter.notifyDataSetChanged();
 
         }
     }

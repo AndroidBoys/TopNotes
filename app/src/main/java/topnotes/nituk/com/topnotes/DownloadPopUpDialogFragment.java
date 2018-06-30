@@ -15,10 +15,14 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 public class DownloadPopUpDialogFragment extends DialogFragment implements View.OnClickListener {
 
     protected TextView notesTextView,questionPaperTextView,resourceTextView,practicalFileTextView;
+    private int choosenSubject;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -40,6 +44,8 @@ public class DownloadPopUpDialogFragment extends DialogFragment implements View.
         resourceTextView.setOnClickListener(this);
         practicalFileTextView.setOnClickListener(this);
 
+        choosenSubject=getArguments().getInt("subject");
+
         return view;
     }
 
@@ -54,29 +60,50 @@ public class DownloadPopUpDialogFragment extends DialogFragment implements View.
         switch (view.getId()){
 
             case R.id.notes:
-                    //Go to downloaded notes  of user
-                dialog.dismiss();//it will dismiss the fragment
+                //Go to downloaded notes  of user
+
+                addDifferentFragments(DownloadfinalFragment.getInstance(choosenSubject,0));
+               //it will dismiss the fragment
 
                 break;
             case R.id.resources:
                     //Go to downloaded Resources  of user
-                dialog.dismiss();//it will dismiss the fragment
+                //dialog.dismiss();//it will dismiss the fragment
+                addDifferentFragments(DownloadfinalFragment.getInstance(choosenSubject,1));
                 break;
             case R.id.practicalFiles:
                     //Go to downloaded Practical Files  of user
-                dialog.dismiss();//it will dismiss the fragment
+                //dialog.dismiss();//it will dismiss the fragment
+                addDifferentFragments(DownloadfinalFragment.getInstance(choosenSubject,2));
                 break;
 
             case R.id.questionPaper:
                 //Go to downloaded question Paper  of user
-                dialog.dismiss();//it will dismiss the fragment
+                //dialog.dismiss();//it will dismiss the fragment
+                addDifferentFragments(DownloadfinalFragment.getInstance(choosenSubject,3));
                 break;
 
         }
+        dialog.dismiss();
 
     }
 
-    public static DownloadPopUpDialogFragment getInstance(){
-        return new DownloadPopUpDialogFragment();
+    public static DownloadPopUpDialogFragment getInstance(int i){
+        Bundle bundle = new Bundle();
+        bundle.putInt("subject",i);
+        DownloadPopUpDialogFragment fragment= new DownloadPopUpDialogFragment();
+        fragment.setArguments(bundle);
+        return fragment;
     }
+    void addDifferentFragments(Fragment replacableFragment){
+        FragmentManager fragmentManager=getActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
+        // to set a custom animation in fragment
+        fragmentTransaction.setCustomAnimations(R.anim.fragment_open_enter,
+                R.anim.fragment_open_exit, R.anim.fragment_close_enter,
+                R.anim.fragment_close_exit);
+        fragmentTransaction.replace(R.id.frameLayout,replacableFragment);
+        fragmentTransaction.commit();
+    }
+
 }
