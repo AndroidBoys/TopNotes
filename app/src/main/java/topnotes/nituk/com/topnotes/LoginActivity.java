@@ -103,8 +103,13 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(),"Please Enter Valid Roll Number ! ",Toast.LENGTH_SHORT).show();
                 }
                 else if(validatingRollnumber(rollNumber)){
-                    signIn();
-                    mConnectingTextView.setVisibility(View.VISIBLE);
+                    if(NetworkCheck.isNetworkAvailable(getApplicationContext())) {
+                        signIn();
+                        mConnectingTextView.setVisibility(View.VISIBLE);
+                    }else{
+                        InternetAlertDialogfragment internetAlertDialogfragment = new InternetAlertDialogfragment();
+                        internetAlertDialogfragment.show(getSupportFragmentManager().beginTransaction(), "net_dialog");
+                    }
                 }
                 else{
                     Toast.makeText(getApplicationContext(),"Please Enter Valid Roll Number ! ",Toast.LENGTH_SHORT).show();
