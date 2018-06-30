@@ -14,7 +14,9 @@ import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.os.PersistableBundle;
+
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -228,11 +230,19 @@ public class SubjectListActivity extends AppCompatActivity {
         FragmentManager fragmentManager=getSupportFragmentManager();
         FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
         // to set a custom animation in fragment
-        fragmentTransaction.setCustomAnimations(R.anim.fragment_open_enter,
-                R.anim.fragment_open_exit, R.anim.fragment_close_enter,
-                R.anim.fragment_close_exit);
+//        fragmentTransaction.setCustomAnimations(R.anim.fragment_open_enter,
+//                R.anim.fragment_open_exit, R.anim.fragment_close_enter,
+//                R.anim.fragment_close_exit);
+//        fragmentTransaction.setCustomAnimations(R.anim.fade_in_dialog,R.anim.fade_out_dialog);
+//        Log.d("above replace","this is me");
         fragmentTransaction.replace(R.id.frameLayout,replacableFragment);
-        fragmentTransaction.commitNow();
+//        fragmentTransaction.commitNow();
+//        Log.d("below replce","this is me");
+        //
+//        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+        Log.d("after commit","this is me");
+
     }
 
     //This below function is used the selection of item in action bar.
