@@ -20,6 +20,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         app:itemTextColor="@color/brownColor"
+        android:background="@drawable/drawer_list_selector"
         app:menu="@menu/list_menu"
         app:headerLayout="@layout/drawer_header_layout"
         tools:layout_editor_absoluteX="8dp"

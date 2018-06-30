@@ -53,17 +53,19 @@ public class SubjectListActivity extends AppCompatActivity {
         //Below one will set the icon on the action bar
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
+        final NavigationView navigationView=findViewById(R.id.navigationView);
 
         if(NetworkCheck.isNetworkAvailable(getApplicationContext())) {
             //if network is connected then user will move into Mysubject fragment
             addDifferentFragments(MySubjects.getInstance());//it will show the list of subjects when this activity will be opened.
+
         }else{
             //if network is not connected then user will move into DownloadFragment.
             addDifferentFragments(DownloadFirstFragment.getInstance());
         }
 
 
-        NavigationView navigationView=findViewById(R.id.navigationView);
+
 
         View header = navigationView.getHeaderView(0);
         userNameTextView=header.findViewById(R.id.userNameTextView);
@@ -78,6 +80,7 @@ public class SubjectListActivity extends AppCompatActivity {
                 {
 
                     case R.id.mySubjects:
+                        //navigationView.setCheckedItem(R.id.mySubjects);
                         Toast.makeText(SubjectListActivity.this,"mySubject selected",Toast.LENGTH_SHORT).show();
                          MySubjects mySubjects = MySubjects.getInstance();
                         addDifferentFragments(mySubjects);//it will set the subject list fragment in frameLayout.
