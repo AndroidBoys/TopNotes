@@ -1,5 +1,6 @@
 package topnotes.nituk.com.topnotes;
 
+import android.app.PendingIntent;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Environment;
@@ -52,6 +53,7 @@ public class ContentDownloader {
                     @Override
                     public void onStartOrResume() {
                         Toast.makeText(mContext,"Download started..",Toast.LENGTH_SHORT).show();
+                        DownloadDialogFragment.showDownloadNotification();
                     }
                 })
                 .setOnPauseListener(new OnPauseListener() {
