@@ -14,13 +14,13 @@ public class Content implements Serializable {
     private String downloadUrl;
 
 
-    public Content(String title, String author, String date, String downloadUrl) {
-        this.setTitle(title);
-        this.setAuthor(author);
-        this.setDate(date);
-        this.setDownloadUrl(downloadUrl);
-    }
+    public Content() {
+//        this.setTitle(title);
+//        this.setAuthor(author);
+//        this.setDate(date);
+//        this.setDownloadUrl(downloadUrl);
 
+}
 
     public String getTitle() {
         return title;

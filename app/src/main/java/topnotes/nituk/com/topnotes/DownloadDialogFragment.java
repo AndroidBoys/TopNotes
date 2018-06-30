@@ -37,6 +37,7 @@ public class DownloadDialogFragment extends Dialog_fragment {
     private TextView creditsTextView;
     private int choosenSubject;
     private int choosenType;
+    public static  NotificationCompat.Builder notificationBuilder;
 
 
     @Nullable
@@ -49,17 +50,6 @@ public class DownloadDialogFragment extends Dialog_fragment {
 
         View view = inflater.inflate(R.layout.download_dialog_fragment, container, false);
         Button downloadButton = view.findViewById(R.id.downloadButton);
-        downloadButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                showDownloadNotification(); //show notification to user and track the download progress
-
-                // Download the content
-                Toast.makeText(getActivity(), "::Download process begins::", Toast.LENGTH_SHORT).show();
-                new ContentDownloader(getActivity());
-            }
-        });
 
 
         titleTextView =view.findViewById(R.id.title);
@@ -85,6 +75,7 @@ public class DownloadDialogFragment extends Dialog_fragment {
         downloadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                showDownloadNotification(); //show notification to user and track the download progress
                 // Download the content
                 Toast.makeText(getActivity(),"::Download process begins:: with url:"+content.getDownloadUrl(),Toast.LENGTH_SHORT).show();
                 Log.i("url:",content.getDownloadUrl());
@@ -116,7 +107,7 @@ public class DownloadDialogFragment extends Dialog_fragment {
 
         createNotificationChannel(); //notification won't work without this in android version above 8.0+
 
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(getActivity(), notificationChannelId);
+       notificationBuilder = new NotificationCompat.Builder(getActivity(), notificationChannelId);
         //this channelid should be unique and it is used to track the notification
 
         Intent intent = new Intent(getActivity(),SubjectListActivity.class);
@@ -130,7 +121,7 @@ public class DownloadDialogFragment extends Dialog_fragment {
                 .addAction(R.drawable.light_blue_color,"Stop",pendingIntent)
                 .addAction(R.drawable.light_blue_color,"cancel",pendingIntent)
                 .setContentText("Downloading...")
-                .setProgress(10,5,false);
+                ;
 
         //to display notification
         NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(getActivity());

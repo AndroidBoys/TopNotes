@@ -46,7 +46,10 @@ public class DbHelper extends SQLiteOpenHelper {
         onCreate(sqLiteDatabase);
     }
 
-    public void saveContentList(List<Content> contentList, int subjectNumber, int subjectTypeNumber,SQLiteDatabase sqLiteDatabase) {
+    public void saveContentList(List<Content> contentList, int subjectNumber, int subjectTypeNumber) {
+
+        DbHelper dbHelper=new DbHelper(context);
+        SQLiteDatabase sqLiteDatabase=dbHelper.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         for (int i = 0; i < contentList.size(); i++) {
             byte[] data = SerializationUtils.serialize(contentList.get(i));
