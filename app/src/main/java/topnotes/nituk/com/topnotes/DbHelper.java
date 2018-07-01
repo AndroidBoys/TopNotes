@@ -62,24 +62,32 @@ public class DbHelper extends SQLiteOpenHelper {
         SQLiteDatabase sqLiteDatabase = dbHelper.getWritableDatabase();//creating database
 
 
+        List<Content> existingList = dbHelper.readContentList(subjectNumber,subjectTypeNumber);
+
         ContentValues contentValues = new ContentValues();
 
         //creating a ContentValues object, it will contain values in a set
 
         for (int i = 0; i < contentList.size(); i++) {
 
+
+            if(existingList.contains(contentList.get(i)))
+            {
+                continue;
+            }
+
             //serializing the object, since we can't store objects in sqlite
             byte[] data = SerializationUtils.serialize(contentList.get(i));
 
             //for retrieving the data
-            Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM " + DbContract.TABLE_NAME + " WHERE "
-                    + DbContract.SUBJECT_NUMBER + "=" + subjectNumber + " AND "
-                    + DbContract.SUBJECT_TYPE_NUMBER + "=" + subjectTypeNumber
-                    + " AND " + DbContract.CONTENT + "=" + data, null);
-
-            //if data already found it database then don't add it in database
-            if (cursor.getCount() > 0)
-                continue;
+//            Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM " + DbContract.TABLE_NAME + " WHERE "
+//                    + DbContract.SUBJECT_NUMBER + "=" + subjectNumber + " AND "
+//                    + DbContract.SUBJECT_TYPE_NUMBER + "=" + subjectTypeNumber
+//                    + " AND " + DbContract.CONTENT + "=" + data, null);
+//
+//            //if data already found it database then don't add it in database
+//            if (cursor.getCount() > 0)
+//                continue;
 
            //adding values in databse
             contentValues.put(DbContract.CONTENT, data);
