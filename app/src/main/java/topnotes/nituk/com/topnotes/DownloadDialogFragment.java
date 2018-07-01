@@ -57,11 +57,11 @@ public class DownloadDialogFragment extends Dialog_fragment {
             @Override
             public void onClick(View view) {
 
-                showDownloadNotification(); //show notification to user and track the download progress
+               // showDownloadNotification(); //show notification to user and track the download progress
 
                 // Download the content
                 Toast.makeText(getActivity(), "::Download process begins::", Toast.LENGTH_SHORT).show();
-                new ContentDownloader(getActivity());
+               // new ContentDownloader(getActivity());
             }
         });
 
@@ -92,7 +92,8 @@ public class DownloadDialogFragment extends Dialog_fragment {
                 // Download the content
                 Toast.makeText(getActivity(),"::Download process begins:: with url:"+content.getDownloadUrl(),Toast.LENGTH_SHORT).show();
                 Log.i("url:",content.getDownloadUrl());
-                new ContentDownloader(getActivity()).downloadFile(content.getDownloadUrl(),content.getTitle(),choosenSubject,choosenType);
+//                new ContentDownloader(getActivity()).downloadFile(content.getDownloadUrl(),content.getTitle(),choosenSubject,choosenType);
+                  new AnotherContentDownloader(getActivity()).downloadFile(content.getDownloadUrl(),content.getTitle(),choosenSubject,choosenType);
             }
         });
 

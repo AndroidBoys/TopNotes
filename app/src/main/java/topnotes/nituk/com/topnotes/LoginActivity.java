@@ -10,9 +10,12 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,7 +41,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements View.OnClickListener{
 
     private EditText mNameEditText;
     private EditText mRNEditText;
@@ -49,6 +52,7 @@ public class LoginActivity extends AppCompatActivity {
     private GoogleSignInClient mGoogleSignInClient;
     private static final int RC_SIGN_IN=1;
     private SharedPreferences sharedPreferences;
+    private LinearLayout superLoginLayout;
 
 
     @Override
@@ -59,9 +63,14 @@ public class LoginActivity extends AppCompatActivity {
         mNameEditText = findViewById(R.id.nameEditText);
         mRNEditText = findViewById(R.id.rnEditText);
         mSignInButton = findViewById(R.id.googlesigninbutton);
-        mConnectingTextView=findViewById(R.id.connectiong);
+        mConnectingTextView = findViewById(R.id.connectiong);
+        superLoginLayout=findViewById(R.id.superLoginLayout);
+        sharedPreferences = getSharedPreferences("topnotes.nituk.com.topnotes", MODE_PRIVATE);
 
-         sharedPreferences= getSharedPreferences("topnotes.nituk.com.topnotes",MODE_PRIVATE);
+        // set listener to the sign in button and superloginlayout
+        mSignInButton.setOnClickListener(this);
+        superLoginLayout.setOnClickListener(this);
+
 
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
@@ -74,65 +83,22 @@ public class LoginActivity extends AppCompatActivity {
 
         // Build a GoogleSignInClient with the options specified by gso.
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-        // set listener to the sign in button
-        mSignInButton.setOnClickListener(new View.OnClickListener() {
+
+ 
+       //setting keyListener on the mRNEditText so when user press the enter key it will call directly sign in
+        mRNEditText.setOnKeyListener(new View.OnKeyListener() {
             @Override
-            public void onClick(View view) {
+            public boolean onKey(View view, int i, KeyEvent keyEvent) {
+                if(i==KeyEvent.KEYCODE_ENTER&& keyEvent.getAction()==KeyEvent.ACTION_DOWN)
+                    onClick(mSignInButton);//passing the view inside onClick whose action you want to perform
 
-
-                // For testing purpose
-    
-                //Intent intent = new Intent(LoginActivity.this,SubjectListActivity.class);
-                //startActivity(intent);
-                String rollNumber=mRNEditText.getText().toString();
-
-                if(TextUtils.isEmpty(mNameEditText.getText().toString())){
-                    mNameEditText.setError("Empty field");
-                }
-                else if(TextUtils.isEmpty(mRNEditText.getText().toString())){
-                        mRNEditText.setError("Empty field");
-                }else if(validatingRollnumber(rollNumber)){
-                    mGoogleSignInClient.signOut().addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                           // Toast.makeText(LoginActivity.this,"Sign out sucess!",Toast.LENGTH_SHORT).show();
-                            signIn();
-                        }
-                    });
-                }else if(rollNumber.length()<10||rollNumber.length()>10){
-                    Toast.makeText(getApplicationContext(),"Please Enter Valid Roll Number ! ",Toast.LENGTH_SHORT).show();
-                }
-                else if(validatingRollnumber(rollNumber)){
-                    if(NetworkCheck.isNetworkAvailable(getApplicationContext())) {
-                        signIn();
-                        mConnectingTextView.setVisibility(View.VISIBLE);
-                    }else{
-                        InternetAlertDialogfragment internetAlertDialogfragment = new InternetAlertDialogfragment();
-                        internetAlertDialogfragment.show(getSupportFragmentManager().beginTransaction(), "net_dialog");
-                    }
-                }
-                else{
-                    Toast.makeText(getApplicationContext(),"Please Enter Valid Roll Number ! ",Toast.LENGTH_SHORT).show();
-                }
+                return false;
             }
         });
 
+
     }
 
-    boolean validatingRollnumber(String rollNumber){
-        String upper=rollNumber.toUpperCase();
-        Log.i("Roll",upper.substring(0,8));
-
-        if(upper.substring(0,8).equals("BT16CSE0")&&(upper.charAt(8)<=54&&upper.charAt(8)>=48)) {
-            if(upper.charAt(8)==54 &&(upper.charAt(9)>=48&&upper.charAt(9)<=50)||(upper.charAt(8)<=53&&upper.charAt(8)>=48)) {
-                return true;
-            }else{
-               return false;
-            }
-        }
-        else
-            return false;
-    }
     @Override
     protected void onStart() {
         super.onStart();
@@ -159,6 +125,7 @@ public class LoginActivity extends AppCompatActivity {
 
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
+
     }
 
     @Override
@@ -204,7 +171,6 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                              Toast.makeText(LoginActivity.this,"Google sign in sucessfull! Details:"+acct.getEmail(),Toast.LENGTH_SHORT).show();
-                             mProgressDialog.dismiss();
 
                             Log.d("success:", "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
@@ -213,9 +179,9 @@ public class LoginActivity extends AppCompatActivity {
                         } else {
                             // If sign in fails, display a message to the user.
                             Toast.makeText(LoginActivity.this,"Google sign in Failed at server due to:"+task.getException(),Toast.LENGTH_SHORT).show();
-                            mProgressDialog.dismiss();
                             Log.w("failed:", "signInWithCredential:failure", task.getException());
                         }
+                        mProgressDialog.dismiss();
                     }
                 });
     }
@@ -230,6 +196,9 @@ public class LoginActivity extends AppCompatActivity {
     // Don't go to the splash on pressing the back button
     @Override
     public void onBackPressed() {
+
+        if(mProgressDialog.isShowing())
+        mProgressDialog.dismiss();
         // Do nothing as of now
     }
     public void saveUserInfo(FirebaseUser user)
@@ -271,5 +240,76 @@ public class LoginActivity extends AppCompatActivity {
     public void initUser(String name,String rn,String email,String imageurl)
     {
         User.getUser(name,rn,email,imageurl);
+    }
+
+   public boolean validatingDetails(){
+            String rollNumber=mRNEditText.getText().toString();
+
+            if(mNameEditText.getText().toString().trim().length()==0){
+                mNameEditText.setError("Empty field");
+            }
+            if(mRNEditText.getText().toString().trim().length()==0){
+                mRNEditText.setError("Empty field");
+            }
+
+            else if(rollNumber.length()<10||rollNumber.length()>10){
+                Toast.makeText(getApplicationContext(),"Please Enter Valid Roll Number ! ",Toast.LENGTH_SHORT).show();
+            }
+            else if(validatingRollnumber(rollNumber)){
+                if(NetworkCheck.isNetworkAvailable(getApplicationContext())) {
+                    return  true;
+                }else{
+                    InternetAlertDialogfragment internetAlertDialogfragment = new InternetAlertDialogfragment();
+                    internetAlertDialogfragment.show(getSupportFragmentManager().beginTransaction(), "net_dialog");
+
+                }
+            }
+            else{
+                Toast.makeText(getApplicationContext(),"Please Enter Valid Roll Number ! ",Toast.LENGTH_SHORT).show();
+
+            }
+            return false;
+
+        }
+
+    boolean validatingRollnumber(String rollNumber){
+        String upper=rollNumber.toUpperCase();
+        Log.i("Roll",upper.substring(0,8));
+
+        if(upper.substring(0,8).equals("BT16CSE0")&&(upper.charAt(8)<=54&&upper.charAt(8)>=48)) {
+            if(upper.charAt(8)==54 &&(upper.charAt(9)>=48&&upper.charAt(9)<=50)||(upper.charAt(8)<=53&&upper.charAt(8)>=48)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    @Override
+    public void onClick(View view) {
+
+        switch (view.getId()){
+            case R.id.googlesigninbutton:
+                if (validatingDetails()) {
+                    mGoogleSignInClient.signOut().addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            // Toast.makeText(LoginActivity.this,"Sign out sucess!",Toast.LENGTH_SHORT).show();
+                             mConnectingTextView.setVisibility(View.VISIBLE);
+                             signIn();
+
+                        }
+                    });
+                }
+                break;
+
+            case R.id.superLoginLayout:
+                //To hide the keyboard from the screen if user press anywhere in outside the editTexts
+                InputMethodManager inputMethodManager=(InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
+                inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),0);
+                break;
+
+        }
+
     }
 }
