@@ -3,9 +3,12 @@ package topnotes.nituk.com.topnotes;
 import android.app.DownloadManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
+import android.widget.Toast;
 
 public class AnotherContentDownloader {
    private Context mContext;
@@ -41,4 +44,5 @@ public class AnotherContentDownloader {
         mDownloadReference=mDownloadManager.enqueue(request);
 
     }
+
 }
