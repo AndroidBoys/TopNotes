@@ -58,14 +58,14 @@ public class DbHelper extends SQLiteOpenHelper {
             titleList.add(list.get(i).getTitle());
         }
         ContentValues contentValues = new ContentValues();
-//        for (int i = 0; i < contentList.size(); i++) {
-//            for(j=0;j<list.size();j++){
-//                if(contentList.get(i).equals(list.get(j)))
-//                    break;
-//
-//            }
-//            if(j!=list.size())
-//                continue;
+////        for (int i = 0; i < contentList.size(); i++) {
+////            for(j=0;j<list.size();j++){
+////                if(contentList.get(i).equals(list.get(j)))
+////                    break;
+////
+////            }
+////            if(j!=list.size())
+////                continue;
         for(int i=0;i<contentList.size();i++) {
             if(titleList.contains(contentList.get(i).getTitle())) {
                 continue;
@@ -77,7 +77,10 @@ public class DbHelper extends SQLiteOpenHelper {
             contentValues.put(DbContract.SUBJECT_TYPE_NUMBER, subjectTypeNumber);
             sqLiteDatabase.insert(DbContract.TABLE_NAME, null, contentValues);
 
+
+
         }
+        Log.i("savedtodb:",contentList.toString());
     }
 
     public List<Content> readContentList(int subjectNumber,int subjectTupeNumber){

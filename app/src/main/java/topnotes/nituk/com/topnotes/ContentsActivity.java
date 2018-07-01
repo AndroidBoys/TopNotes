@@ -50,10 +50,11 @@ public class ContentsActivity extends AppCompatActivity {
         // initialise
 
 
-        dbHelper = new DbHelper(this);
+        dbHelper = new DbHelper(getApplicationContext());
 
         fetchedContentList= new ArrayList<>();
         localContentList= dbHelper.readContentList(choosenSubject,choosenType);
+        Log.i("fromdb:",""+localContentList.size());
 
         subjectTokenArray=getResources().getStringArray(R.array.subjectToken);
         typeTokenArray=getResources().getStringArray(R.array.typeToken);
@@ -171,10 +172,10 @@ public class ContentsActivity extends AppCompatActivity {
                         {   Log.i("note id:",dataSnapshot.getKey());
                             Log.i("fetched:",content.getTitle()+" "+content.getAuthor()+" "+content.getDate());
                           fetchedContentList.add(content);
-                          if(localContentList.size()<fetchedContentList.size())
+                          if(!localContentList.contains(content))
                           {
-                           localContentList.add(content);
-                           mContentAdapter.notifyDataSetChanged();
+                              localContentList.add(content);
+                              mContentAdapter.notifyDataSetChanged();
                           }
                         }
                     }
@@ -204,16 +205,8 @@ public class ContentsActivity extends AppCompatActivity {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         Toast.makeText(ContentsActivity.this,"Fetching done!",Toast.LENGTH_SHORT).show();
-                        if(fetchedContentList.equals(localContentList))
-                        {
-                           // pass
-                        }
-                        else {
-                            localContentList=fetchedContentList;
-                            mContentAdapter.notifyDataSetChanged();
-                            addToDB();
-
-                        }
+                        Log.i("localsize:",""+localContentList.size());
+                        addToDB();
                     }
 
                     @Override

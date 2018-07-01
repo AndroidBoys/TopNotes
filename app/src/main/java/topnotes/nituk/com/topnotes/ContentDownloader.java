@@ -35,16 +35,16 @@ public class ContentDownloader {
     public ContentDownloader(Context context) {
         mContext = context;
         PRDownloaderConfig config = PRDownloaderConfig.newBuilder()
-                //.setReadTimeout(30_000)
-                //.setConnectTimeout(30_000)
-                //.setDatabaseEnabled(true)
+                .setReadTimeout(30_000)
+                .setConnectTimeout(30_000)
+                .setDatabaseEnabled(true)
                 .build();
         PRDownloader.initialize(mContext, config);
         //getDownloadUrl();
     }
     public void downloadFile(String url,String title,int subject,int type)
     {
-        downloadId = PRDownloader.download(url,Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getPath()+"/TopNotes/"+
+        downloadId = PRDownloader.download("https://yt3.ggpht.com/a-/ACSszfH4rgI-WIVE6ZZqYZK-8oCZyEY_L8-FhvJarA=s900-mo-c-c0xffffffff-rj-k-no",Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getPath()+"/TopNotes/"+
                 mContext.getResources().getStringArray(R.array.subjectList)[subject]+"/"+
                 mContext.getResources().getStringArray(R.array.categoryList)[type]
                 ,title+".jpg")

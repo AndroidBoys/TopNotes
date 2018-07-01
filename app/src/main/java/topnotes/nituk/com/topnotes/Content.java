@@ -50,4 +50,12 @@ public class Content implements Serializable {
         this.downloadUrl = downloadUrl;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        Content content =(Content)obj;
+        return content.getTitle().equals(this.getTitle())
+                && content.getAuthor().equals(this.getAuthor())
+                &&content.getDate().equals(this.getDate())
+                &&content.getDownloadUrl().equals(this.getDownloadUrl());
+    }
 }
