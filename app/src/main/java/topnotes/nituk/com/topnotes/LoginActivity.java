@@ -81,41 +81,46 @@ public class LoginActivity extends AppCompatActivity {
 
 
                 // For testing purpose
-    
-                //Intent intent = new Intent(LoginActivity.this,SubjectListActivity.class);
-                //startActivity(intent);
-                String rollNumber=mRNEditText.getText().toString();
 
-                if(TextUtils.isEmpty(mNameEditText.getText().toString())){
-                    mNameEditText.setError("Empty field");
-                }
-                else if(TextUtils.isEmpty(mRNEditText.getText().toString())){
-                        mRNEditText.setError("Empty field");
-                }else if(validatingRollnumber(rollNumber)){
-                    mGoogleSignInClient.signOut().addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                           // Toast.makeText(LoginActivity.this,"Sign out sucess!",Toast.LENGTH_SHORT).show();
-                            signIn();
-                        }
-                    });
-                }else if(rollNumber.length()<10||rollNumber.length()>10){
-                    Toast.makeText(getApplicationContext(),"Please Enter Valid Roll Number ! ",Toast.LENGTH_SHORT).show();
-                }
-                else if(validatingRollnumber(rollNumber)){
-                    if(NetworkCheck.isNetworkAvailable(getApplicationContext())) {
+                mGoogleSignInClient.signOut().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        // Toast.makeText(LoginActivity.this,"Sign out sucess!",Toast.LENGTH_SHORT).show();
                         signIn();
-                        mConnectingTextView.setVisibility(View.VISIBLE);
-                    }else{
-                        InternetAlertDialogfragment internetAlertDialogfragment = new InternetAlertDialogfragment();
-                        internetAlertDialogfragment.show(getSupportFragmentManager().beginTransaction(), "net_dialog");
                     }
-                }
-                else{
-                    Toast.makeText(getApplicationContext(),"Please Enter Valid Roll Number ! ",Toast.LENGTH_SHORT).show();
-                }
+                });
+
+                // Commented out for the time being...
+    
+//                //Intent intent = new Intent(LoginActivity.this,SubjectListActivity.class);
+//                //startActivity(intent);
+//                String rollNumber=mRNEditText.getText().toString();
+//
+//                if(TextUtils.isEmpty(mNameEditText.getText().toString())){
+//                    mNameEditText.setError("Empty field");
+//                }
+//                else if(TextUtils.isEmpty(mRNEditText.getText().toString())){
+//                        mRNEditText.setError("Empty field");
+//                }else if(validatingRollnumber(rollNumber)){
+//
+//                }else if(rollNumber.length()<10||rollNumber.length()>10){
+//                    Toast.makeText(getApplicationContext(),"Please Enter Valid Roll Number ! ",Toast.LENGTH_SHORT).show();
+//                }
+//                else if(validatingRollnumber(rollNumber)){
+//                    if(NetworkCheck.isNetworkAvailable(getApplicationContext())) {
+//                        signIn();
+//                        mConnectingTextView.setVisibility(View.VISIBLE);
+//                    }else{
+//                        InternetAlertDialogfragment internetAlertDialogfragment = new InternetAlertDialogfragment();
+//                        internetAlertDialogfragment.show(getSupportFragmentManager().beginTransaction(), "net_dialog");
+//                    }
+//                }
+//                else{
+//                    Toast.makeText(getApplicationContext(),"Please Enter Valid Roll Number ! ",Toast.LENGTH_SHORT).show();
+//                }
             }
         });
+
 
     }
 
