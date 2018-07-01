@@ -3,17 +3,22 @@ package topnotes.nituk.com.topnotes;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.util.Log;
 import android.os.PersistableBundle;
 
@@ -144,11 +149,14 @@ public class SubjectListActivity extends AppCompatActivity {
                 drawerLayout.closeDrawer(Gravity.START);
                 return true;
             }
-        });//
-
+        });
+        //set current user info to the dashboard
         setCurrentUserInfo();
-
-
+        // for bug fixing in api > 24 when firing the pdf intent
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder(); StrictMode.setVmPolicy(builder.build());
+        // for api >= 23 asking for all runtime permissions
+         if(!hasAllPermissions())
+         askForPermissions();
     }
 
     /*public void onSaveInstance(Bundle outState) {
@@ -268,11 +276,30 @@ public class SubjectListActivity extends AppCompatActivity {
     }
 
     // sign out
+
     private void signOut()
     {
         FirebaseAuth.getInstance().signOut();
         finish();
 
         LoginActivity.mConnectingTextView.setVisibility(View.INVISIBLE);
+    }
+
+    private void askForPermissions()
+    {
+        String permissions[]={Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.ACCESS_NETWORK_STATE};
+        if(Build.VERSION.SDK_INT>=23)
+        requestPermissions(permissions,1);
+    }
+
+
+    private boolean hasAllPermissions()
+    {
+        if(Build.VERSION.SDK_INT>=23)
+        return ActivityCompat.checkSelfPermission(getApplicationContext(),Manifest.permission.WRITE_EXTERNAL_STORAGE)==PackageManager.PERMISSION_GRANTED
+                &&ActivityCompat.checkSelfPermission(getApplicationContext(),Manifest.permission.READ_EXTERNAL_STORAGE)==PackageManager.PERMISSION_GRANTED
+                &&ActivityCompat.checkSelfPermission(getApplicationContext(),Manifest.permission.ACCESS_NETWORK_STATE)==PackageManager.PERMISSION_GRANTED;
+
+        return true;
     }
 }
