@@ -84,6 +84,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         // Build a GoogleSignInClient with the options specified by gso.
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
+ 
        //setting keyListener on the mRNEditText so when user press the enter key it will call directly sign in
         mRNEditText.setOnKeyListener(new View.OnKeyListener() {
             @Override

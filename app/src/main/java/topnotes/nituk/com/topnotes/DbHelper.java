@@ -63,6 +63,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
 
         ContentValues contentValues = new ContentValues();
+
         //creating a ContentValues object, it will contain values in a set
 
         for (int i = 0; i < contentList.size(); i++) {
@@ -86,7 +87,10 @@ public class DbHelper extends SQLiteOpenHelper {
             contentValues.put(DbContract.SUBJECT_TYPE_NUMBER, subjectTypeNumber);
             sqLiteDatabase.insert(DbContract.TABLE_NAME, null, contentValues);
 
+
+
         }
+        Log.i("savedtodb:",contentList.toString());
     }
 
     public List<Content> readContentList(int subjectNumber, int subjectTupeNumber) {
