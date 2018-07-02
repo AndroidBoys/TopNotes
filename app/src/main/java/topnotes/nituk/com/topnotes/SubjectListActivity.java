@@ -11,37 +11,24 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.ColorFilter;
-import android.graphics.drawable.Drawable;
+
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
-import android.os.PersistableBundle;
 
 import android.view.Gravity;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInApi;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInResult;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.Objects;
 
 public class SubjectListActivity extends AppCompatActivity {
@@ -76,16 +63,7 @@ public class SubjectListActivity extends AppCompatActivity {
 
         final NavigationView navigationView = findViewById(R.id.navigationView);
 
-        if (NetworkCheck.isNetworkAvailable(getApplicationContext())) {
-            //if network is connected then user will move into Mysubject fragment
-            addDifferentFragments(MySubjects.getInstance());//it will show the list of subjects when this activity will be opened.
-            navigationView.getMenu().getItem(0).setChecked(true);
 
-        } else {
-            //if network is not connected then user will move into DownloadFragment.
-            addDifferentFragments(DownloadFirstFragment.getInstance());
-            navigationView.getMenu().getItem(1).setChecked(true);
-        }
 
 
         View header = navigationView.getHeaderView(0);
@@ -151,6 +129,20 @@ public class SubjectListActivity extends AppCompatActivity {
                 return true;
             }
         });
+        if (NetworkCheck.isNetworkAvailable(getApplicationContext())) {
+            //if network is connected then user will move into Mysubject fragment
+            addDifferentFragments(MySubjects.getInstance());//it will show the list of subjects when this activity will be opened.
+            //navigationView.getMenu().getItem(0).setChecked(true);
+            navigationView.setCheckedItem(R.id.mySubjects);
+
+        } else {
+            //if network is not connected then user will move into DownloadFragment.
+            addDifferentFragments(DownloadFirstFragment.getInstance());
+//            navigationView.getMenu().getItem(1).setChecked(true);
+            navigationView.setCheckedItem(R.id.myDownloads);
+        }
+
+
         //set current user info to the dashboard
         setCurrentUserInfo();
         // for bug fixing in api > 24 when firing the pdf intent
@@ -184,7 +176,7 @@ public class SubjectListActivity extends AppCompatActivity {
 //        fragmentTransaction.commitNow();
 //        Log.d("below replce","this is me");
         //
-//        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
         Log.d("after commit","this is me");
 
@@ -207,8 +199,17 @@ public class SubjectListActivity extends AppCompatActivity {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            //exit from the app
-            finish();
+            new AlertDialog.Builder(this).setTitle("Exit TopNotes?")
+                    .setMessage("Do you really want to exit ?")
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            finishAffinity();//it will pop up all the activity from the stack
+                            finish();
+                        }
+                    })
+                    .setNegativeButton("Cancel",null).show();
         }
     }
 

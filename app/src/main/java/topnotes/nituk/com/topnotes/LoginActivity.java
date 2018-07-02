@@ -3,7 +3,10 @@ package topnotes.nituk.com.topnotes;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -59,6 +62,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        getSupportActionBar().hide();
+        mProgressDialog = new ProgressDialog(LoginActivity.this);
 
         mNameEditText = findViewById(R.id.nameEditText);
         mRNEditText = findViewById(R.id.rnEditText);
@@ -119,7 +124,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     // Get a google sign in intent
     private void signIn() {
 
-        mProgressDialog = new ProgressDialog(LoginActivity.this);
+
         mProgressDialog.setMessage("Loading...");
         mProgressDialog.show();
 
@@ -197,9 +202,26 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onBackPressed() {
 
-        if(mProgressDialog.isShowing())
-        mProgressDialog.dismiss();
-        // Do nothing as of now
+        if(mProgressDialog.isShowing()) {
+            mConnectingTextView.setVisibility(View.INVISIBLE);
+            mProgressDialog.dismiss();
+
+        }
+        else{
+            new AlertDialog.Builder(this).setTitle("Exit TopNotes ?")
+                    .setMessage("Do you really want to exit ?")
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            finishAffinity();//it will pop up all the activity from the stack
+                            finish();
+                        }
+                    })
+                    .setNegativeButton("Cancel",null).show();
+
+        }
+
     }
     public void saveUserInfo(FirebaseUser user)
     {
