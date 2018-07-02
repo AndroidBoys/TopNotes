@@ -1,6 +1,7 @@
 package topnotes.nituk.com.topnotes;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -37,12 +38,13 @@ public class DownloadfinalFragment extends Fragment {
     private int choosenSubject;
     private int choosenType;
     private List<String> downloadedTitle;
+    Activity activity;
 
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
+        activity=getActivity();
         View view = inflater.inflate(R.layout.fragment_download, container, false);
 
         fileList = new ArrayList<>();
@@ -69,10 +71,17 @@ public class DownloadfinalFragment extends Fragment {
         });
         choosenSubject=getArguments().getInt("subject");
         choosenType=getArguments().getInt("type");
+        //Toast.makeText(getActivity(),"Subject:"+choosenSubject+"Type:"+choosenType,Toast.LENGTH_SHORT).show();
 
 
         return view;
     }
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((SubjectListActivity)activity).setActionBarTitle(getResources().getStringArray(R.array.categoryList)[choosenType]+" Selected");
+    }
+
     public static DownloadfinalFragment getInstance(int subject,int type)
     {
         Bundle bundle = new Bundle();

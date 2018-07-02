@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:background="@drawable/upload_background_color"
               android:layout_height="match_parent">
 
     <TextView
@@ -38,7 +37,6 @@
             android:layout_height="wrap_content"
             android:text="@string/arvindName"
             android:textSize="20dp"
-            android:textStyle="italic"
             android:textColor="@color/blackColor"
             android:layout_marginTop="20dp"
             android:layout_marginLeft="7dp"/>
@@ -48,7 +46,7 @@
             android:layout_height="wrap_content"
             android:text="@string/arvindGmail"
             android:textSize="20dp"
-            android:textStyle="italic"
+            
             android:textColor="@color/blackColor"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="7dp"/>
@@ -58,7 +56,7 @@
             android:layout_height="wrap_content"
             android:text="@string/amitName"
             android:textSize="20dp"
-            android:textStyle="italic"
+            
             android:textColor="@color/blackColor"
             android:layout_marginTop="20dp"
             android:layout_marginLeft="7dp"/>
@@ -68,7 +66,7 @@
             android:layout_height="wrap_content"
             android:text="@string/amitGmail"
             android:textSize="20dp"
-            android:textStyle="italic"
+            
             android:textColor="@color/blackColor"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="7dp"/>
@@ -78,7 +76,7 @@
             android:layout_height="wrap_content"
             android:text="@string/sohanName"
             android:textSize="20dp"
-            android:textStyle="italic"
+            
             android:textColor="@color/blackColor"
             android:layout_marginTop="20dp"
             android:layout_marginLeft="7dp"/>
@@ -88,7 +86,7 @@
             android:layout_height="wrap_content"
             android:text="@string/sohanEmail"
             android:textSize="20dp"
-            android:textStyle="italic"
+            
             android:textColor="@color/blackColor"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="7dp"/>

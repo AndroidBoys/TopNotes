@@ -1,5 +1,6 @@
 package topnotes.nituk.com.topnotes;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,18 +19,17 @@ public class DownloadFirstFragment extends Fragment {
 
 
     private ListView mDownloadedSubjectListView;
-
-
-
+    Activity activity;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
+        activity=getActivity();
         View view = inflater.inflate(R.layout.fragment_download, container, false);
 
 
         mDownloadedSubjectListView = view.findViewById(R.id.downloadedfilelistview);
-
+        //getActivity().getActionBar().setTitle("My Downloads");
         MyDownloadAnotherArrayAdapter myDownloadsAnotherArrayAdapter = new MyDownloadAnotherArrayAdapter(getActivity(), getResources().getStringArray(R.array.subjectList));
         mDownloadedSubjectListView.setAdapter(myDownloadsAnotherArrayAdapter);
         mDownloadedSubjectListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -48,5 +48,11 @@ public class DownloadFirstFragment extends Fragment {
     public static DownloadFirstFragment getInstance()
     {
         return new DownloadFirstFragment();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((SubjectListActivity)activity).setActionBarTitle("My Downloads");
     }
 }
