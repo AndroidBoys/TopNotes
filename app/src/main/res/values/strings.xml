@@ -13,6 +13,14 @@
     <string name="enter_your_name">enter your name</string>
     <string name="username">USERNAME:</string>
     <string name="sign_in">SIGN IN</string>
+    <string name="arvindName">Name : Arvind Negi</string>
+    <string name="arvindGmail">Gmail : arvind7799.cse16@nituk.ac.in</string>
+    <string name="amitName">Name : Amit Kishor Raturi</string>
+    <string name="amitGmail">Gmail : amitkishorraturi.cse16@nituk.ac.in</string>
+    <string name="sohanName">Name : Sohan Kathait</string>
+    <string name="topNotesVersion">TopNotes Version 1.0</string>
+    <string name="developers_team">Developers Team</string>
+    <string name="sohanEmail">Gmail : sohan.cse16@nituk.ac.in</string>
 
 
     <string-array name="subjectList">

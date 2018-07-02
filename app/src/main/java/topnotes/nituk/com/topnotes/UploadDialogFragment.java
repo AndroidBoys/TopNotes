@@ -88,7 +88,7 @@ public class UploadDialogFragment extends DialogFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View view=inflater.inflate(R.layout.duplicate,container,true);
+        View view=inflater.inflate(R.layout.upload_dialog_fragment,container,true);
 
         // This context should be use throughout the fragment to acess any resources related to the hosting activity
         // There was a bug in uploading due to null (getActivity) which occurs due to completion of HTTP request and detachment of
@@ -275,7 +275,7 @@ public class UploadDialogFragment extends DialogFragment {
     {   UUID contentUUID = UUID.randomUUID();
         Content content = new Content();
         content.setTitle(titleEditText.getText().toString());
-        content.setDate(DateFormat.getDateFormat(getActivity()).format(new Date()));
+        content.setDate(DateFormat.getDateFormat(activity).format(new Date()));
         content.setAuthor(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
         content.setDownloadUrl(url);
         // update the myupload list

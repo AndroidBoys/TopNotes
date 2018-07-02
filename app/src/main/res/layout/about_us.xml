@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:background="@drawable/upload_background_color"
+              android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:textSize="30dp"
+        android:layout_weight="1"
+        android:text="@string/topNotesVersion"
+        android:textColor="@color/blackColor"
+        android:layout_gravity="center"
+        android:textStyle="bold"
+        android:layout_marginTop="20dp"/>
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_weight="10"
+        android:layout_height="0dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="0dp"
+            android:text="@string/developers_team"
+            android:textSize="20dp"
+            android:textColor="@color/blueColor"
+            android:textStyle="bold"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="5dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/arvindName"
+            android:textSize="20dp"
+            android:textStyle="italic"
+            android:textColor="@color/blackColor"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="7dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/arvindGmail"
+            android:textSize="20dp"
+            android:textStyle="italic"
+            android:textColor="@color/blackColor"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="7dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/amitName"
+            android:textSize="20dp"
+            android:textStyle="italic"
+            android:textColor="@color/blackColor"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="7dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/amitGmail"
+            android:textSize="20dp"
+            android:textStyle="italic"
+            android:textColor="@color/blackColor"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="7dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/sohanName"
+            android:textSize="20dp"
+            android:textStyle="italic"
+            android:textColor="@color/blackColor"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="7dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/sohanEmail"
+            android:textSize="20dp"
+            android:textStyle="italic"
+            android:textColor="@color/blackColor"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="7dp"/>
+        
+        
+    </LinearLayout>
+
+    
+    
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:background="@color/blackColor"
+        android:layout_marginBottom="0dp"
+        android:layout_weight="1"
+        android:layout_height="0dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textColor="@color/whiteColor"
+            android:text="TopNotes|©2018"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:textSize="18dp"/>
+
+    </LinearLayout>
+
+
+
+
+</LinearLayout>
