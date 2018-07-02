@@ -275,7 +275,7 @@ public class UploadDialogFragment extends DialogFragment {
     {   UUID contentUUID = UUID.randomUUID();
         Content content = new Content();
         content.setTitle(titleEditText.getText().toString());
-        content.setDate(DateFormat.getDateFormat(getActivity()).format(new Date()));
+        content.setDate(DateFormat.getDateFormat(activity).format(new Date()));
         content.setAuthor(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
         content.setDownloadUrl(url);
         // update the myupload list

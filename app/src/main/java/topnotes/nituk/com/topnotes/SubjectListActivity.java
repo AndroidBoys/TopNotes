@@ -51,21 +51,21 @@ public class SubjectListActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private ImageView userImageView;
-    private TextView userNameTextView,userEmailTextView;
+    private TextView userNameTextView, userEmailTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_subject_list);
 
-        drawerLayout=findViewById(R.id.drawerLayout);
+        drawerLayout = findViewById(R.id.drawerLayout);
 
 
         // fetch and set the current user information
 
         //ActionBarDrawerToggle is a drawable listener which is used to tie together the drawerLayout
         //with the actionBar.
-        actionBarDrawerToggle=new ActionBarDrawerToggle(this,drawerLayout,R.string.open,R.string.close);
+        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close);
 
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
 
@@ -74,44 +74,44 @@ public class SubjectListActivity extends AppCompatActivity {
         //Below one will set the icon on the action bar
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
-        final NavigationView navigationView=findViewById(R.id.navigationView);
+        final NavigationView navigationView = findViewById(R.id.navigationView);
 
-        if(NetworkCheck.isNetworkAvailable(getApplicationContext())) {
+        if (NetworkCheck.isNetworkAvailable(getApplicationContext())) {
             //if network is connected then user will move into Mysubject fragment
             addDifferentFragments(MySubjects.getInstance());//it will show the list of subjects when this activity will be opened.
+            navigationView.getMenu().getItem(0).setChecked(true);
 
-        }else{
+        } else {
             //if network is not connected then user will move into DownloadFragment.
             addDifferentFragments(DownloadFirstFragment.getInstance());
+            navigationView.getMenu().getItem(1).setChecked(true);
         }
 
 
-
-
         View header = navigationView.getHeaderView(0);
-        userNameTextView=header.findViewById(R.id.userNameTextView);
-        userImageView=header.findViewById(R.id.userImageView);
-        userEmailTextView=header.findViewById(R.id.userEmailTextView);
+        userNameTextView = header.findViewById(R.id.userNameTextView);
+        userImageView = header.findViewById(R.id.userImageView);
+        userEmailTextView = header.findViewById(R.id.userEmailTextView);
 
         //This below method is used for click events of navigaiton
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            MenuItem lastMenuItemSelected=null;
+            MenuItem lastMenuItemSelected = null;
+
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                if(lastMenuItemSelected!=null){
+                if (lastMenuItemSelected != null) {
                     lastMenuItemSelected.setChecked(false);
 
                 }
                 menuItem.setChecked(true);
-                lastMenuItemSelected=menuItem;
+                lastMenuItemSelected = menuItem;
 
-                switch (menuItem.getItemId())
-                {
+                switch (menuItem.getItemId()) {
 
                     case R.id.mySubjects:
 
-                         MySubjects mySubjects = MySubjects.getInstance();
+                        MySubjects mySubjects = MySubjects.getInstance();
                         addDifferentFragments(mySubjects);//it will set the subject list fragment in frameLayout.
                         break;
 
@@ -137,6 +137,7 @@ public class SubjectListActivity extends AppCompatActivity {
 
                     case R.id.aboutUs:
                         //aboutUs fragment will be added
+                        addDifferentFragments(new AboutUsFragment());
                         break;
 
                     case R.id.logOut:
@@ -153,80 +154,16 @@ public class SubjectListActivity extends AppCompatActivity {
         //set current user info to the dashboard
         setCurrentUserInfo();
         // for bug fixing in api > 24 when firing the pdf intent
-        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder(); StrictMode.setVmPolicy(builder.build());
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
         // for api >= 23 asking for all runtime permissions
-         if(!hasAllPermissions())
-         askForPermissions();
+        if (!hasAllPermissions())
+            askForPermissions();
     }
 
-    /*public void onSaveInstance(Bundle outState) {
-        ArrayList positions = findSelectedPosition();
-        if(positions.size()>0) {
-            outState.putIntegerArrayList(STATE_SELECTED_POSITION, positions);
-        }
-    }
 
-    private ArrayList findSelectedPosition() {
-        Menu menu = navDrawerFirstPart.getMenu();
-        int count = menu.size();
-        ArrayList result = new ArrayList<>();
-        for (int i = 0; i < count; i++) {
-            if(menu.getItem(i).isChecked()){
-                result.add(i);
-            }
-        }
-        return result;
-    }
-
-    public void onRestoreInstanceState(Bundle savedInstanceState) {
-        if(savedInstanceState.containsKey(STATE_SELECTED_POSITION)){
-            restoreSelectedPosition(savedInstanceState.getIntegerArrayList(STATE_SELECTED_POSITION));
-        }
-    }
-
-    private void restoreSelectedPosition(ArrayList<Integer> positions) {
-        Menu menu = navDrawerFirstPart.getMenu();
-        for(int i=0; i<positions.size(); i++){
-            menu.getItem(positions.get(i)).setChecked(true);
-        }
-    }*/
 
     private void setCurrentUserInfo() {
-//        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users");
-//        databaseReference.child("Name").addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                userNameTextView.setText(dataSnapshot.getValue().toString());
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-//        Log.i("retrieved name:",databaseReference.child("Name").getKey());
-//        databaseReference.child("Email").addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//            userEmailTextView.setText(dataSnapshot.getValue().toString());
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-//        databaseReference.child("Imageurl").addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
         // if the user object is not initialised in LoginActivity than it might throw null pointer exception be careful
         userNameTextView.setText(User.getUser().getName());
         userEmailTextView.setText(User.getUser().getEmail());
