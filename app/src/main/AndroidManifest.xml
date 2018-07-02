@@ -23,8 +23,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".LoginActivity" />
-        <activity android:name=".SubjectListActivity"
-                  android:theme="@style/MyActionBarTheme">
+        <activity android:name=".SubjectListActivity">
 
         </activity>
 

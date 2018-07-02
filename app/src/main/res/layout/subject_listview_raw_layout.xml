@@ -33,8 +33,7 @@ setOnItemClickListener in it-->
             android:text="Subject Name Here"
             android:textAlignment="center"
             android:textColor="@color/blackColor"
-            android:textSize="18dp"
-            android:textStyle="italic"/>
+            android:textSize="18dp"/>
 
     </LinearLayout>
 
