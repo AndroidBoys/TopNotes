@@ -27,6 +27,8 @@ public class AnotherContentDownloader {
     public void downloadFile(String url,String title,int subject,int type)
     {
         Uri uri = Uri.parse(url);
+        String mimeType = mContext.getContentResolver().getType(uri);
+       // Log.i("mimeType:",mimeType);
         DownloadManager.Request request = new DownloadManager.Request(uri);
 
         // configure notification
@@ -35,7 +37,7 @@ public class AnotherContentDownloader {
 
         // set the download path
         request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOCUMENTS+"/TopNotes/"+mContext.getResources().getStringArray(R.array.subjectList)[subject]+
-                        "/"+ mContext.getResources().getStringArray(R.array.categoryList)[type],title+".jpg");
+                        "/"+ mContext.getResources().getStringArray(R.array.categoryList)[type],title+".pdf");
 
         Log.i("destination",Environment.DIRECTORY_DOCUMENTS+"/TopNotes/"+mContext.getResources().getStringArray(R.array.subjectList)[subject]+
                 "/"+ mContext.getResources().getStringArray(R.array.categoryList)[type]);

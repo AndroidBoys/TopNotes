@@ -36,6 +36,7 @@ public class DownloadfinalFragment extends Fragment {
     private ArrayList<String>  downloadsAuthorsNameArray;
     private int choosenSubject;
     private int choosenType;
+    private List<String> downloadedTitle;
 
 
     @Nullable
@@ -46,21 +47,13 @@ public class DownloadfinalFragment extends Fragment {
 
         fileList = new ArrayList<>();
         theNamesOfFiles = new ArrayList<>();
-        downloadsAuthorsNameArray = new ArrayList<>();
-        downloadsAuthorsNameArray.add("Arvind Negi");
-        downloadsAuthorsNameArray.add("amit kishor");
-        downloadsAuthorsNameArray.add("sohan kathait");
-        downloadsAuthorsNameArray.add("Ayush Bisht");
-        downloadsAuthorsNameArray.add("Arvind Negi");
-        downloadsAuthorsNameArray.add("amit kishor");
-        downloadsAuthorsNameArray.add("sohan kathait");
-        downloadsAuthorsNameArray.add("Ayush Bisht");
-        downloadsAuthorsNameArray.add("Arvind Negi");
-        downloadsAuthorsNameArray.add("amit kishor");
+        downloadsAuthorsNameArray=new ArrayList<>();
+        downloadedTitle= new ArrayList<>();
 
-        if (checkPermission(Manifest.permission.READ_EXTERNAL_STORAGE) && checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, PER_REQ_CODE);
-        }
+        listFiles();
+        // get the details of downloaded files
+        getContentDetails();
+
         mDownloadedFilesListView = view.findViewById(R.id.downloadedfilelistview);
         MyDownloadsArrayAdapter myDownloadsArrayAdapter = new MyDownloadsArrayAdapter(getActivity(), theNamesOfFiles, downloadsAuthorsNameArray);
         mDownloadedFilesListView.setAdapter(myDownloadsArrayAdapter);
@@ -69,7 +62,7 @@ public class DownloadfinalFragment extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 openFile(getResources().getStringArray(R.array.subjectList)[choosenSubject]+"/"
                         +getResources().getStringArray(R.array.categoryList)[choosenType]+"/"
-                        +theNamesOfFiles.get(i));
+                        +theNamesOfFiles.get(i)+".pdf");
                 Log.i("clicked:", "" + i);
                 Log.i("file:", theNamesOfFiles.get(i));
             }
@@ -77,7 +70,7 @@ public class DownloadfinalFragment extends Fragment {
         choosenSubject=getArguments().getInt("subject");
         choosenType=getArguments().getInt("type");
 
-        listFiles();
+
         return view;
     }
     public static DownloadfinalFragment getInstance(int subject,int type)
@@ -108,36 +101,39 @@ public class DownloadfinalFragment extends Fragment {
         // otherwise pull all the files out of the directory, get their names and set on the list view
         else {
             Log.i("Already exists:",dir.getAbsolutePath());
-            fileList = Arrays.asList(dir.listFiles());
+            try {
+                fileList = Arrays.asList(dir.listFiles());
+            }catch(Exception e)
+            {
+                e.printStackTrace();
+            }
             for (int i = 0; i < fileList.size(); i++) {
-                theNamesOfFiles.add(fileList.get(i).getName());
+                String fileName= fileList.get(i).getName();
+                downloadedTitle.add(fileName.substring(0,fileName.length()-4));
+                Log.i("filename:",fileName.substring(0,fileName.length()-4));
             }
 
 
         }
     }
-    // check for runtime permission
-    private boolean checkPermission(String permission)
-    {
-        return ActivityCompat.checkSelfPermission(getActivity(),permission)!=PackageManager.PERMISSION_GRANTED;
-    }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if(requestCode==PER_REQ_CODE && grantResults.length>0)
-        {
-            if(grantResults[0]== PackageManager.PERMISSION_GRANTED)
-            {
-                listFiles();
-            }
-            else
-            {
-                Toast.makeText(getActivity(),"Please grant the Read/Write permission first!",Toast.LENGTH_SHORT).show();
-            }
-        }
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+//        if(requestCode==PER_REQ_CODE && grantResults.length>0)
+//        {
+//            if(grantResults[0]== PackageManager.PERMISSION_GRANTED)
+//            {
+//                listFiles();
+//            }
+//            else
+//            {
+//                Toast.makeText(getActivity(),"Please grant the Read/Write permission first!",Toast.LENGTH_SHORT).show();
+//            }
+//        }
+//
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+//    }
 
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-    }
     public void openFile(String file)
     {
 
@@ -146,12 +142,34 @@ public class DownloadfinalFragment extends Fragment {
         Uri path = Uri.fromFile(pdfFile);
         Log.i("uri:",path.toString());
 
-        // Setting the intent for pdf reader
+        // Setting the intent for the file
         Intent pdfIntent = new Intent(Intent.ACTION_VIEW);
+        // for opening pdf files
         pdfIntent.setDataAndType(path, "application/pdf");
+        // for opening images
+        //pdfIntent.setDataAndType(path, "image/*");
+        // If the instance of pdf reader already exists
         pdfIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        // for api>24
+        pdfIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
 
         startActivity(pdfIntent);
     }
+
+    public void getContentDetails()
+    {
+        List<Content> contents = new DbHelper(getActivity().getApplicationContext()).readContentList(choosenSubject,choosenType);
+        Log.i("contents:",contents.toString());
+        for(int i=0;i<contents.size();i++)
+        {   if(downloadedTitle.contains(contents.get(i).getTitle()))
+          {
+            theNamesOfFiles.add(contents.get(i).getTitle());
+            downloadsAuthorsNameArray.add(contents.get(i).getAuthor());
+
+          }
+
+        }
+    }
+
 }
