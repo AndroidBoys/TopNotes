@@ -1,5 +1,6 @@
 package topnotes.nituk.com.topnotes;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,15 +23,17 @@ public class MySubjects extends Fragment {
     private ListView subjectListView;
     private int listViewClickCount=0;
     //private ArrayList<String> allSubjects=new ArrayList<>();
+    private Activity actvity;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
+        actvity=getActivity();
         View view = inflater.inflate(R.layout.my_subjects, container, false);
         subjectListView = view.findViewById(R.id.subjectListView);
         MySubjectArrayAdapter mySubjectArrayAdapter = new MySubjectArrayAdapter(getActivity(), getResources().getStringArray(R.array.subjectList));
         subjectListView.setAdapter(mySubjectArrayAdapter);
-
+        //getActivity().getActionBar().setTitle("My Subjects");
+        //((SubjectListActivity)actvity).setActionBarTitle("My Subjects");
         subjectListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -47,5 +50,16 @@ public class MySubjects extends Fragment {
         return new MySubjects();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+       ((SubjectListActivity)actvity).setActionBarTitle("My Subjects");
+    }
 
+//    @Override
+//    public void onAttach(Context context) {
+//        super.onAttach(context);
+//        if(context!=null)
+//        ((SubjectListActivity)context).setActionBarTitle("My Subjects");
+//    }
 }

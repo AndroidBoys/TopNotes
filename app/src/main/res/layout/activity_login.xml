@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".LoginActivity"
-    android:background="@drawable/login_gradient"
+    android:background="#5290d2"
     android:orientation="vertical">
 
 
@@ -108,7 +108,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_margin="20dp"
-            android:background="@drawable/login_button_gradient"
+            android:background="#5290d2"
             android:drawableStart="@drawable/common_google_signin_btn_icon_dark_normal"
             android:text="@string/sign_in"
             android:textColor="@color/blueColor"

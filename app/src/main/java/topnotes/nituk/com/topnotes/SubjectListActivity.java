@@ -177,7 +177,7 @@ public class SubjectListActivity extends AppCompatActivity {
 //        fragmentTransaction.commitNow();
 //        Log.d("below replce","this is me");
         //
-        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.addToBackStack(null);//it will push the fragment in the stack
         fragmentTransaction.commit();
         Log.d("after commit","this is me");
 
@@ -199,19 +199,22 @@ public class SubjectListActivity extends AppCompatActivity {
         DrawerLayout drawer = findViewById(R.id.drawerLayout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else {
-            new AlertDialog.Builder(this).setTitle("Exit TopNotes?")
-                    .setMessage("Do you really want to exit ?")
-                    .setIcon(android.R.drawable.ic_dialog_alert)
-                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            finishAffinity();//it will pop up all the activity from the stack
-                            finish();
-                        }
-                    })
-                    .setNegativeButton("Cancel",null).show();
-        }
+        } else if(getSupportFragmentManager().getBackStackEntryCount()!=1) {
+            getSupportFragmentManager().popBackStack(); //it will pop the fragment from the stack
+
+        }else {
+                new AlertDialog.Builder(this).setTitle("Exit TopNotes?")
+                        .setMessage("Do you really want to exit ?")
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                finishAffinity();//it will pop up all the activity from the stack
+                                finish();
+                            }
+                        })
+                        .setNegativeButton("Cancel",null).show();
+            }
     }
 
     // sign out
@@ -240,5 +243,9 @@ public class SubjectListActivity extends AppCompatActivity {
                 &&ActivityCompat.checkSelfPermission(getApplicationContext(),Manifest.permission.ACCESS_NETWORK_STATE)==PackageManager.PERMISSION_GRANTED;
 
         return true;
+    }
+
+    public void setActionBarTitle(String title){
+        getSupportActionBar().setTitle(title);
     }
 }

@@ -1,5 +1,6 @@
 package topnotes.nituk.com.topnotes;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -35,12 +36,12 @@ public class UploadFragment extends Fragment {
     private List<String> dateNameList;
     private  MyUploadsArrayAdapter myUploadsArrayAdapter;
     private SharedPreferences mSharedPreferences;
-
+    Activity activity;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
+        activity=getActivity();
         View view = inflater.inflate(R.layout.fragment_upload,container,false);
         try {
             mSharedPreferences = this.getActivity().getSharedPreferences("topnotes.nituk.com.topnotes", Context.MODE_PRIVATE);
@@ -74,6 +75,11 @@ public class UploadFragment extends Fragment {
         myUploadsArrayAdapter = new MyUploadsArrayAdapter(getActivity(),(ArrayList) notesNameList,(ArrayList)subjectNameList,(ArrayList)dateNameList);
         uploadFileListView.setAdapter(myUploadsArrayAdapter);
         return view;
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((SubjectListActivity)activity).setActionBarTitle("My Uploads");
     }
 
     public static UploadFragment getInstance()
@@ -124,11 +130,5 @@ public class UploadFragment extends Fragment {
         {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
     }
 }

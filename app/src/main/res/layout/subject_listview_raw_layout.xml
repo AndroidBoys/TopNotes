@@ -16,8 +16,8 @@ setOnItemClickListener in it-->
         android:focusable="false"
         android:layout_width="match_parent"
         android:orientation="horizontal"
-        android:layout_weight="4"
-        android:layout_height="70dp">
+        android:background="@drawable/upload_background_color"
+        android:layout_height="80dp">
 
         <TextView
             android:focusable="false"
@@ -40,7 +40,7 @@ setOnItemClickListener in it-->
     <Button
         android:focusable="false"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="0.5dp"
         android:layout_weight="1"
         android:background="@color/blackColor"
         android:layout_marginTop="6dp"
