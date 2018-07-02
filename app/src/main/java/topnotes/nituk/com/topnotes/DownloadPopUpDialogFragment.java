@@ -66,22 +66,27 @@ public class DownloadPopUpDialogFragment extends DialogFragment implements View.
                //it will dismiss the fragment
 
                 break;
-            case R.id.resources:
-                    //Go to downloaded Resources  of user
+
+            case R.id.questionPaper:
+                //Go to downloaded question Paper  of user
                 //dialog.dismiss();//it will dismiss the fragment
                 addDifferentFragments(DownloadfinalFragment.getInstance(choosenSubject,1));
                 break;
+
             case R.id.practicalFiles:
                     //Go to downloaded Practical Files  of user
                 //dialog.dismiss();//it will dismiss the fragment
                 addDifferentFragments(DownloadfinalFragment.getInstance(choosenSubject,2));
                 break;
 
-            case R.id.questionPaper:
-                //Go to downloaded question Paper  of user
+
+            case R.id.resources:
+                //Go to downloaded Resources  of user
                 //dialog.dismiss();//it will dismiss the fragment
                 addDifferentFragments(DownloadfinalFragment.getInstance(choosenSubject,3));
                 break;
+
+
 
         }
         dialog.dismiss();
