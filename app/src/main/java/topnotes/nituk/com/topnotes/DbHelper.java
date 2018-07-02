@@ -28,7 +28,7 @@ public class DbHelper extends SQLiteOpenHelper {
     // if table is exist than drop this table(syntax)
     private static final String DROP_TABLE = "drop table if exists " + DbContract.TABLE_NAME;
 
-
+//
     //constructor to create a DbHelper object
     public DbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);

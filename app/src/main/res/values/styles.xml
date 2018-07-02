@@ -21,4 +21,11 @@
         <item name="android:windowExitAnimation">@anim/fade_out_dialog</item>
     </style>
 
+    <!--Action Bar Style-->
+    <style name="MyActionBarTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:background">@drawable/navigation_header_color</item>
+        <!-- Support library compatibility -->
+        <item name="background">@drawable/navigation_header_color</item>
+    </style>
+
 </resources>
