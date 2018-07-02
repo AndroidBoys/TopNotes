@@ -23,8 +23,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".LoginActivity" />
-        <activity android:name=".SubjectListActivity"
-                  android:theme="@style/MyActionBarTheme">
+        <activity android:name=".SubjectListActivity">
 
         </activity>
 
@@ -32,7 +31,8 @@
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
-        <activity android:name=".ContentsActivity"></activity>
+        <activity android:name=".ContentsActivity"
+                  android:parentActivityName=".SubjectListActivity"></activity>
     </application>
 
 </manifest>
