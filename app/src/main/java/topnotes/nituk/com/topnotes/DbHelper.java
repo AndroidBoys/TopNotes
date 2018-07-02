@@ -90,7 +90,7 @@ public class DbHelper extends SQLiteOpenHelper {
         Log.i("savedtodb:",contentList.toString());
     }
 
-    public List<Content> readContentList(int subjectNumber, int subjectTupeNumber) {
+    public List<Content> readContentList(int subjectNumber, int subjectTypeNumber) {
 
         List<Content> contentList = new ArrayList<>();
 
@@ -98,7 +98,7 @@ public class DbHelper extends SQLiteOpenHelper {
         SQLiteDatabase sqLiteDatabase = dbHelper.getWritableDatabase();
         Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM " + DbContract.TABLE_NAME + " WHERE "
                 + DbContract.SUBJECT_NUMBER + "=" + subjectNumber + " AND "
-                + DbContract.SUBJECT_TYPE_NUMBER + "=" + subjectTupeNumber, null);
+                + DbContract.SUBJECT_TYPE_NUMBER + "=" + subjectTypeNumber, null);
 
         if (cursor.getCount() > 0) {
             while (cursor.moveToNext()) {
@@ -115,5 +115,13 @@ public class DbHelper extends SQLiteOpenHelper {
         return contentList;
 
 
+    }
+    public void deleteContent(Content content,int subjectNumber,int subjectTypeNumber){
+
+        DbHelper dbHelper=new DbHelper(context);
+        SQLiteDatabase sqLiteDatabase=dbHelper.getWritableDatabase();
+        byte[] data = SerializationUtils.serialize(content);
+        sqLiteDatabase.delete(DbContract.TABLE_NAME,DbContract.CONTENT+"=? and "+DbContract.SUBJECT_NUMBER
+                +"=? and "+DbContract.SUBJECT_NUMBER+"=?",new String[]{String.valueOf(data), String.valueOf(subjectNumber), String.valueOf(subjectTypeNumber)});
     }
 }

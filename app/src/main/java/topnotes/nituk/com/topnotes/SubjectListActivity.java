@@ -132,6 +132,7 @@ public class SubjectListActivity extends AppCompatActivity {
                         break;
 
                     case R.id.contactUs:
+                        addDifferentFragments(ContactUsFragment.getInstance());
                         //contactUs fragment will be added
                         break;
 

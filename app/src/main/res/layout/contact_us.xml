@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/superContentLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".LoginActivity"
+    android:background="@drawable/login_gradient"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+
+        android:layout_weight="3"
+        android:layout_margin="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@drawable/login_curved_view"
+        android:orientation="vertical"
+        >
+
+        <TextView
+            android:layout_weight="1"
+            android:textColor="@color/blueColor"
+            android:layout_margin="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:text="FEEDBACK"
+            android:textStyle="bold"
+            android:textAlignment="center"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+            />
+
+            <EditText
+                android:layout_weight="2"
+                android:inputType="textMultiLine"
+                android:id="@+id/feedbackEditText"
+                android:layout_marginLeft="20dp"
+                android:lines="8"
+                android:layout_marginRight="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:hint="Write feedback"/>
+
+
+        <Button
+            android:layout_weight="1"
+            android:id="@+id/sendFeedbackButton"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_margin="20dp"
+            android:background="@drawable/login_button_gradient"
+            android:text="SEND FEEDBACK"
+            android:textColor="@color/blueColor"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+            android:textAlignment="gravity"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+
+</LinearLayout>
