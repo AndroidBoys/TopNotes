@@ -190,7 +190,7 @@ public class UploadDialogFragment extends DialogFragment {
     private void chooseFile()
     {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("*/*");
+        intent.setType("application/pdf");
         intent.addCategory(Intent.CATEGORY_OPENABLE);
 
         try {
@@ -242,6 +242,8 @@ public class UploadDialogFragment extends DialogFragment {
                     public void onFailure(@NonNull Exception exception) {
                         // Handle unsuccessful uploads
                         Toast.makeText(getActivity(),"File upload Failed,"+ exception.getMessage(),Toast.LENGTH_SHORT).show();
+                        exception.printStackTrace();
+                        progressDialog.dismiss();
 
 
                     }
