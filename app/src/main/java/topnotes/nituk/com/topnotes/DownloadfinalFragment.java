@@ -52,26 +52,41 @@ public class DownloadfinalFragment extends Fragment {
         downloadsAuthorsNameArray=new ArrayList<>();
         downloadedTitle= new ArrayList<>();
 
+        choosenSubject=getArguments().getInt("subject");
+        choosenType=getArguments().getInt("type");
+
         listFiles();
         // get the details of downloaded files
         getContentDetails();
 
         mDownloadedFilesListView = view.findViewById(R.id.downloadedfilelistview);
-        MyDownloadsArrayAdapter myDownloadsArrayAdapter = new MyDownloadsArrayAdapter(getActivity(), theNamesOfFiles, downloadsAuthorsNameArray);
+        MyDownloadsArrayAdapter myDownloadsArrayAdapter = new MyDownloadsArrayAdapter(getActivity(), theNamesOfFiles, downloadsAuthorsNameArray,choosenSubject,choosenType);
         mDownloadedFilesListView.setAdapter(myDownloadsArrayAdapter);
-        mDownloadedFilesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                openFile(getResources().getStringArray(R.array.subjectList)[choosenSubject]+"/"
-                        +getResources().getStringArray(R.array.categoryList)[choosenType]+"/"
-                        +theNamesOfFiles.get(i)+".pdf");
-                Log.i("clicked:", "" + i);
-                Log.i("file:", theNamesOfFiles.get(i));
-            }
-        });
-        choosenSubject=getArguments().getInt("subject");
-        choosenType=getArguments().getInt("type");
-        //Toast.makeText(getActivity(),"Subject:"+choosenSubject+"Type:"+choosenType,Toast.LENGTH_SHORT).show();
+
+//        mDownloadedFilesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                openFile(getResources().getStringArray(R.array.subjectList)[choosenSubject]+"/"
+//                        +getResources().getStringArray(R.array.categoryList)[choosenType]+"/"
+//                        +theNamesOfFiles.get(i)+".pdf");
+//                Log.i("clicked:", "" + i);
+//                Log.i("file:", theNamesOfFiles.get(i));
+//            }
+//        });
+
+//         mDownloadedFilesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//             @Override
+//             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                 openFile(getResources().getStringArray(R.array.subjectList)[choosenSubject]+"/"
+//                         +getResources().getStringArray(R.array.categoryList)[choosenType]+"/"
+//                         +theNamesOfFiles.get(i)+".pdf");
+//                 Log.i("clicked:", "" + i);
+//                 Log.i("file:", theNamesOfFiles.get(i));
+//             }
+//         });
+//         choosenSubject=getArguments().getInt("subject");
+//         choosenType=getArguments().getInt("type");
+//         //Toast.makeText(getActivity(),"Subject:"+choosenSubject+"Type:"+choosenType,Toast.LENGTH_SHORT).show();
 
 
         return view;
@@ -143,28 +158,6 @@ public class DownloadfinalFragment extends Fragment {
 //        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 //    }
 
-    public void openFile(String file)
-    {
-
-        File pdfFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getPath(),"TopNotes/"+file);
-        Log.i("pdfFile:",pdfFile.toString());
-        Uri path = Uri.fromFile(pdfFile);
-        Log.i("uri:",path.toString());
-
-        // Setting the intent for the file
-        Intent pdfIntent = new Intent(Intent.ACTION_VIEW);
-        // for opening pdf files
-        pdfIntent.setDataAndType(path, "application/pdf");
-        // for opening images
-        //pdfIntent.setDataAndType(path, "image/*");
-        // If the instance of pdf reader already exists
-        pdfIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        // for api>24
-        pdfIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-
-
-        startActivity(pdfIntent);
-    }
 
     public void getContentDetails()
     {

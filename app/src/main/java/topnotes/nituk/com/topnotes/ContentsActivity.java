@@ -57,6 +57,7 @@ public class ContentsActivity extends AppCompatActivity {
 
         setTitle(getResources().getStringArray(R.array.categoryList)[choosenType]+" Selected");
 
+        // initialise
         dbHelper = new DbHelper(getApplicationContext());
 
         fetchedContentList= new ArrayList<>();
@@ -73,6 +74,7 @@ public class ContentsActivity extends AppCompatActivity {
         firebaseStorage = FirebaseStorage.getInstance();
 
         // retrieve the choosen subject and choosen type from the intent
+
         updateUI();
 
         loadContent();
