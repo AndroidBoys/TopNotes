@@ -61,7 +61,7 @@ public class SubjectListActivity extends AppCompatActivity {
         //setTheme(R.style.yellowTheme);
         setContentView(R.layout.activity_subject_list);
         stack=new Stack();
-        //
+        ////
 
         drawerLayout = findViewById(R.id.drawerLayout);
 
