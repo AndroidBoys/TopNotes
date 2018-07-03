@@ -143,39 +143,17 @@ public class MyDownloadsArrayAdapter extends ArrayAdapter<String> {
 
     public void deleteFile(String path)
     {
-//        File file = new File(path);
-//        Log.i("ExternalFilesDir:",context.getExternalFilesDir(null).toString());
-//        Log.i("FilesDir:",context.getFilesDir().toString());
-//        Log.i("ExternalStorageDir:",Environment.getExternalStorageDirectory().toString());
-//        Uri fileUri = FileProvider.getUriForFile(context,
-//                context.getApplicationContext().getPackageName() +
-//                        ".provider", file);
-//        ContentResolver contentResolver = context.getContentResolver();
-//        contentResolver.delete(fileUri, null, null);
-//
-//        if(!file.exists())
-//        {
-//            Toast.makeText(context,"File deleted successfully!",Toast.LENGTH_SHORT).show();
-//            deleteFromListView();
-//            deleteFromDB();
-//        }
-//        else
-//        {
-//            Toast.makeText(context,"File deletion unsuccessful!",Toast.LENGTH_SHORT).show();
-//
-//        }
-
-     File file = new File(path);
+        File file = new File(path);
      if(file.exists())
      {
          Toast.makeText(context,"starting deletion!",Toast.LENGTH_SHORT).show();
          DocumentFile documentFile = DocumentFile.fromFile(file);
-         if(  documentFile.delete())
-         {
-             Toast.makeText(context,"sucess!"+file.exists(),Toast.LENGTH_SHORT).show();
+         if(documentFile.delete())
+         {   deleteFromListView();
+             Toast.makeText(context,"sucess!"+!file.exists(),Toast.LENGTH_SHORT).show();
          }
          else{
-             Toast.makeText(context,"No success!"+file.exists(),Toast.LENGTH_SHORT).show();
+             Toast.makeText(context,"No success!"+!file.exists(),Toast.LENGTH_SHORT).show();
          }
      }
      else

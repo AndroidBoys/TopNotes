@@ -37,7 +37,7 @@ public class AnotherContentDownloader {
 
         // set the download path
         request.setDestinationInExternalPublicDir(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getPath()+"/TopNotes/"+mContext.getResources().getStringArray(R.array.subjectList)[subject]+
-                        "/"+ mContext.getResources().getStringArray(R.array.categoryList)[type],"/"+title+".pdf");
+                        "/"+ mContext.getResources().getStringArray(R.array.categoryList)[type],title+".pdf");
 
         Log.i("destination",Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getPath()+"/TopNotes/"+mContext.getResources().getStringArray(R.array.subjectList)[subject]+
                 "/"+ mContext.getResources().getStringArray(R.array.categoryList)[type]+title+".pdf");
