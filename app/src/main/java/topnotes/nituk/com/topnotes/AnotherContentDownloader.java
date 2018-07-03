@@ -42,7 +42,7 @@ public class AnotherContentDownloader {
         Log.i("destination",Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getPath()+"/TopNotes/"+mContext.getResources().getStringArray(R.array.subjectList)[subject]+
                 "/"+ mContext.getResources().getStringArray(R.array.categoryList)[type]+title+".pdf");
 
-        // enque for download
+        // enqueue for download
         mDownloadReference=mDownloadManager.enqueue(request);
 
     }
