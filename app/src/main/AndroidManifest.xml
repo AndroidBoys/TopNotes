@@ -38,7 +38,7 @@
             android:grantUriPermissions="true">
         <meta-data
             android:name="android.support.FILE_PROVIDER_PATHS"
-            android:resource="@xml/provider_paths"/>
+            android:resource="@xml/path_provider"/>
         </provider>
       
         <activity android:name=".ContentsActivity"

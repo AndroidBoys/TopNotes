@@ -118,7 +118,7 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
         uploadUserNameTextView=view.findViewById(R.id.uploadUserName);
         uploadUserNameTextView.setText(User.getUser().getName());
         Picasso.get().load(User.getUser().getImageUrl()).into(uploadUserImageView);
-        superLinearLayout=view.findViewById(R.id.superUploadFragmentLinerLayout);
+        superLinearLayout=view.findViewById(R.id.superUploadFragmentLinearLayout);
 
 
         uploadButton=view.findViewById(R.id.uploadButton);
@@ -330,7 +330,7 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
                     internetAlertDialogfragment.show(getFragmentManager().beginTransaction(), "net_dialog");
                 }
                 break;
-            case R.id.superUploadFragmentLinerLayout:
+            case R.id.superUploadFragmentLinearLayout:
                 InputMethodManager inputMethodManager=(InputMethodManager)activity.getSystemService(Context.INPUT_METHOD_SERVICE);
                 inputMethodManager.hideSoftInputFromWindow(titleEditText.getWindowToken(),0);
                 break;
