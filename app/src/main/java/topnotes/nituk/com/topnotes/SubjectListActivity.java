@@ -165,6 +165,7 @@ public class SubjectListActivity extends AppCompatActivity {
     }
 
     void addDifferentFragments(Fragment replacableFragment){
+        //
         FragmentManager fragmentManager=getSupportFragmentManager();
         FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
         // to set a custom animation in fragment
