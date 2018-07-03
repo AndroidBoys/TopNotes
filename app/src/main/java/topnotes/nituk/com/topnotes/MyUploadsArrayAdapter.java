@@ -5,23 +5,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class MyUploadsArrayAdapter extends ArrayAdapter<String> {
+public class MyUploadsArrayAdapter extends ArrayAdapter<Content> {
 
     private Context context;
-    private ArrayList<String> myUploadsNotesNameArray;
-    private ArrayList<String> myUploadsSubjectNameArray;
-    private ArrayList<String> myUploadsUploadDateArray;
+    private List<Content> uploadedContent;
 
-    public MyUploadsArrayAdapter(Context context,ArrayList<String> myUploadsNotesNameArray
-            ,ArrayList<String> myUploadsSubjectNameArray,ArrayList<String> myUploadsUploadDateArray) {
-        super(context, -1,myUploadsNotesNameArray);
-        this.myUploadsNotesNameArray=myUploadsNotesNameArray;
-        this.myUploadsSubjectNameArray=myUploadsSubjectNameArray;
-        this.myUploadsUploadDateArray=myUploadsUploadDateArray;
+    public MyUploadsArrayAdapter(Context context, List<Content> uploadedContent) {
+        super(context, -1,uploadedContent);
+        this.uploadedContent=uploadedContent;
         this.context=context;
     }
 
@@ -34,9 +31,9 @@ public class MyUploadsArrayAdapter extends ArrayAdapter<String> {
         TextView subjectNameTextView=rowView.findViewById(R.id.uploadSubjectNameTextView);
         TextView uploadDateTextView=rowView.findViewById(R.id.uploadFragmentDateTextView);
 
-        notesNameTextView.setText(myUploadsNotesNameArray.get(position));
-        subjectNameTextView.setText("Subject : "+myUploadsSubjectNameArray.get(position));
-        uploadDateTextView.setText("Upload Date : "+myUploadsUploadDateArray.get(position));
+        notesNameTextView.setText(uploadedContent.get(position).getTitle());
+        subjectNameTextView.setText("Subject : "+uploadedContent.get(position).getAuthor());
+        uploadDateTextView.setText("Upload Date : "+uploadedContent.get(position).getDate());
         ////
         return rowView;
     }
