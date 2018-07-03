@@ -30,6 +30,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.squareup.picasso.Picasso;
 
 import java.util.Objects;
+import java.util.Stack;
 
 public class SubjectListActivity extends AppCompatActivity {
 
@@ -39,11 +40,17 @@ public class SubjectListActivity extends AppCompatActivity {
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private ImageView userImageView;
     private TextView userNameTextView, userEmailTextView;
+    private Stack stack;
+    NavigationView navigationView;
+    private int flag=0;
+    private boolean firstTime=true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_subject_list);
+        stack=new Stack();
+        //
 
         drawerLayout = findViewById(R.id.drawerLayout);
 
@@ -61,7 +68,7 @@ public class SubjectListActivity extends AppCompatActivity {
         //Below one will set the icon on the action bar
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
-        final NavigationView navigationView = findViewById(R.id.navigationView);
+        navigationView = findViewById(R.id.navigationView);
 
 
 
@@ -85,23 +92,26 @@ public class SubjectListActivity extends AppCompatActivity {
                 menuItem.setChecked(true);
                 lastMenuItemSelected = menuItem;
 
+                stack.push(new Integer(menuItem.getItemId()));
+                Log.i("Inside menuitem",String.valueOf(menuItem.getItemId()));
                 switch (menuItem.getItemId()) {
+
 
                     case R.id.mySubjects:
 
                         MySubjects mySubjects = MySubjects.getInstance();
-                        addDifferentFragments(mySubjects);//it will set the subject list fragment in frameLayout.
+                        addDifferentFragments(mySubjects,"subjects");//it will set the subject list fragment in frameLayout.
                         break;
 
                     case R.id.myDownloads:
-                        addDifferentFragments(DownloadFirstFragment.getInstance());
+                        addDifferentFragments(DownloadFirstFragment.getInstance(),"downloads");
                         //MyDownloads fragment will be added
                         break;
 
                     case R.id.myuploads:
                         //MyUploads fragment will be added
                         UploadFragment uploadFragment = UploadFragment.getInstance();
-                        addDifferentFragments(uploadFragment);
+                        addDifferentFragments(uploadFragment,"uploads");
                         break;
 
                     case R.id.leaderboard:
@@ -110,20 +120,29 @@ public class SubjectListActivity extends AppCompatActivity {
                         break;
 
                     case R.id.contactUs:
-                        addDifferentFragments(ContactUsFragment.getInstance());
+                        addDifferentFragments(ContactUsFragment.getInstance(),"contactUs");
                         //contactUs fragment will be added
                         break;
 
                     case R.id.aboutUs:
                         //aboutUs fragment will be added
-                        addDifferentFragments(new AboutUsFragment());
+                        addDifferentFragments(new AboutUsFragment(),"aboutUs");
                         break;
 
                     case R.id.logOut:
                         //logOut fragment will be added
-                        signOut();
+                        new AlertDialog.Builder(SubjectListActivity.this)
+                                .setTitle("LogOut")
+                                .setMessage("All your data will be lost :(- ... \nDo you really want to Logout ? ")
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        signOut();
+                                    }
+                                })
+                                .setNegativeButton("No",null).show();
                         break;
-
                 }
 
                 drawerLayout.closeDrawer(Gravity.START);
@@ -132,13 +151,15 @@ public class SubjectListActivity extends AppCompatActivity {
         });
         if (NetworkCheck.isNetworkAvailable(getApplicationContext())) {
             //if network is connected then user will move into Mysubject fragment
-            addDifferentFragments(MySubjects.getInstance());//it will show the list of subjects when this activity will be opened.
+            addDifferentFragments(MySubjects.getInstance(),"downloads");//it will show the list of subjects when this activity will be opened.
             //navigationView.getMenu().getItem(0).setChecked(true);
+            stack.push(R.id.mySubjects);//Pusing the id in the stack when app opened first
             navigationView.setCheckedItem(R.id.mySubjects);
 
         } else {
             //if network is not connected then user will move into DownloadFragment.
-            addDifferentFragments(DownloadFirstFragment.getInstance());
+            addDifferentFragments(DownloadFirstFragment.getInstance(),"subjects");
+            stack.push(R.id.myDownloads);//Pusing the id in the stack when app opened first
 //            navigationView.getMenu().getItem(1).setChecked(true);
             navigationView.setCheckedItem(R.id.myDownloads);
         }
@@ -164,7 +185,8 @@ public class SubjectListActivity extends AppCompatActivity {
 
     }
 
-    void addDifferentFragments(Fragment replacableFragment){
+    void addDifferentFragments(Fragment replacableFragment,String tag){
+        //
         FragmentManager fragmentManager=getSupportFragmentManager();
         FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
         // to set a custom animation in fragment
@@ -173,11 +195,11 @@ public class SubjectListActivity extends AppCompatActivity {
 //                R.anim.fragment_close_exit);
 //        fragmentTransaction.setCustomAnimations(R.anim.fade_in_dialog,R.anim.fade_out_dialog);
 //        Log.d("above replace","this is me");
-        fragmentTransaction.replace(R.id.frameLayout,replacableFragment);
+        fragmentTransaction.replace(R.id.frameLayout,replacableFragment,tag);
 //        fragmentTransaction.commitNow();
 //        Log.d("below replce","this is me");
         //
-        fragmentTransaction.addToBackStack(null);//it will push the fragment in the stack
+        fragmentTransaction.addToBackStack(null );//it will push the fragment in the stack
         fragmentTransaction.commit();
         Log.d("after commit","this is me");
 
@@ -196,25 +218,44 @@ public class SubjectListActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+
+
         DrawerLayout drawer = findViewById(R.id.drawerLayout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else if(getSupportFragmentManager().getBackStackEntryCount()!=1) {
-            getSupportFragmentManager().popBackStack(); //it will pop the fragment from the stack
+        }
+        else if(getSupportFragmentManager().getBackStackEntryCount()!=1) {
+//                    Fragment fragment=getSupportFragmentManager().findFragmentByTag("subjects");
+//                    if(==fragment && !firstTime){
+//                        //This if condition is to check if user reach in MySubject fragment or not.
+//                        //Because we are pushing fragment into the stack. if we reach in MySubject fragment and
+//                        //there are fragments present in stack, As we don't to go from MySubject fragment to another
+//                        //fragment that's why i put this condition here.
+//                        flag=1;
+//                    }else {
+                        stack.pop();
+                        getSupportFragmentManager().popBackStack(); //it will pop the fragment from the stack
+                        Integer menuId = (Integer) stack.peek();
+//                      Log.i("menuId", String.valueOf(menuId));
+                        navigationView.setCheckedItem(menuId);
+                        //firstTime=false;
+        } else {
+            alertDialog();
+        }
+    }
 
-        }else {
-                new AlertDialog.Builder(this).setTitle("Exit TopNotes?")
-                        .setMessage("Do you really want to exit ?")
-                        .setIcon(android.R.drawable.ic_dialog_alert)
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                finishAffinity();//it will pop up all the activity from the stack
-                                finish();
-                            }
-                        })
-                        .setNegativeButton("Cancel",null).show();
-            }
+    void alertDialog(){
+        new AlertDialog.Builder(this).setTitle("Exit TopNotes?")
+                .setMessage("Do you really want to exit ?")
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        finishAffinity();//it will pop up all the activity from the stack
+                        finish();
+                    }
+                })
+                .setNegativeButton("Cancel",null).show();
     }
 
     // sign out
