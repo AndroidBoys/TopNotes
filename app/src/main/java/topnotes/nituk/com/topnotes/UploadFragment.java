@@ -46,10 +46,11 @@ public class UploadFragment extends Fragment {
     private Activity activity;
 
 
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
+        activity=getActivity();
         View view = inflater.inflate(R.layout.fragment_upload,container,false);
 
         activity=getActivity();
@@ -74,6 +75,11 @@ public class UploadFragment extends Fragment {
         myUploadsArrayAdapter = new MyUploadsArrayAdapter(getActivity(),uploadedContent);
         uploadFileListView.setAdapter(myUploadsArrayAdapter);
         return view;
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((SubjectListActivity)activity).setActionBarTitle("My Uploads");
     }
 
     public static UploadFragment getInstance()

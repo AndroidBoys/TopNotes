@@ -20,6 +20,10 @@ public class SplashActivity extends AppCompatActivity {
         // Action bar is depricated from the splash
         getSupportActionBar().hide();
 
+        int s=getIntent().getIntExtra("exit",0);
+        if(s==1)
+            finish();
+
         new CountDownTimer(1000,1000){
             @Override
             public void onTick(long l) {
@@ -35,7 +39,11 @@ public class SplashActivity extends AppCompatActivity {
             }
         }.start();
 
+    }
 
-
+    @Override
+    protected void onStop() {
+        super.onStop();
+        finish();
     }
 }
