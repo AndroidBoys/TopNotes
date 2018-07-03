@@ -13,6 +13,7 @@ import androidx.fragment.app.FragmentTransaction;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 
 import android.os.Build;
@@ -21,6 +22,8 @@ import android.os.StrictMode;
 import android.util.Log;
 
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -41,13 +44,21 @@ public class SubjectListActivity extends AppCompatActivity {
     private ImageView userImageView;
     private TextView userNameTextView, userEmailTextView;
     private Stack stack;
-    NavigationView navigationView;
+    private NavigationView navigationView;
     private int flag=0;
     private boolean firstTime=true;
+    static int colorFlag=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(colorFlag==1){
+            //As we are giving user to change the theme of an activity so initially we will not set the
+            //theme.when user will choose the theme then colorFlag value will be toggle and theme will be
+            //set.
+            setTheme(getIntent().getIntExtra("theme",0));
+        }
+        //setTheme(R.style.yellowTheme);
         setContentView(R.layout.activity_subject_list);
         stack=new Stack();
         //
@@ -205,6 +216,14 @@ public class SubjectListActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        MenuInflater menuInflater=getMenuInflater();
+        menuInflater.inflate(R.menu.setting_menu,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
     //This below function is used the selection of item in action bar.
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -212,7 +231,43 @@ public class SubjectListActivity extends AppCompatActivity {
         if(actionBarDrawerToggle.onOptionsItemSelected(item)){
             return true;
         }
+        item.setChecked(true);
 
+        Intent intent=new Intent(this,SubjectListActivity.class);
+        //Intent contentIntent=new Intent(this,ContentsActivity.class);
+        switch(item.getItemId()){
+
+            case R.id.redTheme:
+                //setTheme(R.style.redTheme);
+                intent.putExtra("theme",R.style.redTheme);
+                //contentIntent.putExtra("theme",R.style.redTheme);
+                startActivity(intent);
+                //startActivity(contentIntent);
+                Log.i("clicked","red");
+                //recreate();
+                break;
+            case R.id.purpleTheme:
+                //setTheme(R.style.yellowTheme);
+                intent.putExtra("theme",R.style.purpleTheme);
+                //contentIntent.putExtra("theme",R.style.redTheme);
+                startActivity(intent);
+                //startActivity(contentIntent);
+                Log.i("clicked","yellow");
+                //recreate();
+                break;
+            case R.id.greenTheme:
+                //setTheme(R.style.greenTheme);
+                Log.i("clicked","green");
+                intent.putExtra("theme",R.style.greenTheme);
+                //contentIntent.putExtra("theme",R.style.redTheme);
+                startActivity(intent);
+                //startActivity(contentIntent);
+                //recreate();
+                break;
+
+        }
+
+        colorFlag=1;
         return super.onOptionsItemSelected(item);
     }
 

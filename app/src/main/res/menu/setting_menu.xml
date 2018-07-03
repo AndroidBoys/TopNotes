@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group
+        android:checkableBehavior="single">
+
+        <item android:title="Theme">
+            <menu>
+                <item
+                    android:id="@+id/redTheme"
+                    android:title="Red Theme"
+                    android:checkable="true"/>
+
+                <item
+                    android:id="@+id/purpleTheme"
+                    android:title="Purple Theme"
+                    android:checkable="true"/>
+
+                <item
+                    android:id="@+id/greenTheme"
+                    android:title="Green Theme"
+                    android:checkable="true"/>
+            </menu>
+        </item>
+    </group>
+</menu>
