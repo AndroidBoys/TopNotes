@@ -23,13 +23,13 @@
             </intent-filter>
         </activity>
         <activity android:name=".LoginActivity" />
-        <activity android:name=".SubjectListActivity"></activity>
+        <activity android:name=".SubjectListActivity">
+
+        </activity>
 
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
-
-        <activity android:name=".ContentsActivity"></activity>
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -40,6 +40,9 @@
             android:name="android.support.FILE_PROVIDER_PATHS"
             android:resource="@xml/path_provider"/>
         </provider>
+      
+        <activity android:name=".ContentsActivity"
+                  android:parentActivityName=".SubjectListActivity"></activity>
     </application>
 
 </manifest>

@@ -24,6 +24,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+import androidx.fragment.app.DialogFragment;
 
 public class DownloadDialogFragment extends Dialog_fragment {
 
@@ -53,18 +54,6 @@ public class DownloadDialogFragment extends Dialog_fragment {
 
         View view = inflater.inflate(R.layout.download_dialog_fragment, container, false);
         Button downloadButton = view.findViewById(R.id.downloadButton);
-        downloadButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-               // showDownloadNotification(); //show notification to user and track the download progress
-
-                // Download the content
-                Toast.makeText(getActivity(), "::Download process begins::", Toast.LENGTH_SHORT).show();
-               // new ContentDownloader(getActivity());
-            }
-        });
-
 
         titleTextView =view.findViewById(R.id.title);
         subjectTextView = view.findViewById(R.id.subject);
@@ -94,6 +83,8 @@ public class DownloadDialogFragment extends Dialog_fragment {
                 Log.i("url:",content.getDownloadUrl());
 //                new ContentDownloader(getActivity()).downloadFile(content.getDownloadUrl(),content.getTitle(),choosenSubject,choosenType);
                   new AnotherContentDownloader(getActivity()).downloadFile(content.getDownloadUrl(),content.getTitle(),choosenSubject,choosenType);
+                DialogFragment dialog = (DialogFragment)getFragmentManager().findFragmentByTag("Download");
+                dialog.dismiss();
             }
         });
 

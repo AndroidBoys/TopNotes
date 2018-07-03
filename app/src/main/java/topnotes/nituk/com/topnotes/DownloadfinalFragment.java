@@ -1,6 +1,7 @@
 package topnotes.nituk.com.topnotes;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -37,12 +38,13 @@ public class DownloadfinalFragment extends Fragment {
     private int choosenSubject;
     private int choosenType;
     private List<String> downloadedTitle;
+    Activity activity;
 
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
+        activity=getActivity();
         View view = inflater.inflate(R.layout.fragment_download, container, false);
 
         fileList = new ArrayList<>();
@@ -60,6 +62,7 @@ public class DownloadfinalFragment extends Fragment {
         mDownloadedFilesListView = view.findViewById(R.id.downloadedfilelistview);
         MyDownloadsArrayAdapter myDownloadsArrayAdapter = new MyDownloadsArrayAdapter(getActivity(), theNamesOfFiles, downloadsAuthorsNameArray,choosenSubject,choosenType);
         mDownloadedFilesListView.setAdapter(myDownloadsArrayAdapter);
+
 //        mDownloadedFilesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 //            @Override
 //            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -70,8 +73,30 @@ public class DownloadfinalFragment extends Fragment {
 //                Log.i("file:", theNamesOfFiles.get(i));
 //            }
 //        });
+
+//         mDownloadedFilesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//             @Override
+//             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                 openFile(getResources().getStringArray(R.array.subjectList)[choosenSubject]+"/"
+//                         +getResources().getStringArray(R.array.categoryList)[choosenType]+"/"
+//                         +theNamesOfFiles.get(i)+".pdf");
+//                 Log.i("clicked:", "" + i);
+//                 Log.i("file:", theNamesOfFiles.get(i));
+//             }
+//         });
+//         choosenSubject=getArguments().getInt("subject");
+//         choosenType=getArguments().getInt("type");
+//         //Toast.makeText(getActivity(),"Subject:"+choosenSubject+"Type:"+choosenType,Toast.LENGTH_SHORT).show();
+
+
         return view;
     }
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((SubjectListActivity)activity).setActionBarTitle(getResources().getStringArray(R.array.categoryList)[choosenType]+" Selected");
+    }
+
     public static DownloadfinalFragment getInstance(int subject,int type)
     {
         Bundle bundle = new Bundle();

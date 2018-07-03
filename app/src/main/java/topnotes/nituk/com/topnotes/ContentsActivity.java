@@ -2,6 +2,7 @@ package topnotes.nituk.com.topnotes;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -26,6 +27,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class ContentsActivity extends AppCompatActivity {
 
@@ -47,11 +49,13 @@ public class ContentsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contents);
 
-
-        // retrieve the choosen subject and choosen type from the intent
         choosenSubject= getIntent().getIntExtra("subject",0);
         choosenType=getIntent().getIntExtra("type",0);
         Toast.makeText(this,"Subject:"+choosenSubject+"Type:"+choosenType,Toast.LENGTH_SHORT).show();
+
+        // initialise
+
+        setTitle(getResources().getStringArray(R.array.categoryList)[choosenType]+" Selected");
 
         // initialise
         dbHelper = new DbHelper(getApplicationContext());
@@ -69,6 +73,8 @@ public class ContentsActivity extends AppCompatActivity {
         // get the firebase storage
         firebaseStorage = FirebaseStorage.getInstance();
 
+        // retrieve the choosen subject and choosen type from the intent
+
         updateUI();
 
         loadContent();
@@ -76,11 +82,8 @@ public class ContentsActivity extends AppCompatActivity {
         // set Adapter to the recycler view with appropriate dataset
         Log.i("onCreate::","withing contentActivity");
 
-
-
     }
-
-
+    
 
     // ViewHolder for the recycler view which inflates our own view
     private class ContentHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -227,5 +230,10 @@ public class ContentsActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 }

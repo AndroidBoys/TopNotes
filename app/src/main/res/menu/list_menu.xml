@@ -9,15 +9,18 @@
 
                   <item android:id="@+id/mySubjects"
                         android:title="My Subjects"
-                        android:icon="@drawable/my_subject_image1"/>
+                        android:icon="@drawable/my_subject_image1"
+                        android:checkable="true"/>
 
                   <item android:id="@+id/myDownloads"
                         android:title="My Downloads"
-                        android:icon="@drawable/my_downloads"/>
+                        android:icon="@drawable/my_downloads"
+                        android:checkable="true"/>
 
                   <item android:id="@+id/myuploads"
                         android:title="My Uploads"
-                        android:icon="@drawable/my_uploads"/>
+                        android:icon="@drawable/my_uploads"
+                        android:checkable="true"/>
 
               </menu>
         </item>
@@ -34,16 +37,18 @@
     <group
         android:id="@+id/groupTwo">
 
-        <item android:title="others">
+        <item android:title="Others">
             <menu>
                 <item android:id="@+id/contactUs"
                       android:title="Contact Us"
-                      android:icon="@drawable/contact_us"/>
+                      android:icon="@drawable/contact_us"
+                      android:checkable="true"/>
 
 
                 <item android:id="@+id/aboutUs"
                       android:title="About Us"
-                      android:icon="@drawable/about_us"/>
+                      android:icon="@drawable/about_us"
+                      android:checkable="true"/>
             </menu>
 
         </item>
@@ -53,6 +58,7 @@
 
     <item android:id="@+id/logOut"
           android:title="Log Out"
-          android:icon="@drawable/log_out"/>
+          android:icon="@drawable/log_out"
+          android:checkable="true"/>
 
 </menu>
