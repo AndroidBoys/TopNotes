@@ -1,5 +1,6 @@
 package topnotes.nituk.com.topnotes;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -20,12 +21,14 @@ import static androidx.core.content.ContextCompat.getSystemService;
 
 public class ContactUsFragment extends Fragment implements View.OnClickListener{
 
+    Activity activity;
     public ContactUsFragment() {
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        activity=getActivity();
         View view=inflater.inflate(R.layout.contact_us,container,false);
         final Button sendFeedBackButton=view.findViewById(R.id.sendFeedbackButton);
         LinearLayout linearLayout=view.findViewById(R.id.superContentLayout);
@@ -51,5 +54,10 @@ public class ContactUsFragment extends Fragment implements View.OnClickListener{
                 //intent to gmail
                 break;
         }
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((SubjectListActivity)activity).setActionBarTitle("Contact Us");
     }
 }
