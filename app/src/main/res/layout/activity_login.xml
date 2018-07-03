@@ -6,20 +6,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".LoginActivity"
-    android:background="#5290d2"
+    android:background="@drawable/login_gradient"
     android:orientation="vertical">
 
 
-    <ImageView
-        android:layout_weight="3"
+    <de.hdodenhof.circleimageview.CircleImageView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/userImageView"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_gravity="center"
-        android:layout_margin="20dp"
-
-        android:background="@drawable/nit_uk" />
-
-
+        android:src="@drawable/nit_uk"
+        android:layout_weight="2"
+        app:civ_border_color="@color/whiteColor"
+        app:civ_border_width="3dp" />
 
     <LinearLayout
         android:layout_weight="7"
@@ -108,10 +107,9 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_margin="20dp"
-            android:background="#5290d2"
+            android:background="@drawable/login_button_gradient"
             android:drawableStart="@drawable/common_google_signin_btn_icon_dark_normal"
             android:text="@string/sign_in"
-            android:textColor="@color/blueColor"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
             android:textAlignment="gravity"
             android:textStyle="bold"

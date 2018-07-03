@@ -13,9 +13,9 @@
 
     <corners android:radius="10dp" />
     <gradient
-        android:type="sweep"
-        android:angle="270"
-        android:startColor="#6abcec"
-        android:centerColor="#65a6bc"
-        android:endColor="#95dced"/>
+        android:type="linear"
+        android:angle="45"
+        android:startColor="#4aa2d7"
+        android:centerColor="#fdfeff"
+        android:endColor="#7fc1e7"/>
 </shape>
