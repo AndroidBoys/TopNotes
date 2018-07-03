@@ -18,12 +18,16 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.snatik.storage.Storage;
+
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import androidx.core.app.ShareCompat;
 import androidx.core.content.FileProvider;
+import androidx.documentfile.provider.DocumentFile;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
@@ -76,7 +80,10 @@ public class MyDownloadsArrayAdapter extends ArrayAdapter<String> {
         deleteImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-            // deleteAction();
+             deleteAction(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)+"/TopNotes/"+context.getResources().getStringArray(R.array.subjectList)[choosenSubject]+"/"
+                     +context.getResources().getStringArray(R.array.categoryList)[choosenType]+"/"
+                +downloadsNotesNameArray.get(choosenFile)+".pdf");
+                //deleteAction(downloadsNotesNameArray.get(choosenFile)+".pdf");
             }
         });
 
@@ -98,7 +105,7 @@ public class MyDownloadsArrayAdapter extends ArrayAdapter<String> {
     public  void openFile(String file)
     {
 
-        File pdfFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getPath(),"TopNotes/"+file);
+        File pdfFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS),"TopNotes/"+file);
         Log.i("pdfFile:",pdfFile.toString());
         Uri path = Uri.fromFile(pdfFile);
         Log.i("uri:",path.toString());
@@ -117,7 +124,7 @@ public class MyDownloadsArrayAdapter extends ArrayAdapter<String> {
 
         context.startActivity(pdfIntent);
     }
-    public void deleteAction()
+    public void deleteAction(final String path)
     {
         new AlertDialog.Builder(context)
                 .setIcon(R.drawable.ic_launcher_background)
@@ -127,35 +134,33 @@ public class MyDownloadsArrayAdapter extends ArrayAdapter<String> {
 
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                            deleteFile();
+                            deleteFile(path);
                     }
                 })
                 .setNegativeButton("No",null)
                 .show();
     }
 
-    public void deleteFile()
+    public void deleteFile(String path)
     {
-//        File file = new File("Documents"+"/TopNotes/"+context.getResources().getStringArray(R.array.subjectList)[choosenSubject]+"/"
-//                +context.getResources().getStringArray(R.array.categoryList)[choosenType]+"/"
-//                +downloadsNotesNameArray.get(choosenFile)+".pdf");
-//        Uri fileUri = FileProvider.getUriForFile(context,
-//                context.getApplicationContext().getPackageName() +
-//                        ".provider", file);
-//        ContentResolver contentResolver = context.getContentResolver();
-//        contentResolver.delete(fileUri, null, null);
+        File file = new File(path);
+     if(file.exists())
+     {
+         Toast.makeText(context,"starting deletion!",Toast.LENGTH_SHORT).show();
+         DocumentFile documentFile = DocumentFile.fromFile(file);
+         if(documentFile.delete())
+         {   deleteFromListView();
+             Toast.makeText(context,"sucess!"+!file.exists(),Toast.LENGTH_SHORT).show();
+         }
+         else{
+             Toast.makeText(context,"No success!"+!file.exists(),Toast.LENGTH_SHORT).show();
+         }
+     }
+     else
+     {
+         Toast.makeText(context,"it's weird file doesn't exist!",Toast.LENGTH_SHORT).show();
+     }
 
-//        if(!file.exists())
-//        {
-//            Toast.makeText(context,"File deleted successfully!",Toast.LENGTH_SHORT).show();
-//            deleteFromListView();
-//            deleteFromDB();
-//        }
-//        else
-//        {
-//            Toast.makeText(context,"File deletion unsuccessful!",Toast.LENGTH_SHORT).show();
-//
-//        }
     }
     public void deleteFromDB()
     {
@@ -188,7 +193,7 @@ public class MyDownloadsArrayAdapter extends ArrayAdapter<String> {
 //                    shareIntent, "Share Notes"));
 //        }
 
-        File newFile = new File(context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS),"TopNotes/"+file);
+        File newFile = new File(context.getExternalFilesDir(null),"TopNotes/"+file);
         Uri fileUri=FileProvider.getUriForFile(context,context.getPackageName()+".fileprovider",newFile);
         if(fileUri!=null)
         {
