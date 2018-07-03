@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -173,8 +174,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                              Toast.makeText(LoginActivity.this,"Google sign in sucessfull! Details:"+acct.getEmail(),Toast.LENGTH_SHORT).show();
 
                             Log.d("success:", "signInWithCredential:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            saveUserInfo(user);
+                            final FirebaseUser  user = mAuth.getCurrentUser();
+                            moveToSubjectListActivity();
+                            new Handler().post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    saveUserInfo(user);
+                                }
+                            });
+
 
                         } else {
                             // If sign in fails, display a message to the user.
@@ -228,7 +236,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             @Override
             public void onSuccess(Void aVoid) {
                 // move with all proper information
-                moveToSubjectListActivity();
+
             }
         });
 //        databaseReference.child("Name").setValue(mNameEditText.getText());

@@ -5,8 +5,7 @@
                   android:orientation="horizontal"
                   android:background="@drawable/round_corner"
                   android:layout_width="match_parent"
-                  android:layout_height="120dp"
-                  android:focusable="false">
+                  android:layout_height="120dp">
 
 
     <de.hdodenhof.circleimageview.CircleImageView
@@ -17,15 +16,14 @@
         android:layout_marginTop="22dp"
         android:src="@drawable/notes"
         app:civ_border_color="@color/whiteColor"
-        app:civ_border_width="3dp"
-        android:focusable="false"/>
+        app:civ_border_width="3dp" />
 
         <LinearLayout
             android:layout_width="100dp"
             android:layout_weight="3"
             android:orientation="vertical"
             android:layout_height="match_parent"
-            android:focusable="false">
+            android:id="@+id/clickableLinearLayout">
 
             <TextView
                 android:id="@+id/notesNameTextView"
@@ -36,8 +34,7 @@
                 android:text="Operating system"
                 android:textColor="@color/whiteColor"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-                android:textStyle="bold"
-                android:focusable="false"/>
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/authorsNameTextView"
@@ -46,21 +43,18 @@
                 android:text="Author : Arvind Negi"
                 android:layout_weight="1"
                 android:textColor="@color/whiteColor"
-                android:textSize="15dp"
-                android:focusable="false"/>
+                android:textSize="15dp" />
 
             <Button
                 android:layout_width="match_parent"
                 android:background="@color/blackColor"
-                android:layout_height="1dp"
-                android:focusable="false"/>
+                android:layout_height="1dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_weight="0.1"
                 android:orientation="horizontal"
-                android:layout_height="wrap_content"
-                android:focusable="false">
+                android:layout_height="wrap_content">
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -68,7 +62,7 @@
                     android:layout_weight="1"
                     android:layout_marginTop="5dp"
                     android:src="@drawable/delete_image"
-                    android:focusable="false"/>
+                    android:id="@+id/delete"/>
 
                 <Button
                     android:layout_width="1dp"
@@ -82,7 +76,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:src="@drawable/share_image"
-                    android:focusable="false"/>
+                    android:id="@+id/share"/>
 
 
             </LinearLayout>

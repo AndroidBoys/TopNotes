@@ -47,9 +47,13 @@ public class ContentsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contents);
 
+
+        // retrieve the choosen subject and choosen type from the intent
+        choosenSubject= getIntent().getIntExtra("subject",0);
+        choosenType=getIntent().getIntExtra("type",0);
+        Toast.makeText(this,"Subject:"+choosenSubject+"Type:"+choosenType,Toast.LENGTH_SHORT).show();
+
         // initialise
-
-
         dbHelper = new DbHelper(getApplicationContext());
 
         fetchedContentList= new ArrayList<>();
@@ -65,10 +69,6 @@ public class ContentsActivity extends AppCompatActivity {
         // get the firebase storage
         firebaseStorage = FirebaseStorage.getInstance();
 
-        // retrieve the choosen subject and choosen type from the intent
-        choosenSubject= getIntent().getIntExtra("subject",0);
-        choosenType=getIntent().getIntExtra("type",0);
-        Toast.makeText(this,"Subject:"+choosenSubject+"Type:"+choosenType,Toast.LENGTH_SHORT).show();
         updateUI();
 
         loadContent();
