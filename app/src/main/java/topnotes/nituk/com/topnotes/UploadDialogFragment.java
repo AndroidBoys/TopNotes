@@ -9,15 +9,20 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.inputmethod.InputMethod;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,11 +44,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+import static android.content.Context.INPUT_METHOD_SERVICE;
+
 /***
 PRO TIP: WHEN NETWORKING ON FRAGMENT AND TRYING TO ACCESS THE SYSTEM RESOURCES , BE CAREFUL WITH THE CONTEXT..
  AS THE HOSTING ACTIVITY MAY HAVE BEEN DETACHED ON COMPLETION OF NETWORK TASK
  ***/
-public class UploadDialogFragment extends DialogFragment {
+public class UploadDialogFragment extends DialogFragment implements View.OnClickListener {
 
 
     private static final int FILE_SELECT_CODE = 0;
@@ -58,6 +65,9 @@ public class UploadDialogFragment extends DialogFragment {
     private int choosenSubject;
     private int choosenType;
     private Activity activity;
+    private LinearLayout superLinearLayout;
+    private Spinner subjectSpinner,categorySpinner;
+
 
 
     private EditText titleEditText;
@@ -74,6 +84,7 @@ public class UploadDialogFragment extends DialogFragment {
         Dialog dialog=super.onCreateDialog(savedInstanceState);
 
         dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+//       dialog.getWindow().setLocalFocus(true,true);
         return dialog;
         //
     }
@@ -90,7 +101,7 @@ public class UploadDialogFragment extends DialogFragment {
 
         View view=inflater.inflate(R.layout.upload_dialog_fragment,container,true);
 
-        // This context should be use throughout the fragment to acess any resources related to the hosting activity
+        // This context should be use throughout the fragment to access any resources related to the hosting activity
         // There was a bug in uploading due to null (getActivity) which occurs due to completion of HTTP request and detachment of
         // the base activity
         activity=getActivity();
@@ -100,21 +111,30 @@ public class UploadDialogFragment extends DialogFragment {
         uploadUserNameTextView=view.findViewById(R.id.uploadUserName);
         uploadUserNameTextView.setText(User.getUser().getName());
         Picasso.get().load(User.getUser().getImageUrl()).into(uploadUserImageView);
+        superLinearLayout=view.findViewById(R.id.superUploadFragmentLinerLayout);
 
 
         uploadButton=view.findViewById(R.id.uploadButton);
         chooseFileImageViewButton=view.findViewById(R.id.chooseFileImageViewButton);
         mStorageRef= FirebaseStorage.getInstance().getReference();
 
-
+        superLinearLayout.setOnClickListener(this);
         titleEditText=view.findViewById(R.id.uploadTitleEditText);
+        titleEditText.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View view, int i, KeyEvent keyEvent) {
+                if(i==KeyEvent.KEYCODE_ENTER&&keyEvent.getAction()==KeyEvent.ACTION_DOWN)
+                onClick(uploadButton);
+                return false;
+            }
+        });
 
         Log.i("activity:::",getActivity().toString());
 
 
 
         //To show dropdown list in our app we need to use spinner widget.
-        final Spinner subjectSpinner=view.findViewById(R.id.subjectSpinner);
+        subjectSpinner=view.findViewById(R.id.subjectSpinner);
         ArrayAdapter<String> subjectSpinnerAdapter=new ArrayAdapter<>(getActivity(),android.R.layout.simple_spinner_dropdown_item,getResources().getStringArray(R.array.spinnerSubjectList));
         subjectSpinner.setAdapter(subjectSpinnerAdapter);
         subjectSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -130,7 +150,7 @@ public class UploadDialogFragment extends DialogFragment {
             }
         });
 
-        final Spinner categorySpinner=view.findViewById(R.id.categorySpinner);
+        categorySpinner=view.findViewById(R.id.categorySpinner);
         ArrayAdapter<String> categorysSpinnerAdapter=new ArrayAdapter<>(getActivity(),android.R.layout.simple_spinner_dropdown_item,getResources().getStringArray(R.array.spinnerCategoryList));
         categorySpinner.setAdapter(categorysSpinnerAdapter);
         categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -149,40 +169,10 @@ public class UploadDialogFragment extends DialogFragment {
 
 
 
-        //Below code will choose a file from android system
-        chooseFileImageViewButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(NetworkCheck.isNetworkAvailable(getActivity())) {
-                    chooseFile();
-                }else{
-                    InternetAlertDialogfragment internetAlertDialogfragment = new InternetAlertDialogfragment();
-                    internetAlertDialogfragment.show(getFragmentManager().beginTransaction(), "net_dialog");
-                }
-            }
-        });
+        chooseFileImageViewButton.setOnClickListener(this);
 
-        uploadButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        uploadButton.setOnClickListener(this);
 
-                if(fileUri==null){
-                    Toast.makeText(getActivity(), "Please first choose the file", Toast.LENGTH_SHORT).show();
-                }
-                else if(activity.getResources().getStringArray(R.array.spinnerSubjectList)[subjectSpinner.getSelectedItemPosition()].equals("Select")){
-                    Toast.makeText(getActivity(),"Please first Choose subject !",Toast.LENGTH_SHORT).show();
-                }else if(activity.getResources().getStringArray(R.array.spinnerCategoryList)[categorySpinner.getSelectedItemPosition()].equals("Select")){
-                    Toast.makeText(getActivity(),"Please first Choose category !",Toast.LENGTH_SHORT).show();
-                }else if(titleEditText.getText().toString().equals("")){
-                    Toast.makeText(getActivity(),"Please Write the title name !",Toast.LENGTH_SHORT).show();
-                }
-                else{
-                    uploadFile(fileUri);
-                    DialogFragment dialog = (DialogFragment)getFragmentManager().findFragmentByTag("upload");
-                    dialog.dismiss();
-                }
-            }
-        });
         return view;
     }
 
@@ -295,5 +285,43 @@ public class UploadDialogFragment extends DialogFragment {
 
     }
 
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+
+            case R.id.uploadButton:
+
+                if (fileUri == null) {
+                    Toast.makeText(getActivity(), "Please first choose the file", Toast.LENGTH_SHORT).show();
+                } else if (activity.getResources().getStringArray(R.array.spinnerSubjectList)[subjectSpinner.getSelectedItemPosition()].equals("Select")) {
+                    Toast.makeText(getActivity(), "Please first Choose subject !", Toast.LENGTH_SHORT).show();
+                } else if (activity.getResources().getStringArray(R.array.spinnerCategoryList)[categorySpinner.getSelectedItemPosition()].equals("Select")) {
+                    Toast.makeText(getActivity(), "Please first Choose category !", Toast.LENGTH_SHORT).show();
+                } else if (titleEditText.getText().toString().matches("")) {
+                    Toast.makeText(getActivity(), "Please Write the title name !", Toast.LENGTH_SHORT).show();
+                } else {
+                    uploadFile(fileUri);
+                    DialogFragment dialog = (DialogFragment) getFragmentManager().findFragmentByTag("upload");
+                    dialog.dismiss();
+                }
+                break;
+
+            case R.id.chooseFileImageViewButton:
+                //Below code will choose a file from android system
+
+                if (NetworkCheck.isNetworkAvailable(getActivity())) {
+                    chooseFile();
+                } else {
+                    InternetAlertDialogfragment internetAlertDialogfragment = new InternetAlertDialogfragment();
+                    internetAlertDialogfragment.show(getFragmentManager().beginTransaction(), "net_dialog");
+                }
+                break;
+            case R.id.superUploadFragmentLinerLayout:
+                InputMethodManager inputMethodManager=(InputMethodManager)activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputMethodManager.hideSoftInputFromWindow(titleEditText.getWindowToken(),0);
+                break;
+
+        }
+    }
 }
 
