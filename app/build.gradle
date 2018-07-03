@@ -38,6 +38,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-database:16.0.1'
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'org.apache.commons:commons-lang3:3.5'
+    implementation 'com.snatik:storage:2.1.0'
 
 
 }

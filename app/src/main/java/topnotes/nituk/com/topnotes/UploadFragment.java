@@ -114,12 +114,6 @@ public class UploadFragment extends Fragment {
                 });
     }
 
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-    }
     public void fetchUploadList()
     {
         FirebaseDatabase.getInstance().getReference("users")

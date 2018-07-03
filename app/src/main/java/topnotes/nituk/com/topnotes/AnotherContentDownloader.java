@@ -36,11 +36,11 @@ public class AnotherContentDownloader {
                 .setTitle(title);
 
         // set the download path
-        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOCUMENTS+"/TopNotes/"+mContext.getResources().getStringArray(R.array.subjectList)[subject]+
-                        "/"+ mContext.getResources().getStringArray(R.array.categoryList)[type],title+".pdf");
+        request.setDestinationInExternalPublicDir(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getPath()+"/TopNotes/"+mContext.getResources().getStringArray(R.array.subjectList)[subject]+
+                        "/"+ mContext.getResources().getStringArray(R.array.categoryList)[type],"/"+title+".pdf");
 
-        Log.i("destination",Environment.DIRECTORY_DOCUMENTS+"/TopNotes/"+mContext.getResources().getStringArray(R.array.subjectList)[subject]+
-                "/"+ mContext.getResources().getStringArray(R.array.categoryList)[type]);
+        Log.i("destination",Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getPath()+"/TopNotes/"+mContext.getResources().getStringArray(R.array.subjectList)[subject]+
+                "/"+ mContext.getResources().getStringArray(R.array.categoryList)[type]+title+".pdf");
 
         // enque for download
         mDownloadReference=mDownloadManager.enqueue(request);
