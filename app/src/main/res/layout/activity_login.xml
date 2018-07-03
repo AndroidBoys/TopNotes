@@ -11,21 +11,21 @@
 
 
     <de.hdodenhof.circleimageview.CircleImageView
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/userImageView"
+        android:layout_margin="4dp"
         android:layout_width="wrap_content"
+        android:layout_gravity="center"
         android:layout_height="0dp"
         android:src="@drawable/nit_uk"
         android:layout_weight="2"
-        app:civ_border_color="@color/whiteColor"
-        app:civ_border_width="3dp" />
+        />
 
     <LinearLayout
+
         android:layout_weight="7"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginBottom="50dp"
-        android:layout_marginTop="5dp"
         android:layout_marginRight="40dp"
         android:layout_marginLeft="40dp"
         android:background="@drawable/login_curved_view"
@@ -34,7 +34,6 @@
 
         <TextView
             android:textColor="@color/blueColor"
-            android:layout_margin="20dp"
             android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -45,15 +44,15 @@
             />
 
         <LinearLayout
-
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="4">
 
             <TextView
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/username"
@@ -62,15 +61,15 @@
             <EditText
                 android:singleLine="true"
                 android:id="@+id/nameEditText"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/enter_your_name"/>
             <TextView
-                android:layout_marginTop="20dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/roll_no"
@@ -79,48 +78,40 @@
             <EditText
                 android:singleLine="true"
                 android:id="@+id/rnEditText"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/enter_your_roll_nol"/>
 
+
         </LinearLayout>
 
-        <TextView
-            android:layout_weight="1"
-            android:id="@+id/connectiong"
-            android:layout_marginTop="20dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
+
+        <Button
+            android:id="@+id/googlesigninbutton"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="36dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:background="@drawable/login_button_gradient"
+            android:drawableStart="@drawable/common_google_signin_btn_icon_dark"
+            android:text="@string/sign_in"
+            android:textStyle="bold" />
+
+
+        <TextView
+            android:id="@+id/connectiong"
+            android:layout_weight="1"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:text="@string/connecting"
             android:textAlignment="center"
             android:textStyle="bold"
             android:visibility="invisible"
             />
-
-        <Button
-            android:layout_weight="1"
-            android:id="@+id/googlesigninbutton"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_margin="20dp"
-            android:background="@drawable/login_button_gradient"
-            android:drawableStart="@drawable/common_google_signin_btn_icon_dark_normal"
-            android:text="@string/sign_in"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-            android:textAlignment="gravity"
-            android:textStyle="bold"
-
-
-
-
-            />
     </LinearLayout>
 
-
-
 </LinearLayout>
-

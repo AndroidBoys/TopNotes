@@ -161,7 +161,7 @@ public class DownloadfinalFragment extends Fragment {
 
     public void getContentDetails()
     {
-        List<Content> contents = new DbHelper(getActivity().getApplicationContext()).readContentList(choosenSubject,choosenType);
+        List<Content> contents = new DbHelper(activity.getApplicationContext()).readContentList(choosenSubject,choosenType);
         Log.i("contents:",contents.toString());
         for(int i=0;i<contents.size();i++)
         {   if(downloadedTitle.contains(contents.get(i).getTitle()))
