@@ -5,11 +5,19 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.util.Log;
+import android.view.View;
 import android.view.WindowManager;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 // Sohan create a splash of 4 sec which leads to the login activity
 
 public class SplashActivity extends AppCompatActivity {
+    ImageView imageView;
+    ProgressBar progressBar;
+    TextView quotesTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,14 +28,19 @@ public class SplashActivity extends AppCompatActivity {
         // Action bar is depricated from the splash
         getSupportActionBar().hide();
 
-        int s=getIntent().getIntExtra("exit",0);
-        if(s==1)
-            finish();
+        quotesTextView=findViewById(R.id.quotesTextView);
+        imageView=findViewById(R.id.imageViewIcon);
+        imageView.setAlpha((float) 0);
+        progressBar=findViewById(R.id.progressBar);
+        progressBar.setMax(4000);
 
-        new CountDownTimer(1000,1000){
+
+        new CountDownTimer(4000,1){
             @Override
             public void onTick(long l) {
 
+                progressBar.setProgress((4000-(int)l));
+                imageView.setAlpha((float)(4000-l)/4000);
             }
 
             @Override

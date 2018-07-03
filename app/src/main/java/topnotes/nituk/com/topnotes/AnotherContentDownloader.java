@@ -42,7 +42,7 @@ public class AnotherContentDownloader {
         Log.i("destination",Environment.DIRECTORY_DOCUMENTS+"/TopNotes/"+mContext.getResources().getStringArray(R.array.subjectList)[subject]+
                 "/"+ mContext.getResources().getStringArray(R.array.categoryList)[type]);
 
-        // enque for download
+        // enqueue for download
         mDownloadReference=mDownloadManager.enqueue(request);
 
     }
