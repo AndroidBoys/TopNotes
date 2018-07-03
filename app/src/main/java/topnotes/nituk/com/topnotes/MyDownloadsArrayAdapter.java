@@ -105,7 +105,7 @@ public class MyDownloadsArrayAdapter extends ArrayAdapter<String> {
     public  void openFile(String file)
     {
 
-        File pdfFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS),"TopNotes/"+file);
+        File pdfFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getPath(),"TopNotes/"+file);
         Log.i("pdfFile:",pdfFile.toString());
         Uri path = Uri.fromFile(pdfFile);
         Log.i("uri:",path.toString());
@@ -193,16 +193,16 @@ public class MyDownloadsArrayAdapter extends ArrayAdapter<String> {
 //                    shareIntent, "Share Notes"));
 //        }
 
-        File newFile = new File(context.getExternalFilesDir(null),"TopNotes/"+file);
-        Uri fileUri=FileProvider.getUriForFile(context,context.getPackageName()+".fileprovider",newFile);
-        if(fileUri!=null)
-        {
-            Intent shareIntent = new Intent(Intent.ACTION_SEND);
-            shareIntent.putExtra(Intent.EXTRA_STREAM,fileUri)
-                       .setType("Application/pdf");
-            context.startActivity(shareIntent);
-
-        }
+//        File newFile = new File(context.getExternalFilesDir(null),"TopNotes/"+file);
+//        Uri fileUri=FileProvider.getUriForFile(context,context.getPackageName()+".fileprovider",newFile);
+//        if(fileUri!=null)
+//        {
+//            Intent shareIntent = new Intent(Intent.ACTION_SEND);
+//            shareIntent.putExtra(Intent.EXTRA_STREAM,fileUri)
+//                       .setType("Application/pdf");
+//            context.startActivity(shareIntent);
+//
+//        }
 
     }
 }
