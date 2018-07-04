@@ -47,6 +47,9 @@ public class DownloadfinalFragment extends Fragment {
         activity=getActivity();
         View view = inflater.inflate(R.layout.fragment_download, container, false);
 
+        SubjectListActivity.stack.push(R.id.myDownloads);//it will push the id of myDownloads fragment into the
+        //SubjectListActivity stack to get proper reflection in navigation menu on pressing back button.
+
         fileList = new ArrayList<>();
         theNamesOfFiles = new ArrayList<>();
         downloadsAuthorsNameArray=new ArrayList<>();
@@ -91,6 +94,7 @@ public class DownloadfinalFragment extends Fragment {
 
         return view;
     }
+
     @Override
     public void onResume() {
         super.onResume();

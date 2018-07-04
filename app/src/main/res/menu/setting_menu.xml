@@ -6,20 +6,30 @@
 
         <item android:title="Theme">
             <menu>
+
+                <item
+                    android:id="@+id/defaultTheme"
+                    android:title="Default Theme"
+                    android:checkable="true"
+                    android:checked="false"/>
+
                 <item
                     android:id="@+id/redTheme"
                     android:title="Red Theme"
-                    android:checkable="true"/>
+                    android:checkable="true"
+                    android:checked="false"/>
 
                 <item
                     android:id="@+id/purpleTheme"
                     android:title="Purple Theme"
-                    android:checkable="true"/>
+                    android:checkable="true"
+                    android:checked="false"/>
 
                 <item
                     android:id="@+id/greenTheme"
                     android:title="Green Theme"
-                    android:checkable="true"/>
+                    android:checkable="true"
+                    android:checked="false"/>
             </menu>
         </item>
     </group>

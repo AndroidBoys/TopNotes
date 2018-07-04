@@ -43,7 +43,7 @@ public class SubjectListActivity extends AppCompatActivity {
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private ImageView userImageView;
     private TextView userNameTextView, userEmailTextView;
-    private Stack stack;
+    protected static Stack stack;
     private NavigationView navigationView;
     private int flag=0;
     private boolean firstTime=true;
@@ -128,6 +128,7 @@ public class SubjectListActivity extends AppCompatActivity {
                     case R.id.leaderboard:
                         //Toast.makeText(SubjectListActivity.this,"leaderboard selected",Toast.LENGTH_SHORT).show();
                         //LeaderFragment will be added
+                        addDifferentFragments(new LeaderBoardFragment(),"leaderboard");
                         break;
 
                     case R.id.contactUs:
@@ -144,7 +145,7 @@ public class SubjectListActivity extends AppCompatActivity {
                         //logOut fragment will be added
                         new AlertDialog.Builder(SubjectListActivity.this)
                                 .setTitle("LogOut")
-                                .setMessage("All your data will be lost :(- ... \nDo you really want to Logout ? ")
+                                .setMessage("All your data will be lost  :(-\nDo you really want to Logout ? ")
                                 .setIcon(android.R.drawable.ic_dialog_alert)
                                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                     @Override
@@ -238,32 +239,25 @@ public class SubjectListActivity extends AppCompatActivity {
         switch(item.getItemId()){
 
             case R.id.redTheme:
-                //setTheme(R.style.redTheme);
                 intent.putExtra("theme",R.style.redTheme);
-                //contentIntent.putExtra("theme",R.style.redTheme);
                 startActivity(intent);
-                //startActivity(contentIntent);
-                Log.i("clicked","red");
-                //recreate();
                 break;
+
             case R.id.purpleTheme:
-                //setTheme(R.style.yellowTheme);
                 intent.putExtra("theme",R.style.purpleTheme);
-                //contentIntent.putExtra("theme",R.style.redTheme);
                 startActivity(intent);
-                //startActivity(contentIntent);
-                Log.i("clicked","yellow");
-                //recreate();
                 break;
+
             case R.id.greenTheme:
-                //setTheme(R.style.greenTheme);
-                Log.i("clicked","green");
                 intent.putExtra("theme",R.style.greenTheme);
-                //contentIntent.putExtra("theme",R.style.redTheme);
                 startActivity(intent);
-                //startActivity(contentIntent);
-                //recreate();
                 break;
+
+            case R.id.defaultTheme:
+                intent.putExtra("theme",R.style.AppTheme);
+                startActivity(intent);
+                break;
+
 
         }
 
