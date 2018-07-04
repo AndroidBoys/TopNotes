@@ -80,12 +80,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
+        //to open a google activity
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
 
-        mAuth = FirebaseAuth.getInstance();
+        mAuth = FirebaseAuth.getInstance();//firebase authentication object
 
         // Build a GoogleSignInClient with the options specified by gso.
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
@@ -130,7 +131,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         mProgressDialog.show();
 
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-        startActivityForResult(signInIntent, RC_SIGN_IN);
+        startActivityForResult(signInIntent, RC_SIGN_IN);//RC_SIGN_IN is request code
 
     }
 
@@ -146,6 +147,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
             mProgressDialog.show();
 
+
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             handleSignInResult(task);
         }
@@ -153,10 +155,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
+
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
+            //it have the data, from this data we will get a configured google account corresponding to that data
 
             // Signed in successfully, show authenticated UI
             firebaseAuthWithGoogle(account);
+
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
@@ -169,6 +174,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void firebaseAuthWithGoogle(final GoogleSignInAccount acct) {
         Log.d("Authenticating:", "firebaseAuthWithGoogle:" + acct.getId());
 
+        //extracting the information from the account,to sign in in firebase
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -176,11 +182,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                             Toast.makeText(LoginActivity.this,"Google sign in sucessfull! Details:"+acct.getEmail(),Toast.LENGTH_SHORT).show();
+                             //Toast.makeText(LoginActivity.this,"Google sign in sucessfull! Details:"+acct.getEmail(),Toast.LENGTH_SHORT).show();
 
-                            Log.d("success:", "signInWithCredential:success");
+                            //Log.d("success:", "signInWithCredential:success");
                             final FirebaseUser  user = mAuth.getCurrentUser();
                             moveToSubjectListActivity();
+
                             new Handler().post(new Runnable() {
                                 @Override
                                 public void run() {
@@ -236,7 +243,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users").child(mAuth.getCurrentUser().getUid());
         Map<String,String> map=new HashMap<>();
         String name = mNameEditText.getText().toString();
-        String displayName = user.getDisplayName();
+
+        String displayName = user.getDisplayName();//it will return the username associated with google account
         String rn =mRNEditText.getText().toString();
         String email = user.getEmail();
         String imageurl = user.getPhotoUrl().toString();
@@ -245,6 +253,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         map.put("Rn",rn);
         map.put("Email",email);
         map.put("Imageurl",imageurl);
+
         // initialise the current user object
         initUser(displayName,rn,email,imageurl);
         // save the user info in sharedPreferences to remember the user
@@ -269,7 +278,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
     public void initUser(String name,String rn,String email,String imageurl)
     {
-        User.getUser(name,rn,email,imageurl);
+
+        User.setUser(name,rn,email,imageurl);
     }
 
    public boolean validatingDetails(){
@@ -321,13 +331,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         switch (view.getId()){
             case R.id.googlesigninbutton:
                 if (validatingDetails()) {
+                    // making sure that before login user isn't sign in with mGoogleSiginInClient in firebase
+                    //there is difference b/w login in firebase and login with Google sign api
+                    //doubt-> why we are using this here, can we use this when user press logout button?
                     mGoogleSignInClient.signOut().addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
                             // Toast.makeText(LoginActivity.this,"Sign out sucess!",Toast.LENGTH_SHORT).show();
                              mConnectingTextView.setVisibility(View.VISIBLE);
                              signIn();
-
                         }
                     });
                 }

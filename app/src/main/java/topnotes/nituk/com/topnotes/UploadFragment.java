@@ -44,11 +44,11 @@ public class UploadFragment extends Fragment {
     private SharedPreferences mSharedPreferences;
     private List<Content> uploadedContent;
     private Activity activity;
+    @Override
 
 
 
     @Nullable
-    @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         activity=getActivity();
         View view = inflater.inflate(R.layout.fragment_upload,container,false);

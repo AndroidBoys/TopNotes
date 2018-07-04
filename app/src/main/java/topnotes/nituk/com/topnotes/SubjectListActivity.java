@@ -49,6 +49,7 @@ public class SubjectListActivity extends AppCompatActivity {
     private boolean firstTime=true;
     static int colorFlag=0;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -209,7 +210,7 @@ public class SubjectListActivity extends AppCompatActivity {
 //        Log.d("above replace","this is me");
         fragmentTransaction.replace(R.id.frameLayout,replacableFragment,tag);
 //        fragmentTransaction.commitNow();
-//        Log.d("below replce","this is me");
+//        Log.d("below replace","this is me");
         //
         fragmentTransaction.addToBackStack(null );//it will push the fragment in the stack
         fragmentTransaction.commit();

@@ -27,6 +27,7 @@ public class MySubjects extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
         actvity=getActivity();
         View view = inflater.inflate(R.layout.my_subjects, container, false);
         subjectListView = view.findViewById(R.id.subjectListView);

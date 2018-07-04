@@ -63,7 +63,6 @@ public class DownloadDialogFragment extends Dialog_fragment {
         creditsTextView = view.findViewById(R.id.credits);
 
 
-
         final Content content = (Content)getArguments().getSerializable("content");
         titleTextView.setText(content.getTitle());
         subjectTextView.setText("Subject");

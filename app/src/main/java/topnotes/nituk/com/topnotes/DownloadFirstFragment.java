@@ -27,7 +27,6 @@ public class DownloadFirstFragment extends Fragment {
         activity=getActivity();
         View view = inflater.inflate(R.layout.fragment_download, container, false);
 
-
         mDownloadedSubjectListView = view.findViewById(R.id.downloadedfilelistview);
         //getActivity().getActionBar().setTitle("My Downloads");
         MyDownloadAnotherArrayAdapter myDownloadsAnotherArrayAdapter = new MyDownloadAnotherArrayAdapter(getActivity(), getResources().getStringArray(R.array.subjectList));
