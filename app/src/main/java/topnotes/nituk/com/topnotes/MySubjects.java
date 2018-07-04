@@ -51,6 +51,8 @@ public class MySubjects extends Fragment {
         return new MySubjects();
     }
 
+    //This method will be called when you came from another fragment to this fragment usign back button
+    //That time we also need to set the title of activity..
     @Override
     public void onResume() {
         super.onResume();

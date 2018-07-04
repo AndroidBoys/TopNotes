@@ -174,7 +174,10 @@ public class DownloadfinalFragment extends Fragment {
         Log.i("contents:",contents.toString());
 
         for(int i=0;i<contents.size();i++)
-        {   if(downloadedTitle.contains(contents.get(i).getTitle()))
+        {
+            //Here we are comparing the file present in file system and the file present in sqlite database
+            //if it matches it means users have downloaded it(because only after downloading file enter into file system)
+            if(downloadedTitle.contains(contents.get(i).getTitle()))
           {
             theNamesOfFiles.add(contents.get(i).getTitle());
             downloadsAuthorsNameArray.add(contents.get(i).getAuthor());

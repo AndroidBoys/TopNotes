@@ -30,8 +30,8 @@ public class Dialog_fragment extends DialogFragment implements View.OnClickListe
 
         View view=inflater.inflate(R.layout.dialog_fragment,container,false);
 
-        getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));//it will set the window of dialog transparent.
+        getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);//This dialog doesn't contain any title
         getDialog().getWindow().setWindowAnimations(R.style.dialog_animation_fade);
 
         notesTextView=view.findViewById(R.id.notes);

@@ -148,7 +148,7 @@ public class MyDownloadsArrayAdapter extends ArrayAdapter<String> {
      {
          Toast.makeText(context,"starting deletion!",Toast.LENGTH_SHORT).show();
          DocumentFile documentFile = DocumentFile.fromFile(file);
-         if(documentFile.delete())
+         if(documentFile.delete())//if file will delete then it will return true
          {   deleteFromListView();
              Toast.makeText(context,"sucess!"+!file.exists(),Toast.LENGTH_SHORT).show();
          }
@@ -170,7 +170,7 @@ public class MyDownloadsArrayAdapter extends ArrayAdapter<String> {
     public void deleteFromListView()
     {
         this.remove(this.getItem(choosenFile));
-        this.notifyDataSetChanged();
+        this.notifyDataSetChanged();//it will notify the adapter
     }
 
     private void shareFile(String filePath,int position) {

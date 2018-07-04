@@ -57,7 +57,7 @@ public class UploadFragment extends Fragment {
 
         uploadedContent=new ArrayList<>();
 
-        fetchUploadList();
+        fetchUploadList();//it will fetch the uploaded file upload by user from data base and show it in a list
 
         FloatingActionButton floatingActionButton = view.findViewById(R.id.floatingActionButton);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {

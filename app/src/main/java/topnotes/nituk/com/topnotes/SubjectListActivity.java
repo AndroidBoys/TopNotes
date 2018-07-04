@@ -75,14 +75,13 @@ public class SubjectListActivity extends AppCompatActivity {
 
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
 
+        //it is working fine but don't know how??
         actionBarDrawerToggle.syncState();
 
         //Below one will set the icon on the action bar
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
         navigationView = findViewById(R.id.navigationView);
-
-
 
 
         View header = navigationView.getHeaderView(0);
@@ -236,12 +235,13 @@ public class SubjectListActivity extends AppCompatActivity {
         item.setChecked(true);
 
         Intent intent=new Intent(this,SubjectListActivity.class);
-        //Intent contentIntent=new Intent(this,ContentsActivity.class);
+//        Intent contentIntent=new Intent(this,ContentsActivity.class);
         switch(item.getItemId()){
 
             case R.id.redTheme:
                 intent.putExtra("theme",R.style.redTheme);
                 startActivity(intent);
+
                 break;
 
             case R.id.purpleTheme:
