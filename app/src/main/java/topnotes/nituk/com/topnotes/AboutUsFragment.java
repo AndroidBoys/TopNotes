@@ -20,7 +20,7 @@ public class AboutUsFragment extends Fragment {
         View view=inflater.inflate(R.layout.about_us,container,false);
         return  view;
     }
-//
+
     @Override
     public void onResume() {
         super.onResume();
