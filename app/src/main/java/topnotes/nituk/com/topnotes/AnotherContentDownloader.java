@@ -26,8 +26,10 @@ public class AnotherContentDownloader {
     }
     public void downloadFile(String url,String title,int subject,int type)
     {
-        Uri uri = Uri.parse(url);
-        String mimeType = mContext.getContentResolver().getType(uri);
+        //since download manager takes a uri not a url
+        Uri uri = Uri.parse(url);//converting url into uri
+
+//        String mimeType = mContext.getContentResolver().getType(uri);
        // Log.i("mimeType:",mimeType);
         DownloadManager.Request request = new DownloadManager.Request(uri);
 
@@ -42,7 +44,7 @@ public class AnotherContentDownloader {
         Log.i("destination",Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getPath()+"/TopNotes/"+mContext.getResources().getStringArray(R.array.subjectList)[subject]+
                 "/"+ mContext.getResources().getStringArray(R.array.categoryList)[type]+title+".pdf");
 
-        // enqueue for download
+        // enqueue for download execute in a separate thread
         mDownloadReference=mDownloadManager.enqueue(request);
 
     }

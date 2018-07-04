@@ -247,7 +247,8 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
 
 
                     }
-                }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                })
+                .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
                 double progress = (100*taskSnapshot.getBytesTransferred())/taskSnapshot.getTotalByteCount();
@@ -261,6 +262,8 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
         if(requestCode == FILE_SELECT_CODE && resultCode == Activity.RESULT_OK && data!=null)
         {
             fileUri = data.getData();
@@ -269,8 +272,7 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
 
         }
 
-        super.onActivityResult(requestCode, resultCode, data);
-    }
+     }
 
     // The method saves the upload file's metadata to firebasedatabase
     public void makeEntryToFBDB(String url)
@@ -294,6 +296,8 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
         Intent intent = new Intent();
         intent.putExtra("content",content);
         Log.i("content with title:",content.getTitle());
+
+        //return the result to that fragment which create this fragment
         getTargetFragment().onActivityResult(getTargetRequestCode(),REQ_CODE,intent);
 
 

@@ -57,6 +57,7 @@ public class ContentsActivity extends AppCompatActivity {
 
         // initialise
 
+
         setTitle(getResources().getStringArray(R.array.categoryList)[choosenType]+" Selected");
 
         // initialise
@@ -66,6 +67,7 @@ public class ContentsActivity extends AppCompatActivity {
         localContentList= dbHelper.readContentList(choosenSubject,choosenType);
         Log.i("fromdb:",""+localContentList.size());
 
+        //initialising array from string .xml res file
         subjectTokenArray=getResources().getStringArray(R.array.subjectToken);
         typeTokenArray=getResources().getStringArray(R.array.typeToken);
 
@@ -91,7 +93,7 @@ public class ContentsActivity extends AppCompatActivity {
     private class ContentHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView mTitleTextView,mAuthorTextView,mDateTextView;
 
-        public ContentHolder(LayoutInflater inflater, ViewGroup container)
+        ContentHolder(LayoutInflater inflater, ViewGroup container)
        {
            super(inflater.inflate(R.layout.recyclerview_content_raw_layout,container,false));
            itemView.setOnClickListener(this);
@@ -115,7 +117,11 @@ public class ContentsActivity extends AppCompatActivity {
         // implement the recycler view list item click action here
         @Override
         public void onClick(View view) {
-            DownloadDialogFragment.getInstance(localContentList.get(getAdapterPosition()),choosenSubject,choosenType).show(getSupportFragmentManager(),"Download");
+
+            //getAdapterPosition will returns the position of the item clicked on the recycler view;
+            DownloadDialogFragment.getInstance(localContentList
+                    .get(getAdapterPosition()),choosenSubject,choosenType)
+                    .show(getSupportFragmentManager(),"Download");
 
             }
 
@@ -130,6 +136,7 @@ public class ContentsActivity extends AppCompatActivity {
            mContents =  contents;
         }
 
+        // second method that will be called
         @NonNull
         @Override
         public ContentHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -145,6 +152,7 @@ public class ContentsActivity extends AppCompatActivity {
 
         }
 
+        // first this method will  call
         @Override
         public int getItemCount() {
             return mContents.size();
@@ -172,7 +180,9 @@ public class ContentsActivity extends AppCompatActivity {
                 ref.addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                        Content content=dataSnapshot.getValue(Content.class);
+                        Content content=dataSnapshot.getValue(Content.class);//it will return the
+                        // Content object since we have set
+                        // the values as a content and we have passed the argument as a Content class
                         if(content!=null)
                         {   Log.i("note id:",dataSnapshot.getKey());
                             Log.i("fetched:",content.getTitle()+" "+content.getAuthor()+" "+content.getDate());
@@ -206,6 +216,7 @@ public class ContentsActivity extends AppCompatActivity {
                     }
                 });
 
+                //this will be called when all the child is added in array list
                 ref.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

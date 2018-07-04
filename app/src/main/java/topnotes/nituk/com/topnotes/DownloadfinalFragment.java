@@ -126,10 +126,12 @@ public class DownloadfinalFragment extends Fragment {
             Log.i("folder creation failed",dir.getAbsolutePath());
 
         }
+
         // otherwise pull all the files out of the directory, get their names and set on the list view
         else {
             Log.i("Already exists:",dir.getAbsolutePath());
             try {
+                //putting all the files present in the dir into the fileList
                 fileList = Arrays.asList(dir.listFiles());
             }catch(Exception e)
             {
@@ -137,7 +139,7 @@ public class DownloadfinalFragment extends Fragment {
             }
             for (int i = 0; i < fileList.size(); i++) {
                 String fileName= fileList.get(i).getName();
-                downloadedTitle.add(fileName.substring(0,fileName.length()-4));
+                downloadedTitle.add(fileName.substring(0,fileName.length()-4));//to remove .pdf
                 Log.i("filename:",fileName.substring(0,fileName.length()-4));
             }
 
@@ -163,10 +165,14 @@ public class DownloadfinalFragment extends Fragment {
 //    }
 
 
+
+    //bug here
     public void getContentDetails()
     {
-        List<Content> contents = new DbHelper(activity.getApplicationContext()).readContentList(choosenSubject,choosenType);
+        List<Content> contents = new DbHelper(activity.getApplicationContext())
+                .readContentList(choosenSubject,choosenType);
         Log.i("contents:",contents.toString());
+
         for(int i=0;i<contents.size();i++)
         {   if(downloadedTitle.contains(contents.get(i).getTitle()))
           {

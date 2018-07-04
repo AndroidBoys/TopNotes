@@ -23,7 +23,8 @@ public class DbHelper extends SQLiteOpenHelper {
 
     //syntax of sql to create a a database
     private static final String CREATE = "create table " + DbContract.TABLE_NAME +
-            "(id integer primary key autoincrement," + DbContract.CONTENT + " BLOB," + DbContract.SUBJECT_NUMBER + " text," + DbContract.SUBJECT_TYPE_NUMBER + " text);";
+            "(id integer primary key autoincrement," + DbContract.CONTENT + " BLOB," + DbContract
+            .SUBJECT_NUMBER + " text," + DbContract.SUBJECT_TYPE_NUMBER + " text);";
 
     // if table is exist than drop this table(syntax)
     private static final String DROP_TABLE = "drop table if exists " + DbContract.TABLE_NAME;
@@ -57,6 +58,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
     // custom method to save list of content in database
     public void saveContentList(List<Content> contentList, int subjectNumber, int subjectTypeNumber) {
+
         DbHelper dbHelper = new DbHelper(context); //creating DbHelper object
 
         SQLiteDatabase sqLiteDatabase = dbHelper.getWritableDatabase();//creating database
@@ -79,12 +81,11 @@ public class DbHelper extends SQLiteOpenHelper {
             byte[] data = SerializationUtils.serialize(contentList.get(i));
 
            //adding values in databse
+
             contentValues.put(DbContract.CONTENT, data);
             contentValues.put(DbContract.SUBJECT_NUMBER, subjectNumber);
             contentValues.put(DbContract.SUBJECT_TYPE_NUMBER, subjectTypeNumber);
             sqLiteDatabase.insert(DbContract.TABLE_NAME, null, contentValues);
-
-
 
         }
         Log.i("savedtodb:",contentList.toString());
@@ -101,6 +102,7 @@ public class DbHelper extends SQLiteOpenHelper {
                 + DbContract.SUBJECT_TYPE_NUMBER + "=" + subjectTypeNumber, null);
 
         if (cursor.getCount() > 0) {
+
             while (cursor.moveToNext()) {
                 int contentIndex = cursor.getColumnIndex(DbContract.CONTENT);
                 byte[] data = cursor.getBlob(contentIndex);

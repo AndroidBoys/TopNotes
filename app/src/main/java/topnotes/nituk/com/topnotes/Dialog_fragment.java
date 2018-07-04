@@ -21,11 +21,13 @@ public class Dialog_fragment extends DialogFragment implements View.OnClickListe
 
     protected TextView notesTextView,questionPaperTextView,resourceTextView,practicalFileTextView;
     private int choosenSubject;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-            //by using view you can find the id of the widgets present in R.layout.dialog_fragment
+        //by using view you can find the id of the widgets present in R.layout.dialog_fragment
+
         View view=inflater.inflate(R.layout.dialog_fragment,container,false);
 
         getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
