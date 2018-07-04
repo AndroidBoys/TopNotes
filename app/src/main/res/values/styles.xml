@@ -28,4 +28,26 @@
         <item name="background">@drawable/navigation_header_color</item>
     </style>
 
+    <style name="redTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/redColor</item>
+        <item name="colorPrimaryDark">@color/lightRedColor</item>
+        <item name="colorAccent">@color/redColor2</item>
+    </style>
+
+    <style name="purpleTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/purpleColor</item>
+        <item name="colorPrimaryDark">@color/lightPurpleColor</item>
+        <item name="colorAccent">@color/purpleColor2</item>
+    </style>
+
+    <style name="greenTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/greenColor</item>
+        <item name="colorPrimaryDark">@color/lightgreenColor</item>
+        <item name="colorAccent">@color/greenColor2</item>
+    </style>
+
+
 </resources>
