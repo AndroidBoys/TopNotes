@@ -2,9 +2,12 @@ package topnotes.nituk.com.topnotes;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.format.DateFormat;
@@ -42,6 +45,7 @@ import java.util.UUID;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.DialogFragment;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
@@ -67,6 +71,9 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
     private Activity activity;
     private LinearLayout superLinearLayout;
     private Spinner subjectSpinner,categorySpinner;
+
+    private String notesNameType;
+    private String subjectNameType;
 
 
 
@@ -111,7 +118,7 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
         uploadUserNameTextView=view.findViewById(R.id.uploadUserName);
         uploadUserNameTextView.setText(User.getUser().getName());
         Picasso.get().load(User.getUser().getImageUrl()).into(uploadUserImageView);
-        superLinearLayout=view.findViewById(R.id.superUploadFragmentLinerLayout);
+        superLinearLayout=view.findViewById(R.id.superUploadFragmentLinearLayout);
 
 
         uploadButton=view.findViewById(R.id.uploadButton);
@@ -197,6 +204,9 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
 
     private void uploadFile(Uri uri)
     {
+        subjectNameType=getResources().getStringArray(R.array.subjectList)[choosenType];
+
+        notesNameType=getResources().getStringArray(R.array.categoryList)[choosenSubject];
 
         //Uri file = Uri.fromFile(new File("path/to/images/rivers.jpg"));
         StorageReference riversRef = mStorageRef.child("courses")
@@ -247,6 +257,8 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
 
     }
 
+
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == FILE_SELECT_CODE && resultCode == Activity.RESULT_OK && data!=null)
@@ -274,6 +286,8 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
                 .child(activity.getResources().getStringArray(R.array.typeToken)[choosenType])
                 .child(contentUUID.toString())
                 .setValue(content);
+        createNotification();
+
     }
     private void sendResult(Content content)
     {
@@ -316,12 +330,29 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
                     internetAlertDialogfragment.show(getFragmentManager().beginTransaction(), "net_dialog");
                 }
                 break;
-            case R.id.superUploadFragmentLinerLayout:
+            case R.id.superUploadFragmentLinearLayout:
                 InputMethodManager inputMethodManager=(InputMethodManager)activity.getSystemService(Context.INPUT_METHOD_SERVICE);
                 inputMethodManager.hideSoftInputFromWindow(titleEditText.getWindowToken(),0);
                 break;
 
         }
+    }
+
+    private void createNotification(){
+
+        NotificationCompat.Builder builder=new NotificationCompat.Builder(activity);
+        builder.setSmallIcon(R.drawable.notes);
+        builder.setContentTitle("New Notes Uploaded");
+        //builder.setContentText(getResources().getStringArray(R.array.subjectList)[choosenSubject] + getResources().getStringArray(R.array.subjectList)[choosenType] +" uploaded ..You can download it..");
+        builder.setContentText(subjectNameType+" "+notesNameType+" uploaded ..You can download it..");
+        Uri defaultRingtone=RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        builder.setSound(defaultRingtone);
+        Intent intent=new Intent(activity,SubjectListActivity.class);
+        PendingIntent pendingIntent=PendingIntent.getActivity(activity,0,intent,PendingIntent.FLAG_UPDATE_CURRENT);
+        builder.setContentIntent(pendingIntent);
+        NotificationManager notificationManager=(NotificationManager)activity.getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(0,builder.build());
+
     }
 }
 

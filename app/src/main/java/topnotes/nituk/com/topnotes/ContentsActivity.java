@@ -47,6 +47,8 @@ public class ContentsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        setTheme(getIntent().getIntExtra("theme",0));//it will change the theme of activity
         setContentView(R.layout.activity_contents);
 
         choosenSubject= getIntent().getIntExtra("subject",0);
@@ -57,6 +59,7 @@ public class ContentsActivity extends AppCompatActivity {
 
         setTitle(getResources().getStringArray(R.array.categoryList)[choosenType]+" Selected");
 
+        // initialise
         dbHelper = new DbHelper(getApplicationContext());
 
         fetchedContentList= new ArrayList<>();
@@ -73,6 +76,7 @@ public class ContentsActivity extends AppCompatActivity {
         firebaseStorage = FirebaseStorage.getInstance();
 
         // retrieve the choosen subject and choosen type from the intent
+
         updateUI();
 
         loadContent();

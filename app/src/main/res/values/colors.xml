@@ -4,15 +4,25 @@
     <color name="colorPrimaryDark">#32aabc</color>
     <color name="colorAccent">#3980c1</color>
     <color name="brownColor">#9c4824</color>
-    <color name="greenColor">#5e9428</color>
+    <color name="greenColor">#58dc40</color>
     <color name="blueColor">#182bd7</color>
     <color name="blackColor">#111112</color>
     <color name="lightOrangeColor">#eca68d</color>
     <color name="lightSkyColor">#b6e2ed</color>
     <color name="lightGreyColor">#b4babc</color>
-    <color name="redColor">#f4102b</color>
+    <color name="redColor">#f2243c</color>
     <color name="greenYellowColor">#bcf23e</color>
     <color name="lightPurpleColor">#f48fcf</color>
     <color name="whiteColor">#f1f0f0</color>
+    <color name="lightRedColor">#e66c6c</color>
+    <color name="redColor2">#ec5948</color>
+
+    <color name="lightgreenColor">#80e77b</color>
+    <color name="greenColor2">#45c143</color>
+
+    <color name="purpleColor">#e64acc</color>
+    <color name="lightpurpleColor">#ec7ce6</color>
+    <color name="purpleColor2">#d15acd</color>
+
 
 </resources>
