@@ -70,8 +70,8 @@ public class MyDownloadsArrayAdapter extends ArrayAdapter<String> {
             @Override
             public void onClick(View view) {
                 openFile(context.getResources().getStringArray(R.array.subjectList)[choosenSubject]+"/"
-                        +context.getResources().getStringArray(R.array.categoryList)[choosenType]+"/"
-                        +downloadsNotesNameArray.get(position)+".pdf");
+                        +context.getResources().getStringArray(R.array.categoryList)[choosenType]
+                       +"/" +downloadsNotesNameArray.get(position)+".pdf");
                 Log.i("clicked:", "" + position);
                 Log.i("file:", downloadsNotesNameArray.get(position));
             }
@@ -90,9 +90,9 @@ public class MyDownloadsArrayAdapter extends ArrayAdapter<String> {
         shareImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                shareFile(context.getResources().getStringArray(R.array.subjectList)[choosenSubject]+"/"
-//                        +context.getResources().getStringArray(R.array.categoryList)[choosenType]+"/"
-//                        +downloadsNotesNameArray.get(position)+".pdf");
+                shareFile(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath()+"TopNotes/"+context.getResources().getStringArray(R.array.subjectList)[choosenSubject]+"/"
+                        +context.getResources().getStringArray(R.array.categoryList)[choosenType],position);//+"/"
+                        //+downloadsNotesNameArray.get(position)+".pdf");
             }
         });
 
@@ -172,37 +172,51 @@ public class MyDownloadsArrayAdapter extends ArrayAdapter<String> {
         this.remove(this.getItem(choosenFile));
         this.notifyDataSetChanged();
     }
-    public void shareFile(String file)
-    {
-//        Log.d(TAG, "initializing share notes");
-//        File newFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getPath(),"TopNotes/"+file);
-//        String authority =BuildConfig.APPLICATION_ID + ".fileprovider";
-//        Log.d(TAG, "authority: " + authority);
-//        Uri contentUri = FileProvider.getUriForFile(context, authority,newFile);
-//
-//        if (contentUri != null) {
-//            Intent shareIntent = ShareCompat.IntentBuilder.from((Activity) context)
-//                    .setType("Application/pdf")
-//                    .setStream(contentUri)
-//                    .setSubject("TopNotes")
-//                    .setText("Sent using TopNotes")
-//                    .getIntent();
-//            shareIntent.setData(contentUri);
-//            shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-//            context.startActivity(Intent.createChooser(
-//                    shareIntent, "Share Notes"));
-//        }
 
-//        File newFile = new File(context.getExternalFilesDir(null),"TopNotes/"+file);
-//        Uri fileUri=FileProvider.getUriForFile(context,context.getPackageName()+".fileprovider",newFile);
-//        if(fileUri!=null)
-//        {
-//            Intent shareIntent = new Intent(Intent.ACTION_SEND);
-//            shareIntent.putExtra(Intent.EXTRA_STREAM,fileUri)
-//                       .setType("Application/pdf");
-//            context.startActivity(shareIntent);
-//
-//        }
+    private void shareFile(String filePath,int position) {
+
+        File file = new File(filePath,downloadsNotesNameArray.get(position)+".pdf");
+
+
+        if(file.canRead())
+        {
+            Log.i("yes:","true");
+        }
+        else
+        {Log.i("no:","mrja");
+
+        }
+        //DocumentFile file1 = DocumentFile.fromFile(file);
+
+        Log.i("file:",file.toString());
+
+           Uri uri = FileProvider.getUriForFile(context,context.getPackageName()+".provider",file);
+
+            Log.i("path segments",uri.getPathSegments().toString());
+            Log.i("uri:",uri.toString());
+//            Intent share = new Intent();
+//            share.setAction(Intent.ACTION_SEND);
+//            share.setType("application/pdf");
+//            share.putExtra(Intent.EXTRA_STREAM, uri);
+//            context.grantUriPermission("com.whatsapp",uri,Intent.FLAG_GRANT_READ_URI_PERMISSION|Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+//            context.revokeUriPermission(uri,Intent.FLAG_GRANT_READ_URI_PERMISSION|Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+//            share.addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION|Intent.FLAG_GRANT_WRITE_URI_PERMISSION|Intent.FLAG_GRANT_READ_URI_PERMISSION);
+////            share.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+////            share.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+//            context.startActivity(Intent.createChooser(share, "Share File"));
+
+        Intent intent = ShareCompat.IntentBuilder.from((Activity) context)
+                .setStream(uri) // uri from FileProvider
+                .setType("*/*")
+                .getIntent()
+                .setAction(Intent.ACTION_SEND) //Change if needed
+                .setDataAndType(uri, "*/*")
+                .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+      //  context.grantUriPermission("com.whatsapp",uri,Intent.FLAG_GRANT_READ_URI_PERMISSION|Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+
+
+        context.startActivity(intent);
 
     }
+
 }
