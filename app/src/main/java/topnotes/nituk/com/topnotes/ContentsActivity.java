@@ -47,6 +47,8 @@ public class ContentsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        setTheme(getIntent().getIntExtra("theme",0));//it will change the theme of activity
         setContentView(R.layout.activity_contents);
 
         choosenSubject= getIntent().getIntExtra("subject",0);
