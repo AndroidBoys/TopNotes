@@ -115,8 +115,6 @@ public class DbHelper extends SQLiteOpenHelper {
         }
 
         return contentList;
-
-
     }
     public void deleteContent(Content content,int subjectNumber,int subjectTypeNumber){
 

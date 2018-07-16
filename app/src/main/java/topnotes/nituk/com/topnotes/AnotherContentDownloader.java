@@ -40,6 +40,7 @@ public class AnotherContentDownloader {
         // set the download path
         request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOCUMENTS+"/TopNotes/"+mContext.getResources().getStringArray(R.array.subjectList)[subject]+
                         "/"+ mContext.getResources().getStringArray(R.array.categoryList)[type],title+".pdf");
+        //In the above code we can make some changes. Instead of appending .pdf with title we should not append anything.
 
         Log.i("destination",Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getPath()+"/TopNotes/"+mContext.getResources().getStringArray(R.array.subjectList)[subject]+
                 "/"+ mContext.getResources().getStringArray(R.array.categoryList)[type]+title+".pdf");

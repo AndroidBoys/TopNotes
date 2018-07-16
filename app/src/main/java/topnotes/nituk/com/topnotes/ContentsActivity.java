@@ -104,6 +104,7 @@ public class ContentsActivity extends AppCompatActivity {
            mDateTextView=itemView.findViewById(R.id.uploadDateTextView);
 
        }
+
         // The method binds the data to the viewholder
         public void bind(Content content)
         {
@@ -234,6 +235,7 @@ public class ContentsActivity extends AppCompatActivity {
 
 
     }
+
     public void addToDB()
     {
         dbHelper.saveContentList(fetchedContentList,choosenSubject,choosenType);

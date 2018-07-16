@@ -118,7 +118,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     sharedPreferences.getString("Email","example@gmail.com"),
                     sharedPreferences.getString("Imageurl",null));
             moveToSubjectListActivity();
-
         }
 
 
@@ -188,7 +187,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             final FirebaseUser  user = mAuth.getCurrentUser();
                             moveToSubjectListActivity();
 
-                            new Handler().post(new Runnable() {
+                            new Handler().post(
+
+                                    new Runnable() {
                                 @Override
                                 public void run() {
                                     saveUserInfo(user);
@@ -270,10 +271,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
             }
         });
-//        databaseReference.child("Name").setValue(mNameEditText.getText());
-//        databaseReference.child("Rn").setValue(mRNEditText.getText());
-//        databaseReference.child("Email").setValue(user.getEmail());
-//        databaseReference.child("Imageurl").setValue(user.getPhotoUrl());
 
     }
     public void initUser(String name,String rn,String email,String imageurl)

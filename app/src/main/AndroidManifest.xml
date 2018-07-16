@@ -15,21 +15,25 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".SplashActivity">
+        <activity android:name=".SplashActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LoginActivity" />
-        <activity android:name=".SubjectListActivity">
+        <activity android:name=".LoginActivity"
+                  android:screenOrientation="portrait"/>
+        <activity android:name=".SubjectListActivity"
+                  android:screenOrientation="portrait">
 
         </activity>
 
 
         <activity android:name=".ContentsActivity"
-            android:parentActivityName=".SubjectListActivity"></activity>
+            android:parentActivityName=".SubjectListActivity"
+                  android:screenOrientation="portrait"></activity>
 
         <meta-data
             android:name="preloaded_fonts"
@@ -40,9 +44,9 @@
             android:authorities="${applicationId}.provider"
             android:exported="false"
             android:grantUriPermissions="true">
-        <meta-data
-            android:name="android.support.FILE_PROVIDER_PATHS"
-            android:resource="@xml/path_provider"/>
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/path_provider"/>
         </provider>
 
     </application>
