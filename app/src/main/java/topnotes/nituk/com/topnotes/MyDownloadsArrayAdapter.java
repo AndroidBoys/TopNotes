@@ -6,6 +6,8 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
@@ -90,7 +92,7 @@ public class MyDownloadsArrayAdapter extends ArrayAdapter<String> {
         shareImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                shareFile(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath()+"TopNotes/"+context.getResources().getStringArray(R.array.subjectList)[choosenSubject]+"/"
+                shareFile("TopNotes/"+context.getResources().getStringArray(R.array.subjectList)[choosenSubject]+"/"
                         +context.getResources().getStringArray(R.array.categoryList)[choosenType],position);//+"/"
                         //+downloadsNotesNameArray.get(position)+".pdf");
             }
@@ -114,13 +116,13 @@ public class MyDownloadsArrayAdapter extends ArrayAdapter<String> {
         Intent pdfIntent = new Intent(Intent.ACTION_VIEW);
         // for opening pdf files
         pdfIntent.setDataAndType(path, "application/pdf");
+        //pdfIntent.setDataAndType(path, "*/*");
         // for opening images
         //pdfIntent.setDataAndType(path, "image/*");
         // If the instance of pdf reader already exists
         pdfIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         // for api>24
         pdfIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-
 
         context.startActivity(pdfIntent);
     }
@@ -143,25 +145,23 @@ public class MyDownloadsArrayAdapter extends ArrayAdapter<String> {
 
     public void deleteFile(String path)
     {
-        File file = new File(path);
-     if(file.exists())
-     {
-         Toast.makeText(context,"starting deletion!",Toast.LENGTH_SHORT).show();
-         DocumentFile documentFile = DocumentFile.fromFile(file);
-         if(documentFile.delete())//if file will delete then it will return true
-         {   deleteFromListView();
-             Toast.makeText(context,"sucess!"+!file.exists(),Toast.LENGTH_SHORT).show();
-         }
-         else{
-             Toast.makeText(context,"No success!"+!file.exists(),Toast.LENGTH_SHORT).show();
-         }
-     }
-     else
-     {
+       File file = new File(path);
+       // File file=new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS),"EEM.pdf");
+        if(file.exists()) {
+             Toast.makeText(context,"starting deletion!",Toast.LENGTH_SHORT).show();
+             DocumentFile documentFile = DocumentFile.fromFile(file);
+             if(documentFile.delete())//if file will delete then it will return true
+             {   deleteFromListView();
+                 Toast.makeText(context,"sucess!"+!file.exists(),Toast.LENGTH_SHORT).show();
+             }
+             else{
+                 Toast.makeText(context,"No success!"+!file.exists(),Toast.LENGTH_SHORT).show();
+             }
+        } else {
          Toast.makeText(context,"it's weird file doesn't exist!",Toast.LENGTH_SHORT).show();
-     }
-
+       }
     }
+
     public void deleteFromDB()
     {
 
@@ -175,18 +175,17 @@ public class MyDownloadsArrayAdapter extends ArrayAdapter<String> {
 
     private void shareFile(String filePath,int position) {
 
-        File file = new File(filePath,downloadsNotesNameArray.get(position)+".pdf");
+        //it is necessary to put two arguments in class File constructor one is parent and other one is child.
+        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS),filePath+"/"+downloadsNotesNameArray.get(position)+".pdf");
+       // File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),"downloads/EEM.pdf");
 
-
-        if(file.canRead())
-        {
+        if(file.canRead()) {
             Log.i("yes:","true");
         }
-        else
-        {Log.i("no:","mrja");
+        else {
+            Log.i("no:","mrja");
 
         }
-        //DocumentFile file1 = DocumentFile.fromFile(file);
 
         Log.i("file:",file.toString());
 
@@ -205,17 +204,25 @@ public class MyDownloadsArrayAdapter extends ArrayAdapter<String> {
 ////            share.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
 //            context.startActivity(Intent.createChooser(share, "Share File"));
 
+//
         Intent intent = ShareCompat.IntentBuilder.from((Activity) context)
                 .setStream(uri) // uri from FileProvider
-                .setType("*/*")
+                .setType("application/pdf")
                 .getIntent()
                 .setAction(Intent.ACTION_SEND) //Change if needed
-                .setDataAndType(uri, "*/*")
+                .setDataAndType(uri, "application/pdf")
                 .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-      //  context.grantUriPermission("com.whatsapp",uri,Intent.FLAG_GRANT_READ_URI_PERMISSION|Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+        intent.putExtra(Intent.EXTRA_STREAM,uri);
 
+        //This below code is used to grantPermission for all other sharing apps
+        List<ResolveInfo> resInfoList = context.getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+        for (ResolveInfo resolveInfo : resInfoList) {
+            String packageName = resolveInfo.activityInfo.packageName;
+            context.grantUriPermission(packageName, uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        }
 
         context.startActivity(intent);
+
 
     }
 

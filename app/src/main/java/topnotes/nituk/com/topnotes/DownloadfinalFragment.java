@@ -1,19 +1,13 @@
 package topnotes.nituk.com.topnotes;
 
-import android.Manifest;
 import android.app.Activity;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -22,7 +16,6 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
 //  Fragment showing the downloaded files of the user
@@ -65,33 +58,6 @@ public class DownloadfinalFragment extends Fragment {
         mDownloadedFilesListView = view.findViewById(R.id.downloadedfilelistview);
         MyDownloadsArrayAdapter myDownloadsArrayAdapter = new MyDownloadsArrayAdapter(getActivity(), theNamesOfFiles, downloadsAuthorsNameArray,choosenSubject,choosenType);
         mDownloadedFilesListView.setAdapter(myDownloadsArrayAdapter);
-
-//        mDownloadedFilesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                openFile(getResources().getStringArray(R.array.subjectList)[choosenSubject]+"/"
-//                        +getResources().getStringArray(R.array.categoryList)[choosenType]+"/"
-//                        +theNamesOfFiles.get(i)+".pdf");
-//                Log.i("clicked:", "" + i);
-//                Log.i("file:", theNamesOfFiles.get(i));
-//            }
-//        });
-
-//         mDownloadedFilesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//             @Override
-//             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                 openFile(getResources().getStringArray(R.array.subjectList)[choosenSubject]+"/"
-//                         +getResources().getStringArray(R.array.categoryList)[choosenType]+"/"
-//                         +theNamesOfFiles.get(i)+".pdf");
-//                 Log.i("clicked:", "" + i);
-//                 Log.i("file:", theNamesOfFiles.get(i));
-//             }
-//         });
-//         choosenSubject=getArguments().getInt("subject");
-//         choosenType=getArguments().getInt("type");
-//         //Toast.makeText(getActivity(),"Subject:"+choosenSubject+"Type:"+choosenType,Toast.LENGTH_SHORT).show();
-
-
         return view;
     }
 
@@ -142,31 +108,9 @@ public class DownloadfinalFragment extends Fragment {
                 downloadedTitle.add(fileName.substring(0,fileName.length()-4));//to remove .pdf
                 Log.i("filename:",fileName.substring(0,fileName.length()-4));
             }
-
-
         }
     }
 
-//    @Override
-//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-//        if(requestCode==PER_REQ_CODE && grantResults.length>0)
-//        {
-//            if(grantResults[0]== PackageManager.PERMISSION_GRANTED)
-//            {
-//                listFiles();
-//            }
-//            else
-//            {
-//                Toast.makeText(getActivity(),"Please grant the Read/Write permission first!",Toast.LENGTH_SHORT).show();
-//            }
-//        }
-//
-//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-//    }
-
-
-
-    //bug here
     public void getContentDetails()
     {
         List<Content> contents = new DbHelper(activity.getApplicationContext())
@@ -181,7 +125,6 @@ public class DownloadfinalFragment extends Fragment {
           {
             theNamesOfFiles.add(contents.get(i).getTitle());
             downloadsAuthorsNameArray.add(contents.get(i).getAuthor());
-
           }
 
         }

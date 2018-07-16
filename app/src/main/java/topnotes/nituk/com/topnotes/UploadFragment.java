@@ -53,8 +53,6 @@ public class UploadFragment extends Fragment {
         activity=getActivity();
         View view = inflater.inflate(R.layout.fragment_upload,container,false);
 
-        activity=getActivity();
-
         uploadedContent=new ArrayList<>();
 
         fetchUploadList();//it will fetch the uploaded file upload by user from data base and show it in a list

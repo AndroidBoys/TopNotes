@@ -7,9 +7,11 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +21,13 @@ import android.widget.Button;
 import android.widget.RemoteViews;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.io.File;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -40,6 +49,36 @@ public class DownloadDialogFragment extends Dialog_fragment {
     private int choosenSubject;
     private int choosenType;
     private static Activity activity;
+    private Content content;
+    private List<File> fileList;
+    private ArrayList<String> titleNameofFiles;
+
+    class SizeTask extends AsyncTask{
+
+        //This below code is used to find out the size of file and then set the size of the file in the sizeTextView
+
+        @Override
+        protected Object doInBackground(Object[] objects) {
+
+
+            try {
+                URL url = new URL(content.getDownloadUrl());
+                Log.i("Inside","--------------------------------url"+content.getDownloadUrl());
+                URLConnection urlConnection =url.openConnection();
+                //urlConnection.connect();
+                int file_size=urlConnection.getContentLength();
+                Log.i("FileSize","--------------------------------"+file_size);
+                sizeTextView.setText(file_size/(1024)+"KB");
+                //sizeTextView.setText(String.valueOf(file_size));
+
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+
+
+            return null;
+        }
+    }
 
 
     @Nullable
@@ -62,27 +101,62 @@ public class DownloadDialogFragment extends Dialog_fragment {
         sizeTextView = view.findViewById(R.id.size);
         creditsTextView = view.findViewById(R.id.credits);
 
+        //titleNameOfFiles contain the title name present in specific folder.
+        titleNameofFiles=new ArrayList<>();
 
-        final Content content = (Content)getArguments().getSerializable("content");
+        content = (Content)getArguments().getSerializable("content");
         titleTextView.setText(content.getTitle());
-        subjectTextView.setText("Subject");
+
         authorTextView.setText(content.getAuthor());
-        sizeTextView.setText("4.5mb");
+        //sizeTextView.setText("4.5mb");
         creditsTextView.setText("me :)");
         dateTextView.setText(content.getDate());
 
         choosenSubject=getArguments().getInt("subject");
         choosenType=getArguments().getInt("type");
 
+        File directory=new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS),"TopNotes/"+
+                     getResources().getStringArray(R.array.subjectList)[choosenSubject]+"/"+
+                getResources().getStringArray(R.array.categoryList)[choosenType]);
+
+
+        if(directory.exists()) {
+            fileList = Arrays.asList(directory.listFiles());//it will return the list of files present
+            //in that folder(specified path)
+
+            //Below code is used to add the title name in titleNameOfFiles arrayList..
+            for(int i=0;i<fileList.size();i++){
+                titleNameofFiles.add(fileList.get(i).getName());
+            }
+        }
+
+        for(int i=0;i<fileList.size();i++){
+            Log.i("AboutFile","------------------------------"+titleNameofFiles.get(i));
+        }
+
+
+        new SizeTask().execute();
+
+        subjectTextView.setText(getResources().getStringArray(R.array.subjectList)[choosenSubject]);
+
         downloadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Download the content
-                Toast.makeText(getActivity(),"::Download process begins:: with url:"+content.getDownloadUrl(),Toast.LENGTH_SHORT).show();
-                Log.i("url:",content.getDownloadUrl());
+
+                //Here i will check if the file which i am going to download is already present
+                //in file system that means users had already download it ..So no need to download it
+                //again.
+                if(!titleNameofFiles.contains(content.getTitle()+".pdf")) {
+                    // Download the content
+                    Toast.makeText(getActivity(), "::Download process begins:: with url:" + content.getDownloadUrl(), Toast.LENGTH_SHORT).show();
+                    Log.i("url:", content.getDownloadUrl());
 //                new ContentDownloader(getActivity()).downloadFile(content.getDownloadUrl(),content.getTitle(),choosenSubject,choosenType);
-                  new AnotherContentDownloader(getActivity()).downloadFile(content.getDownloadUrl(),content.getTitle(),choosenSubject,choosenType);
-                DialogFragment dialog = (DialogFragment)getFragmentManager().findFragmentByTag("Download");
+                    new AnotherContentDownloader(getActivity()).downloadFile(content.getDownloadUrl(), content.getTitle(), choosenSubject, choosenType);
+
+                }else{
+                    Toast.makeText(getActivity(),"You already have downloaded this file",Toast.LENGTH_SHORT).show();
+                }
+                DialogFragment dialog = (DialogFragment) getFragmentManager().findFragmentByTag("Download");
                 dialog.dismiss();
             }
         });

@@ -32,6 +32,7 @@ public class MyUploadsArrayAdapter extends ArrayAdapter<Content> {
         TextView uploadDateTextView=rowView.findViewById(R.id.uploadFragmentDateTextView);
 
         notesNameTextView.setText(uploadedContent.get(position).getTitle());
+        //need to make some changes in the below code ..we need to set subjectname instead of author name
         subjectNameTextView.setText("Subject : "+uploadedContent.get(position).getAuthor());
         uploadDateTextView.setText("Upload Date : "+uploadedContent.get(position).getDate());
         ////

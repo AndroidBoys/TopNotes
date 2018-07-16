@@ -101,7 +101,6 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
         return new UploadDialogFragment();
     }
 
-//    String spinnerList[]={"mohan","rohan","sohan","dohan","gohangohan gohan gohan","johan","pagal","dagal"};
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -147,7 +146,7 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
         subjectSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                // since the select option in also included
+                // since the select option is also included
                 choosenSubject=i-1;
             }
 
@@ -276,7 +275,8 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
 
     // The method saves the upload file's metadata to firebasedatabase
     public void makeEntryToFBDB(String url)
-    {   UUID contentUUID = UUID.randomUUID();
+    {
+        UUID contentUUID = UUID.randomUUID();
         Content content = new Content();
         content.setTitle(titleEditText.getText().toString());
         content.setDate(DateFormat.getDateFormat(activity).format(new Date()));
