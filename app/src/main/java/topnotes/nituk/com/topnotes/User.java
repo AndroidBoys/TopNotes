@@ -48,10 +48,8 @@ public class User {
     }
     public static void setUser(String name, String rn, String email, String imageUrl)
     {
-        if(mCurrentUser==null)
-        {
+
             mCurrentUser= new User(name, rn, email, imageUrl);
-        }
 
     }
 

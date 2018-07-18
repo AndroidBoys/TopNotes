@@ -32,11 +32,11 @@
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
             android:textStyle="bold"/>
 
-        <Button
+
+        <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/blackColor"/>
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_weight="1"
