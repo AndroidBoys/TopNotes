@@ -50,13 +50,10 @@ setOnItemClickListener in it-->
 
     </LinearLayout>
 
-    <Button
-        android:focusable="false"
+
+    <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_weight="1"
-        android:background="@color/blackColor"
-        android:layout_marginTop="6dp"
-        android:layout_marginBottom="1dp"/>
+        android:background="@color/blackColor"/>
 
 </LinearLayout>
