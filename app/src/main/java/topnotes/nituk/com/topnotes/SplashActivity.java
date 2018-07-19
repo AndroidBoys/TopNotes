@@ -1,8 +1,11 @@
 package topnotes.nituk.com.topnotes;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
@@ -11,6 +14,11 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 // Sohan create a splash of 4 sec which leads to the login activity
 
@@ -33,6 +41,8 @@ public class SplashActivity extends AppCompatActivity {
         imageView.setAlpha((float) 0);
         progressBar=findViewById(R.id.progressBar);
         progressBar.setMax(4000);
+        SharedPreferences sharedPreferences=getSharedPreferences("topnotes.nituk.com.topnotes.quotes",Context.MODE_PRIVATE);
+        quotesTextView.setText(sharedPreferences.getString("quotes","Chai pilo frands"));
 
 
         new CountDownTimer(4000,1){

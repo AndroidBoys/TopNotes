@@ -30,10 +30,10 @@
 
 
 
-    <item android:id="@+id/leaderboard"
-          android:title="Leaderboard"
+    <item android:id="@+id/announcement"
+          android:title="Announcement"
           android:checkable="true"
-          android:icon="@drawable/leaderboard"/>
+          android:icon="@drawable/announcement"/>
 
 
     <group
