@@ -12,12 +12,15 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.StrictMode;
 import android.util.Log;
 
@@ -30,6 +33,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.Objects;
@@ -48,17 +55,27 @@ public class SubjectListActivity extends AppCompatActivity {
     private int flag=0;
     private boolean firstTime=true;
     static int colorFlag=0;
+    private SharedPreferences sharedPreferences;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+                saveQuotesInSharePreferences();
+            }
+        });
+
         if(colorFlag==1){
             //As we are giving user to change the theme of an activity so initially we will not set the
             //theme.when user will choose the theme then colorFlag value will be toggle and theme will be
             //set.
             setTheme(getIntent().getIntExtra("theme",0));
         }
+
         //setTheme(R.style.yellowTheme);
         setContentView(R.layout.activity_subject_list);
         stack=new Stack();
@@ -125,10 +142,10 @@ public class SubjectListActivity extends AppCompatActivity {
                         addDifferentFragments(uploadFragment,"uploads");
                         break;
 
-                    case R.id.leaderboard:
-                        //Toast.makeText(SubjectListActivity.this,"leaderboard selected",Toast.LENGTH_SHORT).show();
+                    case R.id.announcement:
+                        //Toast.makeText(SubjectListActivity.this,"announcement selected",Toast.LENGTH_SHORT).show();
                         //LeaderFragment will be added
-                        addDifferentFragments(new LeaderBoardFragment(),"leaderboard");
+                        addDifferentFragments(new AnnouncementFragment(),"announcement");
                         break;
 
                     case R.id.contactUs:
@@ -339,4 +356,21 @@ public class SubjectListActivity extends AppCompatActivity {
     public void setActionBarTitle(String title){
         getSupportActionBar().setTitle(title);
     }
+    public void saveQuotesInSharePreferences(){
+        FirebaseDatabase.getInstance().getReference().child("quotes").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                sharedPreferences=getSharedPreferences("topnotes.nituk.com.topnotes.quotes",Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor=sharedPreferences.edit();
+                editor.putString("quotes",dataSnapshot.getValue().toString())
+                        .apply();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
 }
+
