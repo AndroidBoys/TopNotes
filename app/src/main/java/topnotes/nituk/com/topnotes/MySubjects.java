@@ -30,6 +30,7 @@ public class MySubjects extends Fragment {
 
         actvity=getActivity();
         View view = inflater.inflate(R.layout.my_subjects, container, false);
+        MyService.registerAlarm(actvity);
         subjectListView = view.findViewById(R.id.subjectListView);
         MySubjectArrayAdapter mySubjectArrayAdapter = new MySubjectArrayAdapter(getActivity(), getResources().getStringArray(R.array.subjectList));
         subjectListView.setAdapter(mySubjectArrayAdapter);
@@ -57,6 +58,7 @@ public class MySubjects extends Fragment {
     public void onResume() {
         super.onResume();
        ((SubjectListActivity)actvity).setActionBarTitle("My Subjects");
+
     }
 
 //    @Override

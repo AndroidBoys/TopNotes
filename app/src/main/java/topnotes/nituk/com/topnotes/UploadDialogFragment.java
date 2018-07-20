@@ -288,7 +288,7 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
                 .child(activity.getResources().getStringArray(R.array.typeToken)[choosenType])
                 .child(contentUUID.toString())
                 .setValue(content);
-        createNotification();
+        //createNotification();
 
     }
     private void sendResult(Content content)

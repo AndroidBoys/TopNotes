@@ -29,8 +29,6 @@
                   android:screenOrientation="portrait">
 
         </activity>
-
-
         <activity android:name=".ContentsActivity"
             android:parentActivityName=".SubjectListActivity"
                   android:screenOrientation="portrait"></activity>
@@ -48,6 +46,8 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/path_provider"/>
         </provider>
+
+        <service android:name=".MyService"/>
 
     </application>
 
