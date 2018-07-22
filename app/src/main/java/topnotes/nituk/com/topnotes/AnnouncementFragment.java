@@ -30,10 +30,7 @@ public class AnnouncementFragment extends Fragment {
     private EditText quotesEditText;
     private Button quotesSendButton;
     private Button sendAnnouncementButton;
-    private final String sohanEmail="sohan.cse16@nituk.ac.in",
-                            amitEmail="amitkishorraturi.cse16@nituk.ac.in",
-                            arvindEmail="arvind7799.cse16@nituk.ac.in";
-    @Nullable
+     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         activity = getActivity();
@@ -75,9 +72,8 @@ public class AnnouncementFragment extends Fragment {
     }
     public void checkAdminMode(){
 
-        String userEmail=FirebaseAuth.getInstance().getCurrentUser().getEmail();
-        if(userEmail.equals(sohanEmail)||userEmail.equals(amitEmail)
-                ||userEmail.equals(arvindEmail)){
+        if(CheckAdminMode.isAdminMode()){
+
             announcementEditText.setVisibility(View.VISIBLE);
             sendAnnouncementButton.setVisibility(View.VISIBLE);
             quotesSendButton.setVisibility(View.VISIBLE);

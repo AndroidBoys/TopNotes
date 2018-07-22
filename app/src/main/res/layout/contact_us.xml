@@ -50,10 +50,9 @@
 
 
         <Button
-            android:layout_weight="1"
             android:id="@+id/sendFeedbackButton"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_margin="20dp"
             android:background="@drawable/login_button_gradient"
             android:text="SEND FEEDBACK"
@@ -63,5 +62,10 @@
             android:textStyle="bold" />
     </LinearLayout>
 
-
+<Button
+    android:id="@+id/showFeedbackButton"
+    android:visibility="invisible"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="show feedback"/>
 </LinearLayout>

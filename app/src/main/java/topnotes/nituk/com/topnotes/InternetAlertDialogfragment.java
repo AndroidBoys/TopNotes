@@ -31,7 +31,8 @@ public class InternetAlertDialogfragment extends DialogFragment {
        retryButton.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View view) {
-               Toast.makeText(getActivity(), "try again clicked", Toast.LENGTH_SHORT).show();
+               dismiss();
+
            }
        });
 

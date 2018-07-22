@@ -59,24 +59,24 @@ public class Dialog_fragment extends DialogFragment implements View.OnClickListe
         switch (view.getId()){
             case R.id.notes:
 
-                Toast.makeText(getActivity(), "notes selected", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getActivity(), "notes selected", Toast.LENGTH_SHORT).show();
                 moveToContentActivity(0);
                 break;
 
             case R.id.questionPaper:
-                Toast.makeText(getActivity(), "questionpaper selected", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getActivity(), "questionpaper selected", Toast.LENGTH_SHORT).show();
                 moveToContentActivity(1);
                 break;
 
             case R.id.practicalFiles:
 
-                Toast.makeText(getActivity(), "practicalFiles selected", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getActivity(), "practicalFiles selected", Toast.LENGTH_SHORT).show();
                 //new DownloadDialogFragment().show(getFragmentManager(),"Download dialog");
                 moveToContentActivity(2);
                 break;
 
             case R.id.resources:
-                Toast.makeText(getActivity(), "resources selected", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getActivity(), "resources selected", Toast.LENGTH_SHORT).show();
                 moveToContentActivity(3);
                 break;
                 }

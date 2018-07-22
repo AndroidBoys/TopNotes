@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,12 +17,19 @@ import android.widget.LinearLayout;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseError;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -34,6 +42,7 @@ public class ContactUsFragment extends Fragment implements View.OnClickListener{
 
     private Activity activity;
     private EditText feedbackEditText;
+    private Button showFeedbackButton;
     public ContactUsFragment() {
     }
 
@@ -47,7 +56,16 @@ public class ContactUsFragment extends Fragment implements View.OnClickListener{
         feedbackEditText=view.findViewById(R.id.feedbackEditText);
         linearLayout.setOnClickListener(this);
         sendFeedBackButton.setOnClickListener(this);
-
+        showFeedbackButton=view.findViewById(R.id.showFeedbackButton);
+        if(CheckAdminMode.isAdminMode()){
+            showFeedbackButton.setVisibility(View.VISIBLE);
+            showFeedbackButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    showFeedback();
+                }
+            });
+        }
         return view;
     }
 
@@ -104,4 +122,76 @@ public class ContactUsFragment extends Fragment implements View.OnClickListener{
         super.onResume();
         ((SubjectListActivity)activity).setActionBarTitle("Contact Us");
     }
+
+    public void showFeedback(){
+
+        final ArrayList<String> feedbacks=new ArrayList<>();
+
+        //extracting feedbacks from firebase database;
+        FirebaseDatabase.getInstance().getReference().child("users").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                for(final DataSnapshot itemSnapshot: dataSnapshot.getChildren()){
+                    if(itemSnapshot.getKey().equals("Feedback")){
+
+                        itemSnapshot.getRef().addChildEventListener(new ChildEventListener() {
+                            @Override
+                            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                                Log.d("feedbacksuser",dataSnapshot.getValue().toString());
+                                feedbacks.add(dataSnapshot.getValue().toString());
+                                if(FeedbackList.arrayAdapter!=null)
+                                    FeedbackList.arrayAdapter.notifyDataSetChanged();
+                            }
+
+                            @Override
+                            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                            }
+
+                            @Override
+                            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+                            }
+
+                            @Override
+                            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+
+                    }
+                }
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
+        FeedbackList feedbackList=new FeedbackList(feedbacks);
+        feedbackList.show(getFragmentManager(),"feedbacks");
+    }
+
 }
