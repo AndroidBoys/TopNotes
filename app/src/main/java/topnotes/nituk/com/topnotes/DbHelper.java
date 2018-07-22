@@ -21,7 +21,7 @@ public class DbHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;//database version
     private Context context;
 
-    //syntax of sql to create a a database
+    //syntax of sql to create a database
     private static final String CREATE = "create table " + DbContract.TABLE_NAME +
             "(id integer primary key autoincrement," + DbContract.CONTENT + " BLOB," + DbContract
             .SUBJECT_NUMBER + " text," + DbContract.SUBJECT_TYPE_NUMBER + " text);";
@@ -36,7 +36,7 @@ public class DbHelper extends SQLiteOpenHelper {
         this.context = context;  //saving context
     }
 
-    // calling this method result in database creation
+    // calling this method results in database creation
     @Override
     public SQLiteDatabase getWritableDatabase() {
         return super.getWritableDatabase();

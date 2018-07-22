@@ -356,6 +356,7 @@ public class SubjectListActivity extends AppCompatActivity {
     public void setActionBarTitle(String title){
         getSupportActionBar().setTitle(title);
     }
+
     public void saveQuotesInSharePreferences(){
         FirebaseDatabase.getInstance().getReference().child("quotes").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
