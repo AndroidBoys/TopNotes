@@ -216,16 +216,12 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
         notesNameType=getResources().getStringArray(R.array.categoryList)[choosenType];
 
         //using current time to set title so their will be no title of similar names
-        Calendar calendar=Calendar.getInstance();
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yy-MM-dd HH:mm:ss");
-        final String dateTime=simpleDateFormat.format(calendar.getTime());
-
-
+           final String dateTime=UUID.randomUUID().toString();
         //Uri file = Uri.fromFile(new File("path/to/images/rivers.jpg"));
         StorageReference riversRef = mStorageRef.child("courses")
                 .child(getResources().getStringArray(R.array.subjectList)[choosenSubject])
                 .child(getResources().getStringArray(R.array.categoryList)[choosenType])
-                .child(titleEditText.getText().toString()+" "+dateTime);
+                .child(titleEditText.getText().toString()+"_"+dateTime);
         final ProgressDialog progressDialog = new ProgressDialog(getActivity());
         progressDialog.setTitle("Uploading...");
         //Log.i("activity again::",getActivity().toString());
@@ -280,6 +276,7 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
         if(requestCode == FILE_SELECT_CODE && resultCode == Activity.RESULT_OK && data!=null)
         {
             fileUri = data.getData();
+            Log.d("urifile",data.getData().toString());
             //mPathTextView.setText(fileUri.getPath());
             Toast.makeText(getContext(),"File ready to upload  with uri:"+fileUri.getPath(),Toast.LENGTH_SHORT).show();
 
@@ -292,7 +289,7 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
     {
         UUID contentUUID = UUID.randomUUID();
         Content content = new Content();
-        content.setTitle(titleEditText.getText().toString()+" "+dateTime);
+        content.setTitle(titleEditText.getText().toString()+"_"+dateTime);
         content.setDate(DateFormat.getDateFormat(activity).format(new Date()));
         content.setAuthor(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
         content.setDownloadUrl(url);
