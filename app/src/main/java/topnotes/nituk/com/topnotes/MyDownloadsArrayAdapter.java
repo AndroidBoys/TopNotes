@@ -125,7 +125,6 @@ public class MyDownloadsArrayAdapter extends ArrayAdapter<String> {
         pdfIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
         context.startActivity(pdfIntent);
-
     }
     public void deleteAction(final String path)
     {

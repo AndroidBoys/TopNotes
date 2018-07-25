@@ -216,7 +216,9 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
         notesNameType=getResources().getStringArray(R.array.categoryList)[choosenType];
 
         //using current time to set title so their will be no title of similar names
-           final String dateTime=UUID.randomUUID().toString();
+        Calendar calendar=Calendar.getInstance();
+        SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+        final String dateTime=simpleDateFormat.format(calendar.getTime());
         //Uri file = Uri.fromFile(new File("path/to/images/rivers.jpg"));
         StorageReference riversRef = mStorageRef.child("courses")
                 .child(getResources().getStringArray(R.array.subjectList)[choosenSubject])
