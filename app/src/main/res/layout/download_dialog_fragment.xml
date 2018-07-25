@@ -43,7 +43,7 @@
 
             android:layout_weight="1"
             android:id="@+id/subject"
-            android:text="Applied physics"
+            android:text=" "
             android:padding="5dp"
             android:layout_width="0dp"
             android:layout_height="wrap_content" />
@@ -67,7 +67,7 @@
         <TextView
             android:layout_weight="1"
             android:id="@+id/size"
-            android:text="Applied physics"
+            android:text=" "
 
             android:padding="5dp"
             android:layout_width="0dp"
@@ -92,7 +92,7 @@
         <TextView
             android:layout_weight="1"
             android:id="@+id/downloads"
-            android:text="Applied physics"
+            android:text=" "
 
             android:padding="5dp"
             android:layout_width="0dp"
@@ -116,7 +116,7 @@
         <TextView
             android:layout_weight="1"
             android:id="@+id/author"
-            android:text="Applied physics"
+            android:text=" "
             android:padding="5dp"
             android:layout_width="0dp"
             android:layout_height="wrap_content" />
@@ -139,7 +139,7 @@
         <TextView
             android:layout_weight="1"
             android:id="@+id/date"
-            android:text="Applied physics"
+            android:text=" "
             android:padding="5dp"
             android:layout_width="0dp"
             android:layout_height="wrap_content" />
@@ -163,7 +163,7 @@
         <TextView
             android:layout_weight="1"
             android:id="@+id/credits"
-            android:text="Applied physics"
+            android:text=" "
             android:padding="5dp"
             android:layout_width="0dp"
             android:layout_height="wrap_content" />

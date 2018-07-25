@@ -1,5 +1,6 @@
 package topnotes.nituk.com.topnotes;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.NotificationManager;
@@ -33,6 +34,9 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
@@ -40,6 +44,9 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
 
@@ -71,7 +78,6 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
     private Activity activity;
     private LinearLayout superLinearLayout;
     private Spinner subjectSpinner,categorySpinner;
-
     private String notesNameType;
     private String subjectNameType;
 
@@ -106,8 +112,7 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view=inflater.inflate(R.layout.upload_dialog_fragment,container,true);
-
-        // This context should be use throughout the fragment to access any resources related to the hosting activity
+      // This context should be use throughout the fragment to access any resources related to the hosting activity
         // There was a bug in uploading due to null (getActivity) which occurs due to completion of HTTP request and detachment of
         // the base activity
         activity=getActivity();
@@ -207,11 +212,17 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
 
         notesNameType=getResources().getStringArray(R.array.categoryList)[choosenSubject];
 
+        //using current time to set title so their will be no title of similar names
+        Calendar calendar=Calendar.getInstance();
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yy-MM-dd HH:mm:ss");
+        final String dateTime=simpleDateFormat.format(calendar.getTime());
+
+
         //Uri file = Uri.fromFile(new File("path/to/images/rivers.jpg"));
         StorageReference riversRef = mStorageRef.child("courses")
                 .child(getResources().getStringArray(R.array.subjectList)[choosenSubject])
                 .child(getResources().getStringArray(R.array.categoryList)[choosenType])
-                .child(titleEditText.getText().toString());
+                .child(titleEditText.getText().toString()+" "+dateTime);
         final ProgressDialog progressDialog = new ProgressDialog(getActivity());
         progressDialog.setTitle("Uploading...");
         //Log.i("activity again::",getActivity().toString());
@@ -228,7 +239,7 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
                             public void onSuccess(Uri uri) {
                                 Toast.makeText(activity,"File uploaded successfully, file url:"+uri.toString(),Toast.LENGTH_SHORT).show();
                                 Log.i("Upload success, Url:",uri.toString());
-                                makeEntryToFBDB(uri.toString());
+                                makeEntryToFBDB(uri.toString(),dateTime);
                                 progressDialog.dismiss();
                                 fileUri=null;
                             }
@@ -274,11 +285,11 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
      }
 
     // The method saves the upload file's metadata to firebasedatabase
-    public void makeEntryToFBDB(String url)
+    public void makeEntryToFBDB(String url,String dateTime)
     {
         UUID contentUUID = UUID.randomUUID();
         Content content = new Content();
-        content.setTitle(titleEditText.getText().toString());
+        content.setTitle(titleEditText.getText().toString()+" "+dateTime);
         content.setDate(DateFormat.getDateFormat(activity).format(new Date()));
         content.setAuthor(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
         content.setDownloadUrl(url);
@@ -358,5 +369,6 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
         notificationManager.notify(0,builder.build());
 
     }
-}
+
+    }
 
