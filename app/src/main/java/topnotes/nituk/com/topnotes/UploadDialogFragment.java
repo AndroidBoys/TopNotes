@@ -152,6 +152,7 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 // since the select option is also included
+                Log.d("coosenSubject",""+i);
                 choosenSubject=i-1;
             }
 
@@ -168,6 +169,8 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                // since the select option is also included..
+                Log.d("catagory",""+i);
+
                 choosenType=i-1;
 
             }
@@ -208,9 +211,9 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
 
     private void uploadFile(Uri uri)
     {
-        subjectNameType=getResources().getStringArray(R.array.subjectList)[choosenType];
+        subjectNameType=getResources().getStringArray(R.array.subjectList)[choosenSubject];
 
-        notesNameType=getResources().getStringArray(R.array.categoryList)[choosenSubject];
+        notesNameType=getResources().getStringArray(R.array.categoryList)[choosenType];
 
         //using current time to set title so their will be no title of similar names
         Calendar calendar=Calendar.getInstance();
