@@ -12,6 +12,9 @@ public class Content implements Serializable {
     private String author;
     private String date;
     private String downloadUrl;
+    private String subject;
+    private String size;
+    private int downloads;
 
 
     public Content() {
@@ -58,5 +61,29 @@ public class Content implements Serializable {
                 && content.getAuthor().equals(this.getAuthor())
                 &&content.getDate().equals(this.getDate())
                 &&content.getDownloadUrl().equals(this.getDownloadUrl());
+    }
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
+
+    public String getSize() {
+        return size;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
+    }
+
+    public int getDownloads() {
+        return downloads;
+    }
+
+    public void setDownloads(int downloads) {
+        this.downloads = downloads;
     }
 }

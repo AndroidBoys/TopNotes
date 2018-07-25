@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
@@ -12,9 +13,13 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.app.DownloadManager;
+import android.app.NotificationManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 
@@ -31,6 +36,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -39,6 +46,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Stack;
 
@@ -62,10 +70,12 @@ public class SubjectListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        registerReceiver(onComplete,new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+
         new Handler().post(new Runnable() {
             @Override
             public void run() {
-                saveQuotesInSharePreferences();
+                    saveQuotesInSharePreferences();
             }
         });
 
@@ -196,9 +206,11 @@ public class SubjectListActivity extends AppCompatActivity {
 
         //set current user info to the dashboard
         setCurrentUserInfo();
+
         // for bug fixing in api > 24 when firing the pdf intent
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
+
         // for api >= 23 asking for all runtime permissions
         if (!hasAllPermissions())
             askForPermissions();
@@ -362,8 +374,13 @@ public class SubjectListActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 sharedPreferences=getSharedPreferences("topnotes.nituk.com.topnotes.quotes",Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor=sharedPreferences.edit();
-                editor.putString("quotes",dataSnapshot.getValue().toString())
-                        .apply();
+                try {
+                    editor.putString("quotes", dataSnapshot.getValue().toString())
+                            .apply();
+                }catch(Exception e)
+                {
+                    e.printStackTrace();
+                }
             }
 
             @Override
@@ -372,5 +389,47 @@ public class SubjectListActivity extends AppCompatActivity {
             }
         });
     }
+
+    // Reciever to recieve the download complete event
+    BroadcastReceiver onComplete = new BroadcastReceiver() {
+
+        public void onReceive(Context ctxt, Intent intent) {
+
+            // get the refid from the download manager
+            long referenceId = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
+
+           // remove it from our list
+           List<Long> list=MyApplication.getApp().getDownloadList();
+           list.remove(referenceId);
+
+// if list is empty means all downloads completed
+            if (list.isEmpty())
+            {
+
+// show a notification
+                Log.e("INSIDE", "" + referenceId);
+                NotificationCompat.Builder mBuilder =
+                        new NotificationCompat.Builder(SubjectListActivity.this)
+                                .setSmallIcon(R.mipmap.ic_launcher)
+                                .setContentTitle("TopNotes")
+                                .setContentText("Download Completed");
+
+
+                NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                notificationManager.notify(455, mBuilder.build());
+
+                Toast.makeText(MyApplication.getApp(), "Download completed!", Toast.LENGTH_SHORT).show();
+            }
+
+        }
+    };
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(onComplete);
+    }
+
+
 }
 
