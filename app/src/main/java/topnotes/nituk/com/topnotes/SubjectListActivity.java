@@ -214,6 +214,22 @@ public class SubjectListActivity extends AppCompatActivity {
         // for api >= 23 asking for all runtime permissions
         if (!hasAllPermissions())
             askForPermissions();
+
+
+        // testing purpose
+//        if(getIntent()!=null)
+//        {
+//            Intent i = getIntent();
+//            String extra = i.getStringExtra("fromSplashActivity");
+//            if(extra!=null)
+//            {
+//                Toast.makeText(this, "fromSplashActivity:"+extra, Toast.LENGTH_SHORT).show();
+//            }
+//            else
+//            {
+//                Toast.makeText(this, "well that's sad :(", Toast.LENGTH_SHORT).show();
+//            }
+//        }
     }
 
 
@@ -405,6 +421,12 @@ public class SubjectListActivity extends AppCompatActivity {
 // if list is empty means all downloads completed
             if (list.isEmpty())
             {
+              // increment the downloads counter;
+
+                AnotherContentDownloader.getInstance(ctxt).incrementDownloadCounter();
+
+
+
 
 // show a notification
                 Log.e("INSIDE", "" + referenceId);

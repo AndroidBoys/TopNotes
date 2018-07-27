@@ -60,7 +60,8 @@ public class Content implements Serializable {
         return content.getTitle().equals(this.getTitle())
                 && content.getAuthor().equals(this.getAuthor())
                 &&content.getDate().equals(this.getDate())
-                &&content.getDownloadUrl().equals(this.getDownloadUrl());
+                &&content.getDownloadUrl().equals(this.getDownloadUrl())
+        &&content.getSubject().equals(this.getSubject());
     }
 
     public String getSubject() {

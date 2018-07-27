@@ -80,12 +80,10 @@ public class ContentsActivity extends AppCompatActivity {
 
         // retrieve the choosen subject and choosen type from the intent
 
-
-
         loadContent();
 
-        // set Adapter to the recycler view with appropriate dataset
         updateUI();
+
         Log.i("onCreate::","withing contentActivity");
 
     }
@@ -226,6 +224,7 @@ public class ContentsActivity extends AppCompatActivity {
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         Toast.makeText(ContentsActivity.this,"Fetching done!",Toast.LENGTH_SHORT).show();
                         Log.i("localsize:",""+localContentList.size());
+                        refreshDownloadsCount();
                         addToDB();
                     }
 
@@ -254,4 +253,21 @@ public class ContentsActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
     }
+
+    public void refreshDownloadsCount()
+    {
+        for(int i=0;i<fetchedContentList.size();i++)
+        {
+            Content fetchedContent = fetchedContentList.get(i);
+            Content localContent = localContentList.get(i);
+
+            if(localContent.getDownloads()!=fetchedContent.getDownloads())
+            {
+                localContent.setDownloads(fetchedContent.getDownloads());
+            }
+        }
+
+        mContentAdapter.notifyDataSetChanged();
+    }
+
 }

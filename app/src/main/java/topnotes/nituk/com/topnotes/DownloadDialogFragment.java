@@ -150,7 +150,7 @@ public class DownloadDialogFragment extends Dialog_fragment {
                     Toast.makeText(getActivity(), "::Download process begins:: with url:" + content.getDownloadUrl(), Toast.LENGTH_SHORT).show();
                     Log.i("url:", content.getDownloadUrl());
 //                new ContentDownloader(getActivity()).downloadFile(content.getDownloadUrl(),content.getTitle(),choosenSubject,choosenType);
-                    new AnotherContentDownloader(getActivity()).downloadFile(content.getDownloadUrl(), content.getTitle(), choosenSubject, choosenType);
+                    AnotherContentDownloader.getInstance(getActivity()).downloadFile(content.getDownloadUrl(), content.getTitle(), choosenSubject, choosenType);
 
                 }else{
                     Toast.makeText(getActivity(),"You already have downloaded this file",Toast.LENGTH_SHORT).show();
