@@ -63,7 +63,9 @@
         <item>Computer Networks</item>
         <item>Network Security</item>
         <item>Real Time System</item>
-        <item>Industrial and Society</item>
+        <item>Computer Graphics</item>
+        <item>Industry and Society</item>
+        <item>Image Processing</item>
     </string-array>
 
     <string-array name="spinnerCategoryList">

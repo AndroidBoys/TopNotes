@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 
 import java.io.File;
@@ -31,6 +32,7 @@ public class DownloadfinalFragment extends Fragment {
     private int choosenSubject;
     private int choosenType;
     Activity activity;
+    private FrameLayout frameLayout;
 
 
     @Nullable
@@ -55,7 +57,16 @@ public class DownloadfinalFragment extends Fragment {
         getContentDetails();
 
         mDownloadedFilesListView = view.findViewById(R.id.downloadedfilelistview);
-        MyDownloadsArrayAdapter myDownloadsArrayAdapter = new MyDownloadsArrayAdapter(getActivity(), contentList, fileTitleList,choosenSubject,choosenType);
+        frameLayout=view.findViewById(R.id.downloadfileFrameLayout);
+        frameLayout.setVisibility(View.INVISIBLE);
+        mDownloadedFilesListView.setVisibility(View.VISIBLE);
+        if(theNamesOfFiles.size()==0||downloadsAuthorsNameArray.size()==0){
+            mDownloadedFilesListView.setVisibility(View.INVISIBLE);
+            frameLayout.setVisibility(View.VISIBLE);
+            getFragmentManager().beginTransaction().replace(R.id.downloadfileFrameLayout,
+                    new NothingToDisplayDialogFragment("download")).commit();
+        }
+        MyDownloadsArrayAdapter myDownloadsArrayAdapter = new MyDownloadsArrayAdapter(getActivity(), theNamesOfFiles, downloadsAuthorsNameArray,choosenSubject,choosenType);
         mDownloadedFilesListView.setAdapter(myDownloadsArrayAdapter);
         return view;
     }
