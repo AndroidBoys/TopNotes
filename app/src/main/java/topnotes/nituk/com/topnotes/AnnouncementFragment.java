@@ -48,7 +48,7 @@ public class AnnouncementFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        ((SubjectListActivity) activity).setActionBarTitle("LeaderBoard");
+        ((SubjectListActivity) activity).setActionBarTitle("Announcement");
     }
 
     public void setAnnouncement() {

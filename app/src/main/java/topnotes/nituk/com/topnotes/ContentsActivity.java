@@ -53,6 +53,7 @@ public class ContentsActivity extends AppCompatActivity {
 
         choosenSubject= getIntent().getIntExtra("subject",0);
         choosenType=getIntent().getIntExtra("type",0);
+
         Toast.makeText(this,"Subject:"+choosenSubject+"Type:"+choosenType,Toast.LENGTH_SHORT).show();
 
         // initialise
@@ -79,11 +80,10 @@ public class ContentsActivity extends AppCompatActivity {
 
         // retrieve the choosen subject and choosen type from the intent
 
-        updateUI();
-
         loadContent();
 
-        // set Adapter to the recycler view with appropriate dataset
+        updateUI();
+
         Log.i("onCreate::","withing contentActivity");
 
     }
@@ -96,6 +96,7 @@ public class ContentsActivity extends AppCompatActivity {
         ContentHolder(LayoutInflater inflater, ViewGroup container)
        {
            super(inflater.inflate(R.layout.recyclerview_content_raw_layout,container,false));
+
            itemView.setOnClickListener(this);
            // get reference to the views using the viewholder when the viewholders are created here
 
@@ -223,6 +224,7 @@ public class ContentsActivity extends AppCompatActivity {
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         Toast.makeText(ContentsActivity.this,"Fetching done!",Toast.LENGTH_SHORT).show();
                         Log.i("localsize:",""+localContentList.size());
+                        refreshDownloadsCount();
                         addToDB();
                     }
 
@@ -251,4 +253,21 @@ public class ContentsActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
     }
+
+    public void refreshDownloadsCount()
+    {
+        for(int i=0;i<fetchedContentList.size();i++)
+        {
+            Content fetchedContent = fetchedContentList.get(i);
+            Content localContent = localContentList.get(i);
+
+            if(localContent.getDownloads()!=fetchedContent.getDownloads())
+            {
+                localContent.setDownloads(fetchedContent.getDownloads());
+            }
+        }
+
+        mContentAdapter.notifyDataSetChanged();
+    }
+
 }

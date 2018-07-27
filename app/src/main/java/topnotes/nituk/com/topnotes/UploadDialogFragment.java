@@ -6,11 +6,15 @@ import android.app.Dialog;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.provider.OpenableColumns;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -43,10 +47,14 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.io.File;
+import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.UUID;
 
@@ -295,6 +303,26 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
         content.setDate(DateFormat.getDateFormat(activity).format(new Date()));
         content.setAuthor(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
         content.setDownloadUrl(url);
+        // new properties
+        content.setDownloads(0);
+        content.setSubject(activity.getResources().getStringArray(R.array.subjectList)[choosenSubject]);
+
+        Long uriSizeinLong = getFileSize(fileUri);
+        Log.i("size in long:",uriSizeinLong.toString());
+        String s = uriSizeinLong + "";
+        Double uriSize = Double.parseDouble(s);
+        Log.i("size in double:",uriSize.toString());
+        // cast long to double
+        String fileSize = calculateProperFileSize(uriSize);
+        content.setSize(fileSize);
+        Log.i("uploaded size:",fileSize);
+
+
+        String fileName = getFileName(fileUri);
+        Log.i("fileName:",fileName);
+        content.setFileName(fileName);
+
+
         // update the myupload list
         sendResult(content);
         FirebaseDatabase.getInstance().getReference("courses").child(activity.getResources().getStringArray(R.array.subjectToken)[choosenSubject])
@@ -372,5 +400,62 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
 
     }
 
+    public String calculateProperFileSize(double bytes){
+        String[] fileSizeUnits = {"bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"};
+        String sizeToReturn = "";// = FileUtils.byteCountToDisplaySize(bytes), unit = "";
+        int index = 0;
+        for(index = 0; index < fileSizeUnits.length; index++){
+            if(bytes < 1024){
+                break;
+            }
+            bytes = bytes / 1024;
+        }
+        System.out.println("Systematic file size: " + bytes + " " + fileSizeUnits[index]);
+        sizeToReturn = String.valueOf(new DecimalFormat("##.##").format(bytes)) + " " + fileSizeUnits[index];
+        return sizeToReturn;
     }
+
+    private Long getFileSize(Uri uri)
+    {   long dataSize =0;
+        File f=null;
+        String scheme = uri.getScheme();
+        System.out.println("Scheme type " + scheme);
+        if(scheme.equals(ContentResolver.SCHEME_CONTENT))
+        {
+            try {
+                InputStream fileInputStream=activity.getApplicationContext().getContentResolver().openInputStream(uri);
+                dataSize = fileInputStream.available();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            System.out.println("File size in bytes"+dataSize);
+
+        }
+        else if(scheme.equals(ContentResolver.SCHEME_FILE))
+        {
+            String path = uri.getPath();
+            try {
+                f = new File(path);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            System.out.println("File size in bytes"+f.length());
+        }
+
+        return dataSize;
+    }
+
+    public String getFileName(Uri uri)
+    {
+       String path = uri.getPath();
+       String splits[] = path.split(":");
+       Log.i("splits","first:"+splits[0]+"and second:"+splits[1]);
+
+       return splits[1];
+    }
+
+
+
+
+}
 

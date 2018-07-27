@@ -52,33 +52,33 @@ public class DownloadDialogFragment extends Dialog_fragment {
     private Content content;
     private List<File> fileList;
     private ArrayList<String> titleNameofFiles;
-
-    class SizeTask extends AsyncTask{
-
-        //This below code is used to find out the size of file and then set the size of the file in the sizeTextView
-
-        @Override
-        protected Object doInBackground(Object[] objects) {
-
-
-            try {
-                URL url = new URL(content.getDownloadUrl());
-                Log.i("Inside","--------------------------------url"+content.getDownloadUrl());
-                URLConnection urlConnection =url.openConnection();
-                //urlConnection.connect();
-                int file_size=urlConnection.getContentLength();
-                Log.i("FileSize","--------------------------------"+file_size);
-                sizeTextView.setText(file_size/(1024)+"KB");
-                //sizeTextView.setText(String.valueOf(file_size));
-
-            }catch(Exception e){
-                e.printStackTrace();
-            }
-
-
-            return null;
-        }
-    }
+//
+//    class SizeTask extends AsyncTask{
+//
+//        //This below code is used to find out the size of file and then set the size of the file in the sizeTextView
+//
+//        @Override
+//        protected Object doInBackground(Object[] objects) {
+//
+//
+//            try {
+//                URL url = new URL(content.getDownloadUrl());
+//                Log.i("Inside","--------------------------------url"+content.getDownloadUrl());
+//                URLConnection urlConnection =url.openConnection();
+//                //urlConnection.connect();
+//                int file_size=urlConnection.getContentLength();
+//                Log.i("FileSize","--------------------------------"+file_size);
+//                sizeTextView.setText(file_size/(1024)+"KB");
+//                //sizeTextView.setText(String.valueOf(file_size));
+//
+//            }catch(Exception e){
+//                e.printStackTrace();
+//            }
+//
+//
+//            return null;
+//        }
+//    }
 
 
     @Nullable
@@ -100,6 +100,7 @@ public class DownloadDialogFragment extends Dialog_fragment {
         dateTextView = view.findViewById(R.id.date);
         sizeTextView = view.findViewById(R.id.size);
         creditsTextView = view.findViewById(R.id.credits);
+        downloadsTextView = view.findViewById(R.id.downloads);
 
         //titleNameOfFiles contain the title name present in specific folder.
         titleNameofFiles=new ArrayList<>();
@@ -108,9 +109,11 @@ public class DownloadDialogFragment extends Dialog_fragment {
         titleTextView.setText(content.getTitle());
 
         authorTextView.setText(content.getAuthor());
-        //sizeTextView.setText("4.5mb");
-        creditsTextView.setText("me :)");
+        sizeTextView.setText(content.getSize());
+        creditsTextView.setText("Admins :)");
         dateTextView.setText(content.getDate());
+        subjectTextView.setText(content.getSubject());
+        downloadsTextView.setText(Integer.toString(content.getDownloads()));
 
         choosenSubject=getArguments().getInt("subject");
         choosenType=getArguments().getInt("type");
@@ -130,14 +133,10 @@ public class DownloadDialogFragment extends Dialog_fragment {
             }
         }
 
-        for(int i=0;i<fileList.size();i++){
-            Log.i("AboutFile","------------------------------"+titleNameofFiles.get(i));
-        }
 
 
-        new SizeTask().execute();
+//        new SizeTask().execute();
 
-        subjectTextView.setText(getResources().getStringArray(R.array.subjectList)[choosenSubject]);
 
         downloadButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -146,15 +145,15 @@ public class DownloadDialogFragment extends Dialog_fragment {
                 //Here i will check if the file which i am going to download is already present
                 //in file system that means users had already download it ..So no need to download it
                 //again.
-                if(!titleNameofFiles.contains(content.getTitle()+".pdf")) {
+               if(!titleNameofFiles.contains(content.getFileName())) {
                     // Download the content
                     Toast.makeText(getActivity(), "::Download process begins:: with url:" + content.getDownloadUrl(), Toast.LENGTH_SHORT).show();
                     Log.i("url:", content.getDownloadUrl());
 //                new ContentDownloader(getActivity()).downloadFile(content.getDownloadUrl(),content.getTitle(),choosenSubject,choosenType);
-                    new AnotherContentDownloader(getActivity()).downloadFile(content.getDownloadUrl(), content.getTitle(), choosenSubject, choosenType);
+                    AnotherContentDownloader.getInstance(getActivity()).downloadFile(content.getDownloadUrl(), content.getFileName(), choosenSubject, choosenType);
 
                 }else{
-                    Toast.makeText(getActivity(),"You already have downloaded this file",Toast.LENGTH_SHORT).show();
+                   Toast.makeText(getActivity()," You already have downloaded this file!",Toast.LENGTH_SHORT).show();
                 }
                 DialogFragment dialog = (DialogFragment) getFragmentManager().findFragmentByTag("Download");
                 dialog.dismiss();
@@ -222,4 +221,7 @@ public class DownloadDialogFragment extends Dialog_fragment {
             notificationManager.createNotificationChannel(channel);
         }
     }
+
+
+
 }
