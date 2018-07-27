@@ -67,8 +67,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private LinearLayout superLoginLayout;
 
     private List<String> subjects;
-    private List<String> subjectNames;
-    private List<String> subjectNamesToken;
+//    private List<String> subjectNames;
+//    private List<String> subjectNamesToken;
 
 
 
@@ -79,9 +79,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         getSupportActionBar().hide();
         mProgressDialog = new ProgressDialog(LoginActivity.this);
 
-        // copy the globle list into local variables
-        subjectNames = MyApplication.getApp().subjectNames;
-        subjectNamesToken=MyApplication.getApp().subjectNamesToken;
+//        // copy the globle list into local variables
+//        subjectNames = MyApplication.getApp().subjectNames;
+//        subjectNamesToken=MyApplication.getApp().subjectNamesToken;
 
         mNameEditText = findViewById(R.id.nameEditText);
         mRNEditText = findViewById(R.id.rnEditText);
@@ -236,12 +236,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
         else
         {
-            Log.i("presentsubNames",subjectNames.toString());
-            Log.i("presentsubTokens",subjectNamesToken.toString());
+            Log.i("presentsubNames",MyApplication.getApp().subjectNames.toString());
+            Log.i("presentsubTokens",MyApplication.getApp().subjectNamesToken.toString());
         }
 
-        Intent intent = new Intent(LoginActivity.this,SubjectListActivity.class);
-        startActivity(intent);
         //
     }
 
@@ -394,8 +392,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         extractSubjectInfo();
 
 
-        Log.i("fromPrefsub",subjectNames.toString());
-        Log.i("fromPrefsubt",subjectNamesToken.toString());
+        Log.i("fromPrefsub",MyApplication.getApp().subjectNames.toString());
+        Log.i("fromPrefsubt",MyApplication.getApp().subjectNamesToken.toString());
 
     }
 
@@ -432,18 +430,21 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     public void extractSubjectInfo()
     {
-        subjectNames=new ArrayList<>();
-        subjectNamesToken = new ArrayList<>();
+        MyApplication.getApp().subjectNames=new ArrayList<>();
+        MyApplication.getApp().subjectNamesToken = new ArrayList<>();
         for(int i=0;i<subjects.size();i++)
         {
             String[] parts = subjects.get(i).split(":");
 
-            subjectNamesToken.add(parts[0]);
-            subjectNames.add(parts[1]);
+            MyApplication.getApp().subjectNamesToken.add(parts[0]);
+            MyApplication.getApp().subjectNames.add(parts[1]);
 
         }
-        Log.i("extraction subnames",subjectNames.toString());
-        Log.i("extraction subtokens",subjectNamesToken.toString());
+        Log.i("extraction subnames",MyApplication.getApp().subjectNames.toString());
+        Log.i("extraction subtokens",MyApplication.getApp().subjectNamesToken.toString());
+        // moving to the subject list activity after being sure that we get some list
+        Intent intent = new Intent(LoginActivity.this,SubjectListActivity.class);
+        startActivity(intent);
     }
 
 }

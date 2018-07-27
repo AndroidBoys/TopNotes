@@ -119,7 +119,7 @@ public class DownloadDialogFragment extends Dialog_fragment {
         choosenType=getArguments().getInt("type");
 
         File directory=new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS),"TopNotes/"+
-                     getResources().getStringArray(R.array.subjectList)[choosenSubject]+"/"+
+                     MyApplication.getApp().subjectNames.get(choosenSubject)+"/"+
                 getResources().getStringArray(R.array.categoryList)[choosenType]);
 
 

@@ -212,13 +212,13 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
 
     private void uploadFile(Uri uri)
     {
-        subjectNameType=getResources().getStringArray(R.array.subjectList)[choosenType];
-
-        notesNameType=getResources().getStringArray(R.array.categoryList)[choosenSubject];
+//        subjectNameType=getResources().getStringArray(R.array.subjectList)[choosenType];
+//
+//        notesNameType=getResources().getStringArray(R.array.categoryList)[choosenSubject];
 
         //Uri file = Uri.fromFile(new File("path/to/images/rivers.jpg"));
         StorageReference riversRef = mStorageRef.child("courses")
-                .child(getResources().getStringArray(R.array.subjectList)[choosenSubject])
+                .child(MyApplication.getApp().subjectNames.get(choosenSubject))
                 .child(getResources().getStringArray(R.array.categoryList)[choosenType])
                 .child(titleEditText.getText().toString());
         final ProgressDialog progressDialog = new ProgressDialog(getActivity());
@@ -293,7 +293,7 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
         content.setDownloadUrl(url);
         // new properties
         content.setDownloads(0);
-        content.setSubject(activity.getResources().getStringArray(R.array.subjectList)[choosenSubject]);
+        content.setSubject(MyApplication.getApp().subjectNames.get(choosenSubject));
 
         Long uriSizeinLong = getFileSize(fileUri);
         Log.i("size in long:",uriSizeinLong.toString());
@@ -313,11 +313,11 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
 
         // update the myupload list
         sendResult(content);
-        FirebaseDatabase.getInstance().getReference("courses").child(activity.getResources().getStringArray(R.array.subjectToken)[choosenSubject])
+        FirebaseDatabase.getInstance().getReference("courses").child(MyApplication.getApp().subjectNamesToken.get(choosenSubject))
                 .child(activity.getResources().getStringArray(R.array.typeToken)[choosenType])
                 .child(contentUUID.toString())
                 .setValue(content);
-        createNotification();
+       // createNotification();
 
     }
     private void sendResult(Content content)
