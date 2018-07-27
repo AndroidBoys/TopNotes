@@ -44,6 +44,10 @@ public class SplashActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences=getSharedPreferences("topnotes.nituk.com.topnotes.quotes",Context.MODE_PRIVATE);
         quotesTextView.setText(sharedPreferences.getString("quotes","Chai pilo frands"));
 
+        // testing purpose
+//        Intent intent = new Intent(this,SubjectListActivity.class);
+//        intent.putExtra("fromSplashActivity","woooh that's amazing");
+
 
         new CountDownTimer(4000,1){
             @Override
