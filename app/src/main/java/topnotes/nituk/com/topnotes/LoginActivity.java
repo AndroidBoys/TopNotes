@@ -38,12 +38,20 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -58,6 +66,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private SharedPreferences sharedPreferences;
     private LinearLayout superLoginLayout;
 
+    private List<String> subjects;
+    private List<String> subjectNames;
+    private List<String> subjectNamesToken;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +78,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.activity_login);
         getSupportActionBar().hide();
         mProgressDialog = new ProgressDialog(LoginActivity.this);
+
+        // copy the globle list into local variables
+        subjectNames = MyApplication.getApp().subjectNames;
+        subjectNamesToken=MyApplication.getApp().subjectNamesToken;
 
         mNameEditText = findViewById(R.id.nameEditText);
         mRNEditText = findViewById(R.id.rnEditText);
@@ -211,6 +228,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private void moveToSubjectListActivity()
     {
+        getSubjects();
+
+        if(subjects.size()==0) // subjects are not saved locally then fetch subjects
+        {
+            fetchSubjects();
+        }
+        else
+        {
+            Log.i("presentsubNames",subjectNames.toString());
+            Log.i("presentsubTokens",subjectNamesToken.toString());
+        }
+
         Intent intent = new Intent(LoginActivity.this,SubjectListActivity.class);
         startActivity(intent);
         //
@@ -353,4 +382,68 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
 
     }
+
+    // fetching the subjectlist kind of stuff
+
+    public void getSubjects()
+    {
+        Set<String> subjectsSet = new LinkedHashSet<>();
+        subjectsSet=sharedPreferences.getStringSet("subjects",subjectsSet);
+        subjects = new ArrayList<>(subjectsSet);
+
+        extractSubjectInfo();
+
+
+        Log.i("fromPrefsub",subjectNames.toString());
+        Log.i("fromPrefsubt",subjectNamesToken.toString());
+
+    }
+
+    public void fetchSubjects()
+    {
+
+        FirebaseDatabase.getInstance().getReference("subjectNames").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Map<String,String> subjectMap;
+                subjectMap = (Map<String,String>)dataSnapshot.getValue();
+                subjects = new ArrayList<>();
+                for(Map.Entry<String,String> entry:subjectMap.entrySet())
+                {
+                    subjects.add(entry.getKey()+":"+entry.getValue());
+                }
+                Log.i("subjects",subjects.toString());
+                extractSubjectInfo();
+                saveSubjects();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+    public void saveSubjects()
+    {
+        sharedPreferences.edit().putStringSet("subjects",new LinkedHashSet<>(subjects)).apply();
+        Log.i("savedtopref","saved");
+
+    }
+
+    public void extractSubjectInfo()
+    {
+        subjectNames=new ArrayList<>();
+        subjectNamesToken = new ArrayList<>();
+        for(int i=0;i<subjects.size();i++)
+        {
+            String[] parts = subjects.get(i).split(":");
+
+            subjectNamesToken.add(parts[0]);
+            subjectNames.add(parts[1]);
+
+        }
+        Log.i("extraction subnames",subjectNames.toString());
+        Log.i("extraction subtokens",subjectNamesToken.toString());
+    }
+
 }
