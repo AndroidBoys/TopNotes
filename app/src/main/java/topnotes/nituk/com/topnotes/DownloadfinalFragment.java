@@ -25,12 +25,11 @@ public class DownloadfinalFragment extends Fragment {
 
     private static final int PER_REQ_CODE = 1;
     private ListView mDownloadedFilesListView;
-    private List<File> fileList;  // field saves the list of all the download files
-    private List<String> theNamesOfFiles; // field saves the name of all the download files
-    private ArrayList<String>  downloadsAuthorsNameArray;
+    private List<String> theNamesOfFiles; //contains file names from file system
+    private List<String>  fileTitleList; // contains the titles associated with the file names
+    private List<Content> contentList; // contains the corresponding content objects present in the file system
     private int choosenSubject;
     private int choosenType;
-    private List<String> downloadedTitle;
     Activity activity;
 
 
@@ -43,20 +42,20 @@ public class DownloadfinalFragment extends Fragment {
         SubjectListActivity.stack.push(R.id.myDownloads);//it will push the id of myDownloads fragment into the
         //SubjectListActivity stack to get proper reflection in navigation menu on pressing back button.
 
-        fileList = new ArrayList<>();
         theNamesOfFiles = new ArrayList<>();
-        downloadsAuthorsNameArray=new ArrayList<>();
-        downloadedTitle= new ArrayList<>();
+        fileTitleList= new ArrayList<>();
+        contentList = new ArrayList<>();
 
         choosenSubject=getArguments().getInt("subject");
         choosenType=getArguments().getInt("type");
 
+        // get the file names from the file system
         listFiles();
-        // get the details of downloaded files
+        // get the contents corresponding to the files present in the file system
         getContentDetails();
 
         mDownloadedFilesListView = view.findViewById(R.id.downloadedfilelistview);
-        MyDownloadsArrayAdapter myDownloadsArrayAdapter = new MyDownloadsArrayAdapter(getActivity(), theNamesOfFiles, downloadsAuthorsNameArray,choosenSubject,choosenType);
+        MyDownloadsArrayAdapter myDownloadsArrayAdapter = new MyDownloadsArrayAdapter(getActivity(), contentList, fileTitleList,choosenSubject,choosenType);
         mDownloadedFilesListView.setAdapter(myDownloadsArrayAdapter);
         return view;
     }
@@ -79,7 +78,9 @@ public class DownloadfinalFragment extends Fragment {
 
     // list the downloaded files
     private  void listFiles()
-    {   // Folder name where all the downloaded notes will be saved
+    {
+        List<File> fileList= new ArrayList<>();
+        // Folder name where all the downloaded notes will be saved
         String dirPath = "TopNotes/"+getResources().getStringArray(R.array.subjectList)[choosenSubject]+"/"+
                 getResources().getStringArray(R.array.categoryList)[choosenType];
         // get the directory for the given folder name
@@ -103,28 +104,31 @@ public class DownloadfinalFragment extends Fragment {
             {
                 e.printStackTrace();
             }
+            // Exract the filenames of files present in the file system
             for (int i = 0; i < fileList.size(); i++) {
                 String fileName= fileList.get(i).getName();
-                downloadedTitle.add(fileName.substring(0,fileName.length()-4));//to remove .pdf
-                Log.i("filename:",fileName.substring(0,fileName.length()-4));
+                theNamesOfFiles.add(fileName);
+                Log.i("filename:",fileName);
             }
         }
     }
 
     public void getContentDetails()
     {
+        // get all the content objects present in the db
         List<Content> contents = new DbHelper(activity.getApplicationContext())
                 .readContentList(choosenSubject,choosenType);
         Log.i("contents:",contents.toString());
 
+        // extract the content objects corresponding to the filenames present in the file system only
         for(int i=0;i<contents.size();i++)
         {
             //Here we are comparing the file present in file system and the file present in sqlite database
             //if it matches it means users have downloaded it(because only after downloading file enter into file system)
-            if(downloadedTitle.contains(contents.get(i).getTitle()))
+            if(theNamesOfFiles.contains(contents.get(i).getFileName()))
           {
-            theNamesOfFiles.add(contents.get(i).getTitle());
-            downloadsAuthorsNameArray.add(contents.get(i).getAuthor());
+            fileTitleList.add(contents.get(i).getTitle());
+            contentList.add(contents.get(i));
           }
 
         }

@@ -72,7 +72,7 @@ public class AnotherContentDownloader {
 
         // set the download path
         request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOCUMENTS+"/TopNotes/"+mContext.getResources().getStringArray(R.array.subjectList)[subject]+
-                        "/"+ mContext.getResources().getStringArray(R.array.categoryList)[type],title+".pdf");
+                        "/"+ mContext.getResources().getStringArray(R.array.categoryList)[type],title);
         //In the above code we can make some changes. Instead of appending .pdf with title we should not append anything.
 
         request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE);

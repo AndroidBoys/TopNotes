@@ -145,15 +145,15 @@ public class DownloadDialogFragment extends Dialog_fragment {
                 //Here i will check if the file which i am going to download is already present
                 //in file system that means users had already download it ..So no need to download it
                 //again.
-                if(!titleNameofFiles.contains(content.getTitle()+".pdf")) {
+               if(!titleNameofFiles.contains(content.getFileName())) {
                     // Download the content
                     Toast.makeText(getActivity(), "::Download process begins:: with url:" + content.getDownloadUrl(), Toast.LENGTH_SHORT).show();
                     Log.i("url:", content.getDownloadUrl());
 //                new ContentDownloader(getActivity()).downloadFile(content.getDownloadUrl(),content.getTitle(),choosenSubject,choosenType);
-                    AnotherContentDownloader.getInstance(getActivity()).downloadFile(content.getDownloadUrl(), content.getTitle(), choosenSubject, choosenType);
+                    AnotherContentDownloader.getInstance(getActivity()).downloadFile(content.getDownloadUrl(), content.getFileName(), choosenSubject, choosenType);
 
                 }else{
-                    Toast.makeText(getActivity(),"You already have downloaded this file",Toast.LENGTH_SHORT).show();
+                   Toast.makeText(getActivity()," You already have downloaded this file!",Toast.LENGTH_SHORT).show();
                 }
                 DialogFragment dialog = (DialogFragment) getFragmentManager().findFragmentByTag("Download");
                 dialog.dismiss();

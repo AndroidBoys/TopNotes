@@ -13,6 +13,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.provider.OpenableColumns;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -304,6 +305,12 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
         content.setSize(fileSize);
         Log.i("uploaded size:",fileSize);
 
+
+        String fileName = getFileName(fileUri);
+        Log.i("fileName:",fileName);
+        content.setFileName(fileName);
+
+
         // update the myupload list
         sendResult(content);
         FirebaseDatabase.getInstance().getReference("courses").child(activity.getResources().getStringArray(R.array.subjectToken)[choosenSubject])
@@ -424,6 +431,15 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
         }
 
         return dataSize;
+    }
+
+    public String getFileName(Uri uri)
+    {
+       String path = uri.getPath();
+       String splits[] = path.split(":");
+       Log.i("splits","first:"+splits[0]+"and second:"+splits[1]);
+
+       return splits[1];
     }
 
 

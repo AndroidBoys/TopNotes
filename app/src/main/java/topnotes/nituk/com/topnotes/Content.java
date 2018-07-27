@@ -15,6 +15,7 @@ public class Content implements Serializable {
     private String subject;
     private String size;
     private int downloads;
+    private String fileName;
 
 
     public Content() {
@@ -86,5 +87,13 @@ public class Content implements Serializable {
 
     public void setDownloads(int downloads) {
         this.downloads = downloads;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 }

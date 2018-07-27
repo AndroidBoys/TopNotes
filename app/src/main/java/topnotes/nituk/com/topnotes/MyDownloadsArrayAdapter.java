@@ -36,18 +36,15 @@ import static androidx.constraintlayout.widget.Constraints.TAG;
 public class MyDownloadsArrayAdapter extends ArrayAdapter<String> {
 
 
-
-    private List<String> downloadsNotesNameArray;
-    private ArrayList<String> getDownloadsAuthorsNameArray;
+    private List<Content> contentList;
     private Context context;
     private int choosenSubject;
     private int choosenType;
     private int choosenFile;
 
-    public MyDownloadsArrayAdapter(Context context, List<String> downloadsNotesNameArray, ArrayList<String> getDownloadsAuthorsNameArray,int choosenSubject,int choosenType) {
-        super(context,-1,downloadsNotesNameArray);
-        this.downloadsNotesNameArray=downloadsNotesNameArray;
-        this.getDownloadsAuthorsNameArray=getDownloadsAuthorsNameArray;
+    public MyDownloadsArrayAdapter(Context context,List<Content> contentList,List<String> contentTitleList,int choosenSubject,int choosenType) {
+        super(context,-1,contentTitleList);
+        this.contentList = contentList;
         this.context=context;
         this.choosenSubject=choosenSubject;
         this.choosenType=choosenType;
@@ -73,9 +70,9 @@ public class MyDownloadsArrayAdapter extends ArrayAdapter<String> {
             public void onClick(View view) {
                 openFile(context.getResources().getStringArray(R.array.subjectList)[choosenSubject]+"/"
                         +context.getResources().getStringArray(R.array.categoryList)[choosenType]
-                       +"/" +downloadsNotesNameArray.get(position)+".pdf");
+                       +"/" +contentList.get(position).getFileName());
                 Log.i("clicked:", "" + position);
-                Log.i("file:", downloadsNotesNameArray.get(position));
+                Log.i("file:", contentList.get(position).getFileName());
             }
         });
 
@@ -84,7 +81,7 @@ public class MyDownloadsArrayAdapter extends ArrayAdapter<String> {
             public void onClick(View view) {
              deleteAction(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)+"/TopNotes/"+context.getResources().getStringArray(R.array.subjectList)[choosenSubject]+"/"
                      +context.getResources().getStringArray(R.array.categoryList)[choosenType]+"/"
-                +downloadsNotesNameArray.get(choosenFile)+".pdf");
+                +contentList.get(position).getFileName());
                 //deleteAction(downloadsNotesNameArray.get(choosenFile)+".pdf");
             }
         });
@@ -98,8 +95,8 @@ public class MyDownloadsArrayAdapter extends ArrayAdapter<String> {
             }
         });
 
-        notesNameTextView.setText(downloadsNotesNameArray.get(position));
-        authorsNameTextView.setText("Author : "+getDownloadsAuthorsNameArray.get(position));
+        notesNameTextView.setText(contentList.get(position).getTitle());
+        authorsNameTextView.setText("Author : "+contentList.get(position).getAuthor());
 
         return rowView;
     }
@@ -176,7 +173,7 @@ public class MyDownloadsArrayAdapter extends ArrayAdapter<String> {
     private void shareFile(String filePath,int position) {
 
         //it is necessary to put two arguments in class File constructor one is parent and other one is child.
-        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS),filePath+"/"+downloadsNotesNameArray.get(position)+".pdf");
+        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS),filePath+"/"+contentList.get(position).getFileName());
        // File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),"downloads/EEM.pdf");
 
         if(file.canRead()) {
