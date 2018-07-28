@@ -203,6 +203,7 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
     private  void chooseFile(){
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.setType("*/*");
+        //need to send mimetypes for some devices (read from stackoverflow not sure
         String[] mimetypes = {"application/pdf"};
         intent.putExtra(Intent.EXTRA_MIME_TYPES, mimetypes);
         try {
