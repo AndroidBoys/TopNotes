@@ -200,40 +200,12 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
     }
 
 
-    private void chooseFile()
-    {
-        String[] mimeTypes =
-                {"application/msword","application/vnd.openxmlformats-officedocument.wordprocessingml.document", // .doc & .docx
-                        "application/vnd.ms-powerpoint","application/vnd.openxmlformats-officedocument.presentationml.presentation", // .ppt & .pptx
-                        "application/vnd.ms-excel","application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // .xls & .xlsx
-                        "text/plain",
-                        "application/pdf",
-                        "application/zip"};
-
-
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            intent.setType(mimeTypes.length == 1 ? mimeTypes[0] : "*/*");
-            if (mimeTypes.length > 0) {
-                intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
-            }
-        } else {
-            String mimeTypesStr = "";
-            for (String mimeType : mimeTypes) {
-                mimeTypesStr += mimeType + "|";
-            }
-            intent.setType(mimeTypesStr.substring(0,mimeTypesStr.length() - 1));
-        }
-
-
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
+    private  void chooseFile(){
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        intent.setType("*/*");
+        String[] mimetypes = {"application/pdf"};
+        intent.putExtra(Intent.EXTRA_MIME_TYPES, mimetypes);
         try {
-//            startActivityForResult(
-//                    Intent.createChooser(intent, "Select a File to Upload"),
-//                    FILE_SELECT_CODE);
-
             startActivityForResult(intent,FILE_SELECT_CODE);
 
         } catch (android.content.ActivityNotFoundException ex) {
@@ -243,6 +215,50 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
                     Toast.LENGTH_SHORT).show();
         }
     }
+
+//    private void chooseFile()
+//    {
+//        String[] mimeTypes =
+//                {"application/msword","application/vnd.openxmlformats-officedocument.wordprocessingml.document", // .doc & .docx
+//                        "application/vnd.ms-powerpoint","application/vnd.openxmlformats-officedocument.presentationml.presentation", // .ppt & .pptx
+//                        "application/vnd.ms-excel","application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // .xls & .xlsx
+//                        "text/plain",
+//                        "application/pdf",
+//                        "application/zip"};
+//
+//
+//        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+//
+//
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+//            intent.setType(mimeTypes.length == 1 ? mimeTypes[0] : "*/*");
+//            if (mimeTypes.length > 0) {
+//                intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
+//            }
+//        } else {
+//            String mimeTypesStr = "";
+//            for (String mimeType : mimeTypes) {
+//                mimeTypesStr += mimeType + "|";
+//            }
+//            intent.setType(mimeTypesStr.substring(0,mimeTypesStr.length() - 1));
+//        }
+//
+//
+//        intent.addCategory(Intent.CATEGORY_OPENABLE);
+//        try {
+////            startActivityForResult(
+////                    Intent.createChooser(intent, "Select a File to Upload"),
+////                    FILE_SELECT_CODE);
+//
+//            startActivityForResult(intent,FILE_SELECT_CODE);
+//
+//        } catch (android.content.ActivityNotFoundException ex) {
+//            // Potentially direct the user to the Market with a Dialog
+//
+//            Toast.makeText(getContext(), "Please install a File Manager.",
+//                    Toast.LENGTH_SHORT).show();
+//        }
+//    }
 
     private void uploadFile(Uri uri)
     {
