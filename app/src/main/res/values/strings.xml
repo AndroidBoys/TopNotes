@@ -26,27 +26,27 @@
     <string name="sohanEmail">Email : sohan.cse16@nituk.ac.in</string>
 
 
-    <string-array name="subjectList">
+    <!--<string-array name="subjectList">-->
 
-        <item>DataBase Management System</item>
-        <item>Computer Networks</item>
-        <item>Network Security</item>
-        <item>Real Time System</item>
-        <item>Computer Graphics</item>
-        <item>Industry and Society</item>
-        <item>Image Processing</item>
         <!--<item>DataBase Management System</item>-->
         <!--<item>Computer Networks</item>-->
         <!--<item>Network Security</item>-->
         <!--<item>Real Time System</item>-->
-        <!--<item>Industrial and Society</item>-->
-        <!--<item>DataBase Management System</item>-->
-        <!--<item>Computer Networks</item>-->
-        <!--<item>Network Security</item>-->
-        <!--<item>Real Time System</item>-->
-        <!--<item>Industrial and Society</item>-->
+        <!--<item>Computer Graphics</item>-->
+        <!--<item>Industry and Society</item>-->
+        <!--<item>Image Processing</item>-->
+        <!--&lt;!&ndash;<item>DataBase Management System</item>&ndash;&gt;-->
+        <!--&lt;!&ndash;<item>Computer Networks</item>&ndash;&gt;-->
+        <!--&lt;!&ndash;<item>Network Security</item>&ndash;&gt;-->
+        <!--&lt;!&ndash;<item>Real Time System</item>&ndash;&gt;-->
+        <!--&lt;!&ndash;<item>Industrial and Society</item>&ndash;&gt;-->
+        <!--&lt;!&ndash;<item>DataBase Management System</item>&ndash;&gt;-->
+        <!--&lt;!&ndash;<item>Computer Networks</item>&ndash;&gt;-->
+        <!--&lt;!&ndash;<item>Network Security</item>&ndash;&gt;-->
+        <!--&lt;!&ndash;<item>Real Time System</item>&ndash;&gt;-->
+        <!--&lt;!&ndash;<item>Industrial and Society</item>&ndash;&gt;-->
 
-    </string-array>
+    <!--</string-array>-->
 
     <string-array name="categoryList">
 
@@ -56,17 +56,15 @@
         <item>Resources</item>
 
     </string-array>
-
-    <string-array name="spinnerSubjectList">
-        <item>Select</item>
-        <item>DataBase Management System</item>
-        <item>Computer Networks</item>
-        <item>Network Security</item>
-        <item>Real Time System</item>
-        <item>Computer Graphics</item>
-        <item>Industry and Society</item>
-        <item>Image Processing</item>
-    </string-array>
+  
+    <!--<string-array name="spinnerSubjectList">-->
+        <!--<item>Select</item>-->
+        <!--<item>DataBase Management System</item>-->
+        <!--<item>Computer Networks</item>-->
+        <!--<item>Network Security</item>-->
+        <!--<item>Real Time System</item>-->
+        <!--<item>Industrial and Society</item>-->
+    <!--</string-array>-->
 
     <string-array name="spinnerCategoryList">
         <item>Select</item>
@@ -77,15 +75,15 @@
 
     </string-array>
 
-    <string-array name="subjectToken">
-        <item>DBMS</item>
-        <item>CN</item>
-        <item>NS</item>
-        <item>RTS</item>
-        <item>CG</item>
-        <item>IAS</item>
-        <item>IP</item>
-    </string-array>
+    <!--<string-array name="subjectToken">-->
+        <!--<item>DBMS</item>-->
+        <!--<item>CN</item>-->
+        <!--<item>NS</item>-->
+        <!--<item>RTS</item>-->
+        <!--<item>CG</item>-->
+        <!--<item>IAS</item>-->
+        <!--<item>IP</item>-->
+    <!--</string-array>-->
 
     <string-array name="typeToken">
         <item>N</item>

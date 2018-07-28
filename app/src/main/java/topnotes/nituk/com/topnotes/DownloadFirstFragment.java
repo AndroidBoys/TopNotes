@@ -29,7 +29,7 @@ public class DownloadFirstFragment extends Fragment {
 
         mDownloadedSubjectListView = view.findViewById(R.id.downloadedfilelistview);
         //getActivity().getActionBar().setTitle("My Downloads");
-        MyDownloadAnotherArrayAdapter myDownloadsAnotherArrayAdapter = new MyDownloadAnotherArrayAdapter(getActivity(), getResources().getStringArray(R.array.subjectList));
+        MyDownloadAnotherArrayAdapter myDownloadsAnotherArrayAdapter = new MyDownloadAnotherArrayAdapter(getActivity(), MyApplication.getApp().subjectNames.toArray(new String[MyApplication.getApp().subjectNames.size()]));
         mDownloadedSubjectListView.setAdapter(myDownloadsAnotherArrayAdapter);
         mDownloadedSubjectListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

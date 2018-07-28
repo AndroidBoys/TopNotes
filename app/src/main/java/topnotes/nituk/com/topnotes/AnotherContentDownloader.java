@@ -71,16 +71,13 @@ public class AnotherContentDownloader {
                 .setTitle(title);
 
         // set the download path
-        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOCUMENTS+"/TopNotes/"+mContext.getResources().getStringArray(R.array.subjectList)[subject]+
+        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOCUMENTS+"/TopNotes/"+MyApplication.getApp().subjectNames.get(subject)+
                         "/"+ mContext.getResources().getStringArray(R.array.categoryList)[type],title);
         //In the above code we can make some changes. Instead of appending .pdf with title we should not append anything.
 
         request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE);
 
 
-
-        Log.i("destination",Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getPath()+"/TopNotes/"+mContext.getResources().getStringArray(R.array.subjectList)[subject]+
-                "/"+ mContext.getResources().getStringArray(R.array.categoryList)[type]+title+".pdf");
 
         // enqueue for download execute in a separate thread
         mDownloadReference=mDownloadManager.enqueue(request);
@@ -94,7 +91,7 @@ public class AnotherContentDownloader {
     {
       // to be implemented..
         // get reference to content object section
-      final DatabaseReference reference = FirebaseDatabase.getInstance().getReference("courses").child(mContext.getResources().getStringArray(R.array.subjectToken)[subject])
+      final DatabaseReference reference = FirebaseDatabase.getInstance().getReference("courses").child(MyApplication.subjectNamesToken.get(subject))
       .child(mContext.getResources().getStringArray(R.array.typeToken)[type]);
 
        reference.addChildEventListener(new ChildEventListener() {
