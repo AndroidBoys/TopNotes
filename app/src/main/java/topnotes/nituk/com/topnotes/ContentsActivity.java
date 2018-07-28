@@ -67,6 +67,10 @@ public class ContentsActivity extends AppCompatActivity {
 
         fetchedContentList= new ArrayList<>();
         localContentList= dbHelper.readContentList(MyApplication.getApp().subjectNamesToken.get(choosenSubject),getResources().getStringArray(R.array.typeToken)[choosenType]);
+
+        // clear this old list from database , and later will put the fresh fetched list into it.
+        dbHelper.deleteContentList(MyApplication.getApp().subjectNamesToken.get(choosenSubject),getResources().getStringArray(R.array.typeToken)[choosenType]);
+
         Log.i("fromdb:",""+localContentList.size());
 
         //initialising array from string .xml res file

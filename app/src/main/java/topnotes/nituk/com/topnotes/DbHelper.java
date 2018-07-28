@@ -10,6 +10,7 @@ import android.view.View;
 
 import org.apache.commons.lang3.SerializationUtils;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -118,12 +119,32 @@ public class DbHelper extends SQLiteOpenHelper {
 
         return contentList;
     }
-//    public void deleteContent(Content content,int subjectNumber,int subjectTypeNumber){
-//
-//        DbHelper dbHelper=new DbHelper(context);
-//        SQLiteDatabase sqLiteDatabase=dbHelper.getWritableDatabase();
-//        byte[] data = SerializationUtils.serialize(content);
-//        sqLiteDatabase.delete(DbContract.TABLE_NAME,DbContract.CONTENT+"=? and "+DbContract.SUBJECT_NUMBER
-//                +"=? and "+DbContract.SUBJECT_NUMBER+"=?",new String[]{String.valueOf(data), String.valueOf(subjectNumber), String.valueOf(subjectTypeNumber)});
-//    }
+
+    public void deleteContentList(String subjectName,String subjectType)
+    {
+        List<Content> contents = this.readContentList(subjectName,subjectType);
+        DbHelper dbHelper=new DbHelper(context);
+        SQLiteDatabase sqLiteDatabase=dbHelper.getWritableDatabase();
+
+        for(int i=0;i<contents.size();i++)
+        {
+            byte[] data =SerializationUtils.serialize(contents.get(i));
+
+
+
+            int rowsDeleted= 0;
+            try {
+                Log.i("delete","deleting"+i+new String(data,"UTF-8"));
+                rowsDeleted = sqLiteDatabase.delete(DbContract.TABLE_NAME,DbContract.CONTENT+"=? and "+DbContract.SUBJECT_NAME
+                        +"=? and "+DbContract.SUBJECT_TYPE+"=?",new String[]{new String(data,"UTF-8"),subjectName,subjectType});
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+            Log.i("valuedeleted",Integer.toString(rowsDeleted));
+        }
+        sqLiteDatabase.close();
+        Log.i("Deleted","Old list cleared");
+    }
+
+
 }
