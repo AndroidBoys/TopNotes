@@ -26,7 +26,7 @@ setOnItemClickListener in it-->
             android:layout_height="wrap_content"
             android:layout_weight=".5"
             android:layout_marginTop="10dp"
-            android:src="@drawable/assignment_image"/>
+            android:src="@drawable/my_downloads"/>
 
         <TextView
             android:id="@+id/downloadSubjectTextView"
