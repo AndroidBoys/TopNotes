@@ -101,7 +101,7 @@ public class MyDownloadsArrayAdapter extends ArrayAdapter<String> {
         return rowView;
     }
 
-    public  void openFile(String file)
+    private void openFile(String file)
     {
 
         File pdfFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getPath(),"TopNotes/"+file);
@@ -123,7 +123,7 @@ public class MyDownloadsArrayAdapter extends ArrayAdapter<String> {
 
         context.startActivity(pdfIntent);
     }
-    public void deleteAction(final String path)
+    private void deleteAction(final String path)
     {
         new AlertDialog.Builder(context)
                 .setIcon(R.drawable.ic_launcher_background)
@@ -140,7 +140,7 @@ public class MyDownloadsArrayAdapter extends ArrayAdapter<String> {
                 .show();
     }
 
-    public void deleteFile(String path)
+    private void deleteFile(String path)
     {
        File file = new File(path);
        // File file=new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS),"EEM.pdf");
@@ -164,7 +164,7 @@ public class MyDownloadsArrayAdapter extends ArrayAdapter<String> {
 
     }
 
-    public void deleteFromListView()
+    private void deleteFromListView()
     {
         this.remove(this.getItem(choosenFile));
         this.notifyDataSetChanged();//it will notify the adapter
