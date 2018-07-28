@@ -97,9 +97,11 @@ public class DbHelper extends SQLiteOpenHelper {
 
         DbHelper dbHelper = new DbHelper(context);
         SQLiteDatabase sqLiteDatabase = dbHelper.getWritableDatabase();
+
+        // ALWAYS MAKE SURE THAT THE BITCHES LIKE (, ' and spaces) DON'T mentally harass you for hours. :(
         Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM " + DbContract.TABLE_NAME + " WHERE "
-                + DbContract.SUBJECT_NAME + "=" + subjectName + " AND "
-                + DbContract.SUBJECT_TYPE + "=" + subjectType, null);
+                + DbContract.SUBJECT_NAME + "= '" + subjectName + "' AND "
+                + DbContract.SUBJECT_TYPE + "= '" + subjectType+"'", null);
 
         if (cursor.getCount() > 0) {
 
