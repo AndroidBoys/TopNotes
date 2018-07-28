@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
@@ -150,7 +151,7 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
 
         //To show dropdown list in our app we need to use spinner widget.
         subjectSpinner=view.findViewById(R.id.subjectSpinner);
-        ArrayAdapter<String> subjectSpinnerAdapter=new ArrayAdapter<>(getActivity(),android.R.layout.simple_spinner_dropdown_item,getResources().getStringArray(R.array.spinnerSubjectList));
+        ArrayAdapter<String> subjectSpinnerAdapter=new ArrayAdapter<>(getActivity(),android.R.layout.simple_spinner_dropdown_item,MyApplication.getApp().spinnerSubjectList);
         subjectSpinner.setAdapter(subjectSpinnerAdapter);
         subjectSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -194,10 +195,33 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
 
     private void chooseFile()
     {
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("application/pdf");
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        String[] mimeTypes =
+                {"application/msword","application/vnd.openxmlformats-officedocument.wordprocessingml.document", // .doc & .docx
+                        "application/vnd.ms-powerpoint","application/vnd.openxmlformats-officedocument.presentationml.presentation", // .ppt & .pptx
+                        "application/vnd.ms-excel","application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // .xls & .xlsx
+                        "text/plain",
+                        "application/pdf",
+                        "application/zip"};
 
+
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            intent.setType(mimeTypes.length == 1 ? mimeTypes[0] : "*/*");
+            if (mimeTypes.length > 0) {
+                intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
+            }
+        } else {
+            String mimeTypesStr = "";
+            for (String mimeType : mimeTypes) {
+                mimeTypesStr += mimeType + "|";
+            }
+            intent.setType(mimeTypesStr.substring(0,mimeTypesStr.length() - 1));
+        }
+
+
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
         try {
 //            startActivityForResult(
 //                    Intent.createChooser(intent, "Select a File to Upload"),
@@ -278,9 +302,10 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
         if(requestCode == FILE_SELECT_CODE && resultCode == Activity.RESULT_OK && data!=null)
         {
             fileUri = data.getData();
-            //mPathTextView.setText(fileUri.getPath());
-            Toast.makeText(getContext(),"File ready to upload  with uri:"+fileUri.getPath(),Toast.LENGTH_SHORT).show();
 
+            Toast.makeText(getContext(),"File ready to upload !",Toast.LENGTH_SHORT).show();
+            Log.i("fileuri",fileUri.toString());
+            Log.i("path",fileUri.getPath());
             Log.i("info","fileName:"+getFileName(fileUri)+"and fileSize:"+getFileSize(fileUri));
 
         }
@@ -345,7 +370,7 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
 
                 if (fileUri == null) {
                     Toast.makeText(getActivity(), "Please first choose the file", Toast.LENGTH_SHORT).show();
-                } else if (activity.getResources().getStringArray(R.array.spinnerSubjectList)[subjectSpinner.getSelectedItemPosition()].equals("Select")) {
+                } else if (MyApplication.getApp().spinnerSubjectList.get(subjectSpinner.getSelectedItemPosition()).equals("Select")) {
                     Toast.makeText(getActivity(), "Please first Choose subject !", Toast.LENGTH_SHORT).show();
                 } else if (activity.getResources().getStringArray(R.array.spinnerCategoryList)[categorySpinner.getSelectedItemPosition()].equals("Select")) {
                     Toast.makeText(getActivity(), "Please first Choose category !", Toast.LENGTH_SHORT).show();

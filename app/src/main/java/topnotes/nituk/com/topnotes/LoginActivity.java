@@ -432,16 +432,20 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     {
         MyApplication.getApp().subjectNames=new ArrayList<>();
         MyApplication.getApp().subjectNamesToken = new ArrayList<>();
+        MyApplication.getApp().spinnerSubjectList = new ArrayList<>();
+        MyApplication.getApp().spinnerSubjectList.add("Select");
         for(int i=0;i<subjects.size();i++)
         {
             String[] parts = subjects.get(i).split(":");
 
             MyApplication.getApp().subjectNamesToken.add(parts[0]);
             MyApplication.getApp().subjectNames.add(parts[1]);
+            MyApplication.getApp().spinnerSubjectList.add(parts[1]);
 
         }
         Log.i("extraction subnames",MyApplication.getApp().subjectNames.toString());
         Log.i("extraction subtokens",MyApplication.getApp().subjectNamesToken.toString());
+
         // moving to the subject list activity after being sure that we get some list
         Intent intent = new Intent(LoginActivity.this,SubjectListActivity.class);
         startActivity(intent);

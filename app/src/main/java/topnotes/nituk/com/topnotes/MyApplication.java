@@ -27,13 +27,11 @@ public class MyApplication extends Application {
     public static List<Long> downloadList;
     public static List<String> subjectNames;
     public static List<String> subjectNamesToken;
-    private Map<String,String> subjectMap;
-    private SharedPreferences preferences;
+    public static List<String> spinnerSubjectList;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        preferences = PreferenceManager.getDefaultSharedPreferences(this);
         thisApp = this;
         downloadList = new ArrayList<>();
         }
