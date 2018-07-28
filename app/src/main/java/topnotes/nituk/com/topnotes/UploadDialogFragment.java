@@ -416,42 +416,41 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
     }
 
     private Long getFileSize(Uri uri)
-    {   long dataSize =0;
-        File f=null;
-        String scheme = uri.getScheme();
-        System.out.println("Scheme type " + scheme);
-        if(scheme.equals(ContentResolver.SCHEME_CONTENT))
-        {
-            try {
-                InputStream fileInputStream=activity.getApplicationContext().getContentResolver().openInputStream(uri);
-                dataSize = fileInputStream.available();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            System.out.println("File size in bytes"+dataSize);
+    {   int index=0;
+        Cursor returnCursor =
+                activity.getContentResolver().query(uri, null, null, null, null);
+        returnCursor.moveToFirst();
+        try{
 
-        }
-        else if(scheme.equals(ContentResolver.SCHEME_FILE))
+            index = returnCursor.getColumnIndex(OpenableColumns.SIZE);
+            return returnCursor.getLong(index);
+
+        }catch (Exception e)
         {
-            String path = uri.getPath();
-            try {
-                f = new File(path);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            System.out.println("File size in bytes"+f.length());
+            e.printStackTrace();
+        }finally {
+            returnCursor.close();
         }
 
-        return dataSize;
+        return null;
+
     }
 
     public String getFileName(Uri uri)
     {
-       String path = uri.getPath();
-       String splits[] = path.split(":");
-       Log.i("splits","first:"+splits[0]+"and second:"+splits[1]);
+        int index =0;
+        Cursor returnCursor = activity.getContentResolver().query(uri,null,null,null,null);
+        returnCursor.moveToFirst();
+        try {
+            index = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+            return returnCursor.getString(index);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }finally {
+            returnCursor.close();
+        }
 
-       return splits[1];
+        return "untitled";
     }
 
 
