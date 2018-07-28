@@ -90,7 +90,7 @@ public class MyService extends IntentService {
 //                        Log.i("ChildAdded",newDataSnapshot.getValue().toString());
 //                        break;
 //                    }
-                    createNotification();
+//                    createNotification();
                 }
 
                 @Override
