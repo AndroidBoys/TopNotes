@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -39,6 +40,7 @@ public class UploadFragment extends Fragment {
 
 
     private ListView uploadFileListView;
+    private  FrameLayout frameLayout;
     private static final int DIALOG_REQ_CODE=0;
     private  MyUploadsArrayAdapter myUploadsArrayAdapter;
     private SharedPreferences mSharedPreferences;
@@ -57,6 +59,7 @@ public class UploadFragment extends Fragment {
 
         fetchUploadList();//it will fetch the uploaded file upload by user from data base and show it in a list
 
+
         FloatingActionButton floatingActionButton = view.findViewById(R.id.floatingActionButton);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,10 +71,21 @@ public class UploadFragment extends Fragment {
             }
         });
 
+        frameLayout=view.findViewById(R.id.nothingToDisplayFrameLayout);
         uploadFileListView=view.findViewById(R.id.uploadFileListView);
-
+        uploadFileListView.setVisibility(View.VISIBLE);
+        frameLayout.setVisibility(View.INVISIBLE);
         myUploadsArrayAdapter = new MyUploadsArrayAdapter(getActivity(),uploadedContent);
         uploadFileListView.setAdapter(myUploadsArrayAdapter);
+        if(uploadedContent.size()==0){
+            // no uploaded content than show nothing to display fragment
+            frameLayout.setVisibility(View.VISIBLE);
+            uploadFileListView.setVisibility(View.INVISIBLE);
+            getFragmentManager().beginTransaction().replace(R.id.nothingToDisplayFrameLayout,new NothingToDisplayDialogFragment("upload"))
+                    .commit();
+
+        }
+
         return view;
     }
     @Override
@@ -129,7 +143,12 @@ public class UploadFragment extends Fragment {
                         Content content = dataSnapshot.getValue(Content.class);
                         uploadedContent.add(content);
                         myUploadsArrayAdapter.notifyDataSetChanged();
-                    }
+                        if(uploadedContent.size()>0) {
+                            // uploadfilelistview can be displayed from here
+                            frameLayout.setVisibility(View.INVISIBLE);
+                            uploadFileListView.setVisibility(View.VISIBLE);
+                        }
+                        }
 
                     @Override
                     public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {

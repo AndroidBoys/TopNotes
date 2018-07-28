@@ -386,7 +386,8 @@ public class SubjectListActivity extends AppCompatActivity {
     }
 
     public void saveQuotesInSharePreferences(){
-        FirebaseDatabase.getInstance().getReference().child("quotes").addListenerForSingleValueEvent(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference().child("quotes")
+                .addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 sharedPreferences=getSharedPreferences("topnotes.nituk.com.topnotes.quotes",Context.MODE_PRIVATE);
