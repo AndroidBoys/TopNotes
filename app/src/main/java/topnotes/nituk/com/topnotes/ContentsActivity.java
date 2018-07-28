@@ -66,7 +66,7 @@ public class ContentsActivity extends AppCompatActivity {
         dbHelper = new DbHelper(getApplicationContext());
 
         fetchedContentList= new ArrayList<>();
-        localContentList= dbHelper.readContentList(choosenSubject,choosenType);
+        localContentList= dbHelper.readContentList(MyApplication.getApp().subjectNamesToken.get(choosenSubject),getResources().getStringArray(R.array.typeToken)[choosenType]);
         Log.i("fromdb:",""+localContentList.size());
 
         //initialising array from string .xml res file
@@ -243,7 +243,7 @@ public class ContentsActivity extends AppCompatActivity {
 
     public void addToDB()
     {
-        dbHelper.saveContentList(fetchedContentList,choosenSubject,choosenType);
+        dbHelper.saveContentList(fetchedContentList,MyApplication.getApp().subjectNamesToken.get(choosenSubject),getResources().getStringArray(R.array.typeToken)[choosenType]);
     }
 
     @Override
