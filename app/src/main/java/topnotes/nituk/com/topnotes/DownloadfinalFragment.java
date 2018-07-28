@@ -128,7 +128,7 @@ public class DownloadfinalFragment extends Fragment {
     {
         // get all the content objects present in the db
         List<Content> contents = new DbHelper(activity.getApplicationContext())
-                .readContentList(choosenSubject,choosenType);
+                .readContentList(MyApplication.getApp().subjectNamesToken.get(choosenSubject),activity.getResources().getStringArray(R.array.typeToken)[choosenType]);
         Log.i("contents:",contents.toString());
 
         // extract the content objects corresponding to the filenames present in the file system only

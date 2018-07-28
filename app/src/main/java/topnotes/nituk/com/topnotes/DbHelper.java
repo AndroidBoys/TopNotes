@@ -10,6 +10,7 @@ import android.view.View;
 
 import org.apache.commons.lang3.SerializationUtils;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +25,7 @@ public class DbHelper extends SQLiteOpenHelper {
     //syntax of sql to create a database
     private static final String CREATE = "create table " + DbContract.TABLE_NAME +
             "(id integer primary key autoincrement," + DbContract.CONTENT + " BLOB," + DbContract
-            .SUBJECT_NUMBER + " text," + DbContract.SUBJECT_TYPE_NUMBER + " text);";
+            .SUBJECT_NAME+ " text," + DbContract.SUBJECT_TYPE + " text);";
 
     // if table is exist than drop this table(syntax)
     private static final String DROP_TABLE = "drop table if exists " + DbContract.TABLE_NAME;
@@ -57,14 +58,14 @@ public class DbHelper extends SQLiteOpenHelper {
     }
 
     // custom method to save list of content in database
-    public void saveContentList(List<Content> contentList, int subjectNumber, int subjectTypeNumber) {
+    public void saveContentList(List<Content> contentList, String subjectName, String subjectType) {
 
         DbHelper dbHelper = new DbHelper(context); //creating DbHelper object
 
         SQLiteDatabase sqLiteDatabase = dbHelper.getWritableDatabase();//creating database
 
         // Fetching the already existing list
-        List<Content> existingList = dbHelper.readContentList(subjectNumber,subjectTypeNumber);
+        List<Content> existingList = dbHelper.readContentList(subjectName,subjectType);
 
         //creating a ContentValues object, it will contain values in a set
         ContentValues contentValues = new ContentValues();
@@ -83,23 +84,25 @@ public class DbHelper extends SQLiteOpenHelper {
            //adding values in databse
 
             contentValues.put(DbContract.CONTENT, data);
-            contentValues.put(DbContract.SUBJECT_NUMBER, subjectNumber);
-            contentValues.put(DbContract.SUBJECT_TYPE_NUMBER, subjectTypeNumber);
+            contentValues.put(DbContract.SUBJECT_NAME, subjectName);
+            contentValues.put(DbContract.SUBJECT_TYPE, subjectType);
             sqLiteDatabase.insert(DbContract.TABLE_NAME, null, contentValues);
 
         }
         Log.i("savedtodb:",contentList.toString());
     }
 
-    public List<Content> readContentList(int subjectNumber, int subjectTypeNumber) {
+    public List<Content> readContentList(String subjectName, String subjectType) {
 
         List<Content> contentList = new ArrayList<>();
 
         DbHelper dbHelper = new DbHelper(context);
         SQLiteDatabase sqLiteDatabase = dbHelper.getWritableDatabase();
+
+        // ALWAYS MAKE SURE THAT THE BITCHES LIKE (, ' and spaces) DON'T mentally harass you for hours. :(
         Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM " + DbContract.TABLE_NAME + " WHERE "
-                + DbContract.SUBJECT_NUMBER + "=" + subjectNumber + " AND "
-                + DbContract.SUBJECT_TYPE_NUMBER + "=" + subjectTypeNumber, null);
+                + DbContract.SUBJECT_NAME + "= '" + subjectName + "' AND "
+                + DbContract.SUBJECT_TYPE + "= '" + subjectType+"'", null);
 
         if (cursor.getCount() > 0) {
 
@@ -116,12 +119,32 @@ public class DbHelper extends SQLiteOpenHelper {
 
         return contentList;
     }
-    public void deleteContent(Content content,int subjectNumber,int subjectTypeNumber){
 
+    public void deleteContentList(String subjectName,String subjectType)
+    {
+        List<Content> contents = this.readContentList(subjectName,subjectType);
         DbHelper dbHelper=new DbHelper(context);
         SQLiteDatabase sqLiteDatabase=dbHelper.getWritableDatabase();
-        byte[] data = SerializationUtils.serialize(content);
-        sqLiteDatabase.delete(DbContract.TABLE_NAME,DbContract.CONTENT+"=? and "+DbContract.SUBJECT_NUMBER
-                +"=? and "+DbContract.SUBJECT_NUMBER+"=?",new String[]{String.valueOf(data), String.valueOf(subjectNumber), String.valueOf(subjectTypeNumber)});
+
+        for(int i=0;i<contents.size();i++)
+        {
+            byte[] data =SerializationUtils.serialize(contents.get(i));
+
+
+
+            int rowsDeleted= 0;
+            try {
+                Log.i("delete","deleting"+i+new String(data,"UTF-8"));
+                rowsDeleted = sqLiteDatabase.delete(DbContract.TABLE_NAME,DbContract.CONTENT+"=? and "+DbContract.SUBJECT_NAME
+                        +"=? and "+DbContract.SUBJECT_TYPE+"=?",new String[]{new String(data,"UTF-8"),subjectName,subjectType});
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+            Log.i("valuedeleted",Integer.toString(rowsDeleted));
+        }
+        sqLiteDatabase.close();
+        Log.i("Deleted","Old list cleared");
     }
+
+
 }

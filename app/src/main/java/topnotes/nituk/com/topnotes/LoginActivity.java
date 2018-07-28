@@ -45,6 +45,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -65,8 +66,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private static final int RC_SIGN_IN=1;
     private SharedPreferences sharedPreferences;
     private LinearLayout superLoginLayout;
-
-    private List<String> subjects;
 //    private List<String> subjectNames;
 //    private List<String> subjectNamesToken;
 
@@ -221,26 +220,32 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             Toast.makeText(LoginActivity.this,"Google sign in Failed at server due to:"+task.getException(),Toast.LENGTH_SHORT).show();
                             Log.w("failed:", "signInWithCredential:failure", task.getException());
                         }
-                        mProgressDialog.dismiss();
+
                     }
                 });
     }
 
     private void moveToSubjectListActivity()
     {
-        getSubjects();
+        List<String> subjects = getSubjects();// try to get subjects from shared pref
 
-        if(subjects.size()==0) // subjects are not saved locally then fetch subjects
+        if(subjects.size()==0) // no subjects are saved locally
         {
             fetchSubjects();
         }
-        else
+        else   // subjects are saved locally
         {
-            Log.i("presentsubNames",MyApplication.getApp().subjectNames.toString());
-            Log.i("presentsubTokens",MyApplication.getApp().subjectNamesToken.toString());
+            extractSubjectInfo(subjects);
         }
+        // moving to the subject list activity will happen soon
 
-        //
+       // fetch new subjects in background if any and save to pref for next time
+        new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+                checkForChangeInSubjectList();
+            }
+        });
     }
 
     // Don't go to the splash on pressing the back button
@@ -383,17 +388,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     // fetching the subjectlist kind of stuff
 
-    public void getSubjects()
+    public List<String> getSubjects()
     {
         Set<String> subjectsSet = new LinkedHashSet<>();
         subjectsSet=sharedPreferences.getStringSet("subjects",subjectsSet);
-        subjects = new ArrayList<>(subjectsSet);
-
-        extractSubjectInfo();
-
-
-        Log.i("fromPrefsub",MyApplication.getApp().subjectNames.toString());
-        Log.i("fromPrefsubt",MyApplication.getApp().subjectNamesToken.toString());
+        List<String> savedSubjects = new ArrayList<>(subjectsSet);
+        Collections.sort(savedSubjects);
+        return savedSubjects;
 
     }
 
@@ -405,14 +406,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Map<String,String> subjectMap;
                 subjectMap = (Map<String,String>)dataSnapshot.getValue();
-                subjects = new ArrayList<>();
+                List<String> subjects = new ArrayList<>();
                 for(Map.Entry<String,String> entry:subjectMap.entrySet())
                 {
                     subjects.add(entry.getKey()+":"+entry.getValue());
                 }
+                Collections.sort(subjects);
                 Log.i("subjects",subjects.toString());
-                extractSubjectInfo();
-                saveSubjects();
+                extractSubjectInfo(subjects);
+                saveSubjects(subjects);
+
             }
 
             @Override
@@ -421,14 +424,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             }
         });
     }
-    public void saveSubjects()
+    public void saveSubjects(List<String> subjects)
     {
         sharedPreferences.edit().putStringSet("subjects",new LinkedHashSet<>(subjects)).apply();
         Log.i("savedtopref","saved");
 
     }
 
-    public void extractSubjectInfo()
+    public void extractSubjectInfo(List<String> subjects)
     {
         MyApplication.getApp().subjectNames=new ArrayList<>();
         MyApplication.getApp().subjectNamesToken = new ArrayList<>();
@@ -447,8 +450,42 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         Log.i("extraction subtokens",MyApplication.getApp().subjectNamesToken.toString());
 
         // moving to the subject list activity after being sure that we get some list
+        mProgressDialog.dismiss();
         Intent intent = new Intent(LoginActivity.this,SubjectListActivity.class);
         startActivity(intent);
     }
+
+    public void checkForChangeInSubjectList()
+    {
+        FirebaseDatabase.getInstance().getReference("subjectNames").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Map<String,String> subjectMap;
+                subjectMap = (Map<String,String>)dataSnapshot.getValue();
+                List<String> subjects = new ArrayList<>();
+                for(Map.Entry<String,String> entry:subjectMap.entrySet())
+                {
+                    subjects.add(entry.getKey()+":"+entry.getValue());
+                }
+                Collections.sort(subjects);
+                if(!getSubjects().equals(subjects)) // if there is a new subject list available at server update the preferences.
+                {
+                    Log.i("update:","subjects are update at server Please restart the app");
+                    saveSubjects(subjects);
+                }
+                else
+                {
+                    Log.i("update:","No new subjects at the server");
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
 
 }
