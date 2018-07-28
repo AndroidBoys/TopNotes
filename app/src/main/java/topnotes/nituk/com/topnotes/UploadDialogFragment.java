@@ -297,6 +297,7 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
     // The method saves the upload file's metadata to firebasedatabase
     public void makeEntryToFBDB(String url,String dateTime)
     {
+
         UUID contentUUID = UUID.randomUUID();
         Content content = new Content();
         content.setTitle(titleEditText.getText().toString()+"_"+dateTime);
@@ -416,41 +417,33 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
     }
 
     private Long getFileSize(Uri uri)
-    {   int index=0;
-        Cursor returnCursor =
-                activity.getContentResolver().query(uri, null, null, null, null);
-        returnCursor.moveToFirst();
-        try{
-
-            index = returnCursor.getColumnIndex(OpenableColumns.SIZE);
-            return returnCursor.getLong(index);
-
-        }catch (Exception e)
-        {
-            e.printStackTrace();
-        }finally {
-            returnCursor.close();
-        }
-
-        return null;
-
+    {
+         // simply calculating the size of the file
+//        Log.d("uriquery",""+new File(uri.getPath()).length());
+        return new File(uri.getPath()).length();
     }
 
     public String getFileName(Uri uri)
     {
-        int index =0;
-        Cursor returnCursor = activity.getContentResolver().query(uri,null,null,null,null);
-        returnCursor.moveToFirst();
-        try {
-            index = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
-            return returnCursor.getString(index);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }finally {
-            returnCursor.close();
+        String result = null;
+        if (uri.getScheme().equals("content")) {
+            Cursor cursor = activity.getContentResolver().query(uri, null, null, null, null);
+            try {
+                if (cursor != null && cursor.moveToFirst()) {
+                    result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+                }
+            } finally {
+                cursor.close();
+            }
         }
-
-        return "untitled";
+        if (result == null) {
+            result = uri.getPath();
+            int cut = result.lastIndexOf('/');
+            if (cut != -1) {
+                result = result.substring(cut + 1);
+            }
+        }
+        return result;
     }
 
 
