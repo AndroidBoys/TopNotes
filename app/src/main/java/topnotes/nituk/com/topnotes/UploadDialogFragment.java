@@ -199,9 +199,12 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
         intent.addCategory(Intent.CATEGORY_OPENABLE);
 
         try {
-            startActivityForResult(
-                    Intent.createChooser(intent, "Select a File to Upload"),
-                    FILE_SELECT_CODE);
+//            startActivityForResult(
+//                    Intent.createChooser(intent, "Select a File to Upload"),
+//                    FILE_SELECT_CODE);
+
+            startActivityForResult(intent,FILE_SELECT_CODE);
+
         } catch (android.content.ActivityNotFoundException ex) {
             // Potentially direct the user to the Market with a Dialog
 
@@ -277,6 +280,8 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
             fileUri = data.getData();
             //mPathTextView.setText(fileUri.getPath());
             Toast.makeText(getContext(),"File ready to upload  with uri:"+fileUri.getPath(),Toast.LENGTH_SHORT).show();
+
+            Log.i("info","fileName:"+getFileName(fileUri)+"and fileSize:"+getFileSize(fileUri));
 
         }
 
@@ -403,47 +408,82 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
         return sizeToReturn;
     }
 
+//    private Long getFileSize(Uri uri)
+//    {   long dataSize =0;
+//        File f=null;
+//        String scheme = uri.getScheme();
+//        System.out.println("Scheme type " + scheme);
+//        if(scheme.equals(ContentResolver.SCHEME_CONTENT))
+//        {
+//            try {
+//                InputStream fileInputStream=activity.getApplicationContext().getContentResolver().openInputStream(uri);
+//                dataSize = fileInputStream.available();
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//            System.out.println("File size in bytes"+dataSize);
+//
+//        }
+//        else if(scheme.equals(ContentResolver.SCHEME_FILE))
+//        {
+//            String path = uri.getPath();
+//            try {
+//                f = new File(path);
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//            System.out.println("File size in bytes"+f.length());
+//        }
+//
+//        return dataSize;
+//    }
+//
+//    public String getFileName(Uri uri)
+//    {
+//       String path = uri.getPath();
+//       String splits[] = path.split(":");
+//       Log.i("splits","first:"+splits[0]+"and second:"+splits[1]);
+//
+//       return splits[1];
+//    }
+
     private Long getFileSize(Uri uri)
-    {   long dataSize =0;
-        File f=null;
-        String scheme = uri.getScheme();
-        System.out.println("Scheme type " + scheme);
-        if(scheme.equals(ContentResolver.SCHEME_CONTENT))
-        {
-            try {
-                InputStream fileInputStream=activity.getApplicationContext().getContentResolver().openInputStream(uri);
-                dataSize = fileInputStream.available();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            System.out.println("File size in bytes"+dataSize);
+    {   int index=0;
+        Cursor returnCursor =
+                activity.getContentResolver().query(uri, null, null, null, null);
+        returnCursor.moveToFirst();
+        try{
 
-        }
-        else if(scheme.equals(ContentResolver.SCHEME_FILE))
+            index = returnCursor.getColumnIndex(OpenableColumns.SIZE);
+            return returnCursor.getLong(index);
+
+        }catch (Exception e)
         {
-            String path = uri.getPath();
-            try {
-                f = new File(path);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            System.out.println("File size in bytes"+f.length());
+            e.printStackTrace();
+        }finally {
+            returnCursor.close();
         }
 
-        return dataSize;
+       return null;
+
     }
 
     public String getFileName(Uri uri)
     {
-       String path = uri.getPath();
-       String splits[] = path.split(":");
-       Log.i("splits","first:"+splits[0]+"and second:"+splits[1]);
+        int index =0;
+        Cursor returnCursor = activity.getContentResolver().query(uri,null,null,null,null);
+        returnCursor.moveToFirst();
+        try {
+            index = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+            return returnCursor.getString(index);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }finally {
+            returnCursor.close();
+        }
 
-       return splits[1];
+        return "";
     }
-
-
-
 
 }
 
