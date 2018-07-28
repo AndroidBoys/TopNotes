@@ -249,7 +249,7 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
 
         //using current time to set title so their will be no title of similar names
         Calendar calendar=Calendar.getInstance();
-        SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+        SimpleDateFormat simpleDateFormat=new SimpleDateFormat("dd-MM-yyyy_HH:mm:ss");
         final String dateTime=simpleDateFormat.format(calendar.getTime());
         //Uri file = Uri.fromFile(new File("path/to/images/rivers.jpg"));
         StorageReference riversRef = mStorageRef.child("courses")
@@ -325,7 +325,7 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
     {
         UUID contentUUID = UUID.randomUUID();
         Content content = new Content();
-        content.setTitle(titleEditText.getText().toString()+"_"+dateTime);
+        content.setTitle(titleEditText.getText().toString()+"  "+dateTime);
         content.setDate(DateFormat.getDateFormat(activity).format(new Date()));
         content.setAuthor(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
         content.setDownloadUrl(url);
@@ -423,7 +423,6 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
         builder.setContentIntent(pendingIntent);
         NotificationManager notificationManager=(NotificationManager)activity.getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(0,builder.build());
-
     }
 
     public String calculateProperFileSize(double bytes){
@@ -501,6 +500,7 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
 
     public String getFileName(Uri uri)
     {
+
         int index =0;
         Cursor returnCursor = activity.getContentResolver().query(uri,null,null,null,null);
         returnCursor.moveToFirst();

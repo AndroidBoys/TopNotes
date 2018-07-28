@@ -54,6 +54,9 @@
                 android:resource="@xml/path_provider"/>
         </provider>
 
+        <receiver android:name=".MyReceiver"/>
+        <service android:name=".MyService"/>
+
     </application>
 
 </manifest>

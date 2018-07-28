@@ -15,6 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 public class FeedbackList extends DialogFragment {
+
    ArrayList<String> feedbacks=new ArrayList<>();
    public static ArrayAdapter arrayAdapter;
     @Nullable
