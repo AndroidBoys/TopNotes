@@ -74,7 +74,7 @@ public class DownloadfinalFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        ((SubjectListActivity)activity).setActionBarTitle(getResources().getStringArray(R.array.categoryList)[choosenType]+" Selected");
+        ((SubjectListActivity)activity).setActionBarTitle(getResources().getStringArray(R.array.categoryList)[choosenType]);
     }
 
     public static DownloadfinalFragment getInstance(int subject,int type)
@@ -92,7 +92,7 @@ public class DownloadfinalFragment extends Fragment {
     {
         List<File> fileList= new ArrayList<>();
         // Folder name where all the downloaded notes will be saved
-        String dirPath = "TopNotes/"+getResources().getStringArray(R.array.subjectList)[choosenSubject]+"/"+
+        String dirPath = "TopNotes/"+MyApplication.getApp().subjectNames.get(choosenSubject)+"/"+
                 getResources().getStringArray(R.array.categoryList)[choosenType];
         // get the directory for the given folder name
         File dir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS),dirPath);

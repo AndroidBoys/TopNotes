@@ -26,6 +26,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -59,7 +60,7 @@ public class ContentsActivity extends AppCompatActivity {
         // initialise
 
 
-        setTitle(getResources().getStringArray(R.array.categoryList)[choosenType]+" Selected");
+        setTitle(getResources().getStringArray(R.array.categoryList)[choosenType]);
 
         // initialise
         dbHelper = new DbHelper(getApplicationContext());
@@ -69,7 +70,9 @@ public class ContentsActivity extends AppCompatActivity {
         Log.i("fromdb:",""+localContentList.size());
 
         //initialising array from string .xml res file
-        subjectTokenArray=getResources().getStringArray(R.array.subjectToken);
+        //subjectTokenArray=getResources().getStringArray(R.array.subjectToken);
+        subjectTokenArray = new String[MyApplication.getApp().subjectNamesToken.size()];
+        subjectTokenArray=MyApplication.getApp().subjectNamesToken.toArray(subjectTokenArray);
         typeTokenArray=getResources().getStringArray(R.array.typeToken);
 
         mRecyclerView= findViewById(R.id.contentsRecyclerView);

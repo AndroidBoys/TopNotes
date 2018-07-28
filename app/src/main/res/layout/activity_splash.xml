@@ -60,13 +60,13 @@
 
     <TextView
         android:id="@+id/quotesTextView"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="64dp"
+        android:layout_marginStart="0dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="64dp"
+        android:layout_marginEnd="0dp"
         android:layout_marginBottom="184dp"
-        android:text="chai pilo friends"
+        android:text="Keep Calm!"
         android:textAlignment="center"
         android:textAppearance="@style/Base.TextAppearance.AppCompat"
         android:textSize="24sp"

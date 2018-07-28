@@ -3,6 +3,7 @@ package topnotes.nituk.com.topnotes;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,8 +32,9 @@ public class MySubjects extends Fragment {
         actvity=getActivity();
         View view = inflater.inflate(R.layout.my_subjects, container, false);
         subjectListView = view.findViewById(R.id.subjectListView);
-        MySubjectArrayAdapter mySubjectArrayAdapter = new MySubjectArrayAdapter(getActivity(), getResources().getStringArray(R.array.subjectList));
+        MySubjectArrayAdapter mySubjectArrayAdapter = new MySubjectArrayAdapter(getActivity(), MyApplication.getApp().subjectNames.toArray(new String[MyApplication.getApp().subjectNames.size()]));
         subjectListView.setAdapter(mySubjectArrayAdapter);
+
         //getActivity().getActionBar().setTitle("My Subjects");
         //((SubjectListActivity)actvity).setActionBarTitle("My Subjects");
         subjectListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -65,4 +67,7 @@ public class MySubjects extends Fragment {
 //        if(context!=null)
 //        ((SubjectListActivity)context).setActionBarTitle("My Subjects");
 //    }
+
+
+
 }

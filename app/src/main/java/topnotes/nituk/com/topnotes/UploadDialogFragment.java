@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
@@ -154,7 +155,7 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
 
         //To show dropdown list in our app we need to use spinner widget.
         subjectSpinner=view.findViewById(R.id.subjectSpinner);
-        ArrayAdapter<String> subjectSpinnerAdapter=new ArrayAdapter<>(getActivity(),android.R.layout.simple_spinner_dropdown_item,getResources().getStringArray(R.array.spinnerSubjectList));
+        ArrayAdapter<String> subjectSpinnerAdapter=new ArrayAdapter<>(getActivity(),android.R.layout.simple_spinner_dropdown_item,MyApplication.getApp().spinnerSubjectList);
         subjectSpinner.setAdapter(subjectSpinnerAdapter);
         subjectSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -201,14 +202,40 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
 
     private void chooseFile()
     {
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("application/pdf");
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        String[] mimeTypes =
+                {"application/msword","application/vnd.openxmlformats-officedocument.wordprocessingml.document", // .doc & .docx
+                        "application/vnd.ms-powerpoint","application/vnd.openxmlformats-officedocument.presentationml.presentation", // .ppt & .pptx
+                        "application/vnd.ms-excel","application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // .xls & .xlsx
+                        "text/plain",
+                        "application/pdf",
+                        "application/zip"};
 
+
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            intent.setType(mimeTypes.length == 1 ? mimeTypes[0] : "*/*");
+            if (mimeTypes.length > 0) {
+                intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
+            }
+        } else {
+            String mimeTypesStr = "";
+            for (String mimeType : mimeTypes) {
+                mimeTypesStr += mimeType + "|";
+            }
+            intent.setType(mimeTypesStr.substring(0,mimeTypesStr.length() - 1));
+        }
+
+
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
         try {
-            startActivityForResult(
-                    Intent.createChooser(intent, "Select a File to Upload"),
-                    FILE_SELECT_CODE);
+//            startActivityForResult(
+//                    Intent.createChooser(intent, "Select a File to Upload"),
+//                    FILE_SELECT_CODE);
+
+            startActivityForResult(intent,FILE_SELECT_CODE);
+
         } catch (android.content.ActivityNotFoundException ex) {
             // Potentially direct the user to the Market with a Dialog
 
@@ -219,9 +246,6 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
 
     private void uploadFile(Uri uri)
     {
-        subjectNameType=getResources().getStringArray(R.array.subjectList)[choosenSubject];
-
-        notesNameType=getResources().getStringArray(R.array.categoryList)[choosenType];
 
         //using current time to set title so their will be no title of similar names
         Calendar calendar=Calendar.getInstance();
@@ -229,7 +253,7 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
         final String dateTime=simpleDateFormat.format(calendar.getTime());
         //Uri file = Uri.fromFile(new File("path/to/images/rivers.jpg"));
         StorageReference riversRef = mStorageRef.child("courses")
-                .child(getResources().getStringArray(R.array.subjectList)[choosenSubject])
+                .child(MyApplication.getApp().subjectNames.get(choosenSubject))
                 .child(getResources().getStringArray(R.array.categoryList)[choosenType])
                 .child(titleEditText.getText().toString()+"_"+dateTime);
         final ProgressDialog progressDialog = new ProgressDialog(getActivity());
@@ -286,9 +310,11 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
         if(requestCode == FILE_SELECT_CODE && resultCode == Activity.RESULT_OK && data!=null)
         {
             fileUri = data.getData();
-            Log.d("urifile",data.getData().toString());
-            //mPathTextView.setText(fileUri.getPath());
-            Toast.makeText(getContext(),"File ready to upload  with uri:"+fileUri.getPath(),Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(),"File ready to upload !",Toast.LENGTH_SHORT).show();
+            Log.i("fileuri",fileUri.toString());
+            Log.i("path",fileUri.getPath());
+            Log.i("info","fileName:"+getFileName(fileUri)+"and fileSize:"+getFileSize(fileUri));
+
 
         }
 
@@ -305,7 +331,7 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
         content.setDownloadUrl(url);
         // new properties
         content.setDownloads(0);
-        content.setSubject(activity.getResources().getStringArray(R.array.subjectList)[choosenSubject]);
+        content.setSubject(MyApplication.getApp().subjectNames.get(choosenSubject));
 
         Long uriSizeinLong = getFileSize(fileUri);
         Log.i("size in long:",uriSizeinLong.toString());
@@ -325,11 +351,11 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
 
         // update the myupload list
         sendResult(content);
-        FirebaseDatabase.getInstance().getReference("courses").child(activity.getResources().getStringArray(R.array.subjectToken)[choosenSubject])
+        FirebaseDatabase.getInstance().getReference("courses").child(MyApplication.getApp().subjectNamesToken.get(choosenSubject))
                 .child(activity.getResources().getStringArray(R.array.typeToken)[choosenType])
                 .child(contentUUID.toString())
                 .setValue(content);
-        //createNotification();
+       // createNotification();
 
     }
     private void sendResult(Content content)
@@ -352,7 +378,7 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
 
                 if (fileUri == null) {
                     Toast.makeText(getActivity(), "Please first choose the file", Toast.LENGTH_SHORT).show();
-                } else if (activity.getResources().getStringArray(R.array.spinnerSubjectList)[subjectSpinner.getSelectedItemPosition()].equals("Select")) {
+                } else if (MyApplication.getApp().spinnerSubjectList.get(subjectSpinner.getSelectedItemPosition()).equals("Select")) {
                     Toast.makeText(getActivity(), "Please first Choose subject !", Toast.LENGTH_SHORT).show();
                 } else if (activity.getResources().getStringArray(R.array.spinnerCategoryList)[categorySpinner.getSelectedItemPosition()].equals("Select")) {
                     Toast.makeText(getActivity(), "Please first Choose category !", Toast.LENGTH_SHORT).show();
@@ -414,48 +440,81 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
         return sizeToReturn;
     }
 
+//    private Long getFileSize(Uri uri)
+//    {   long dataSize =0;
+//        File f=null;
+//        String scheme = uri.getScheme();
+//        System.out.println("Scheme type " + scheme);
+//        if(scheme.equals(ContentResolver.SCHEME_CONTENT))
+//        {
+//            try {
+//                InputStream fileInputStream=activity.getApplicationContext().getContentResolver().openInputStream(uri);
+//                dataSize = fileInputStream.available();
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//            System.out.println("File size in bytes"+dataSize);
+//
+//        }
+//        else if(scheme.equals(ContentResolver.SCHEME_FILE))
+//        {
+//            String path = uri.getPath();
+//            try {
+//                f = new File(path);
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//            System.out.println("File size in bytes"+f.length());
+//        }
+//
+//        return dataSize;
+//    }
+//
+//    public String getFileName(Uri uri)
+//    {
+//       String path = uri.getPath();
+//       String splits[] = path.split(":");
+//       Log.i("splits","first:"+splits[0]+"and second:"+splits[1]);
+//
+//       return splits[1];
+//    }
+
     private Long getFileSize(Uri uri)
-    {   long dataSize =0;
-        File f=null;
-        String scheme = uri.getScheme();
-        System.out.println("Scheme type " + scheme);
-        if(scheme.equals(ContentResolver.SCHEME_CONTENT))
-        {
-            try {
-                InputStream fileInputStream=activity.getApplicationContext().getContentResolver().openInputStream(uri);
-                dataSize = fileInputStream.available();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            System.out.println("File size in bytes"+dataSize);
+    {   int index=0;
+        Cursor returnCursor =
+                activity.getContentResolver().query(uri, null, null, null, null);
+        returnCursor.moveToFirst();
+        try{
 
-        }
-        else if(scheme.equals(ContentResolver.SCHEME_FILE))
-        {
-            String path = uri.getPath();
-            try {
-                f = new File(path);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            System.out.println("File size in bytes"+f.length());
-        }
+            index = returnCursor.getColumnIndex(OpenableColumns.SIZE);
+            return returnCursor.getLong(index);
 
-        return dataSize;
-    }
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }finally {
+            returnCursor.close();
+        }
+       return null;
+     }
 
     public String getFileName(Uri uri)
     {
-       String path = uri.getPath();
-       String splits[] = path.split(":");
-//       Log.i("splits","first:"+splits[0]+"and second:"+splits[1]);
 
-        Log.i("Filename",path);
-       return splits[0];
+        int index =0;
+        Cursor returnCursor = activity.getContentResolver().query(uri,null,null,null,null);
+        returnCursor.moveToFirst();
+        try {
+            index = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+            return returnCursor.getString(index);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }finally {
+            returnCursor.close();
+        }
+      
+        return "";
     }
-
-
-
 
 }
 

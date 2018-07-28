@@ -68,7 +68,7 @@ public class MyDownloadsArrayAdapter extends ArrayAdapter<String> {
         clickableLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openFile(context.getResources().getStringArray(R.array.subjectList)[choosenSubject]+"/"
+                openFile(MyApplication.getApp().subjectNames.get(choosenSubject)+"/"
                         +context.getResources().getStringArray(R.array.categoryList)[choosenType]
                        +"/" +contentList.get(position).getFileName());
                 Log.i("clicked:", "" + position);
@@ -79,7 +79,7 @@ public class MyDownloadsArrayAdapter extends ArrayAdapter<String> {
         deleteImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-             deleteAction(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)+"/TopNotes/"+context.getResources().getStringArray(R.array.subjectList)[choosenSubject]+"/"
+             deleteAction(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)+"/TopNotes/"+MyApplication.getApp().subjectNames.get(choosenSubject)+"/"
                      +context.getResources().getStringArray(R.array.categoryList)[choosenType]+"/"
                 +contentList.get(position).getFileName());
                 //deleteAction(downloadsNotesNameArray.get(choosenFile)+".pdf");
@@ -89,7 +89,7 @@ public class MyDownloadsArrayAdapter extends ArrayAdapter<String> {
         shareImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                shareFile("TopNotes/"+context.getResources().getStringArray(R.array.subjectList)[choosenSubject]+"/"
+                shareFile("TopNotes/"+MyApplication.getApp().subjectNames.get(choosenSubject)+"/"
                         +context.getResources().getStringArray(R.array.categoryList)[choosenType],position);//+"/"
                         //+downloadsNotesNameArray.get(position)+".pdf");
             }
