@@ -54,9 +54,6 @@ public class AnotherContentDownloader {
 
     public void downloadFile(String url,String title,int subject,int type)
     {
-
-        Toast.makeText(mContext,"Downloadinig started...",Toast.LENGTH_LONG).show();
-
         this.url = url;
         this.subject = subject;
         this.type = type;

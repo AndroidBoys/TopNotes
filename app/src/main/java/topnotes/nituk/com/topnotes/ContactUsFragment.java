@@ -138,7 +138,7 @@ public class ContactUsFragment extends Fragment implements View.OnClickListener{
                             @Override
                             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                                 Log.d("feedbacksuser",dataSnapshot.getValue().toString());
-                                feedbacks.add(dataSnapshot.getValue().toString()+" From:"+User.getUser().getName());
+                                feedbacks.add(dataSnapshot.getValue().toString());
                                 if(FeedbackList.arrayAdapter!=null)
                                     FeedbackList.arrayAdapter.notifyDataSetChanged();
                             }

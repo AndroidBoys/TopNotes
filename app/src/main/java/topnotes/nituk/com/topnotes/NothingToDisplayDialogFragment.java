@@ -16,7 +16,6 @@ import androidx.fragment.app.Fragment;
 
 public class NothingToDisplayDialogFragment extends Fragment {
     private String updown;
-    private String msg;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -25,11 +24,11 @@ public class NothingToDisplayDialogFragment extends Fragment {
         TextView updownTextView=view.findViewById(R.id.updownTextView);
         if(updown.equals("upload")) {
             updownImageView.setImageResource(R.drawable.my_uploads);
-            updownTextView.setText(msg);
+            updownTextView.setText("Please upload a file first!");
         }
         else if(updown.equals("download")) {
             updownImageView.setImageResource(R.drawable.my_downloads);
-            updownTextView.setText(msg);
+            updownTextView.setText("Please download a file first!");
         }
 
        return view;
@@ -39,8 +38,7 @@ public class NothingToDisplayDialogFragment extends Fragment {
      }
 
     @SuppressLint("ValidFragment")
-    public NothingToDisplayDialogFragment(String updown,String msg) {
+    public NothingToDisplayDialogFragment(String updown) {
         this.updown = updown;
-        this.msg = msg;
     }
 }

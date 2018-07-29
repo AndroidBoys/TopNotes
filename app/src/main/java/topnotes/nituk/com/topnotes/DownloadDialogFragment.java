@@ -146,7 +146,7 @@ public class DownloadDialogFragment extends Dialog_fragment {
                 //again.
                if(!titleNameofFiles.contains(content.getFileName())) {
                     // Download the content
-                    //Toast.makeText(getActivity(), "::Download process begins:: with url:" + content.getDownloadUrl(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "::Download process begins:: with url:" + content.getDownloadUrl(), Toast.LENGTH_SHORT).show();
                     Log.i("url:", content.getDownloadUrl());
 //                new ContentDownloader(getActivity()).downloadFile(content.getDownloadUrl(),content.getTitle(),choosenSubject,choosenType);
                     AnotherContentDownloader.getInstance(getActivity()).downloadFile(content.getDownloadUrl(), content.getFileName(), choosenSubject, choosenType);
