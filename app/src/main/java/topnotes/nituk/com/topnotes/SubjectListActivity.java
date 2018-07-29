@@ -186,7 +186,15 @@ public class SubjectListActivity extends AppCompatActivity {
                                         signOut();
                                     }
                                 })
-                                .setNegativeButton("No",null).show();
+                                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        stack.pop();
+                                        Integer menuId = (Integer) stack.peek();
+//                                      Log.i("menuId", String.valueOf(menuId));
+                                        navigationView.setCheckedItem(menuId);
+                                    }
+                                }).show();
                         break;
                 }
 
@@ -204,7 +212,7 @@ public class SubjectListActivity extends AppCompatActivity {
         } else {
             //if network is not connected then user will move into DownloadFragment.
             addDifferentFragments(DownloadFirstFragment.getInstance(),"subjects");
-            stack.push(R.id.myDownloads);//Pusing the id in the stack when app opened first
+            stack.push(R.id.myDownloads);//Pushing the id in the stack when app opened first
 //            navigationView.getMenu().getItem(1).setChecked(true);
             navigationView.setCheckedItem(R.id.myDownloads);
         }

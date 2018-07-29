@@ -53,6 +53,7 @@ public class MyDownloadsArrayAdapter extends ArrayAdapter<String> {
         this.choosenType=choosenType;
     }
 
+
     @Override
     public View getView(int position, View convertView, final ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -97,7 +98,6 @@ public class MyDownloadsArrayAdapter extends ArrayAdapter<String> {
                 deleteAction(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)+"/TopNotes/"+MyApplication.getApp().subjectNames.get(choosenSubject)+"/"
                      +context.getResources().getStringArray(R.array.categoryList)[choosenType]+"/"
                 +contentList.get(choosenFile).getFileName(),choosenFile);
-                //deleteAction(downloadsNotesNameArray.get(choosenFile)+".pdf");
             }
         });
 
@@ -200,8 +200,9 @@ public class MyDownloadsArrayAdapter extends ArrayAdapter<String> {
 
     private void deleteFile(String path, int choosenFile)
     {
-       File file = new File(path);
-       // File file=new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS),"EEM.pdf");
+       File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS),path);
+//       File file=new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS),path);
+        // File file=new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS),"EEM.pdf");
         if(file.exists()) {
              Toast.makeText(context,"starting deletion!",Toast.LENGTH_SHORT).show();
              DocumentFile documentFile = DocumentFile.fromFile(file);
@@ -225,7 +226,6 @@ public class MyDownloadsArrayAdapter extends ArrayAdapter<String> {
 //        this.notifyDataSetChanged();//it will notify the adapter
         contentList.remove(choosenFile);
         notifyDataSetChanged();
-
     }
 
     private void shareFile(String filePath,int position) {
