@@ -7,6 +7,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
@@ -114,13 +115,7 @@ public class MyDownloadsArrayAdapter extends ArrayAdapter<String> {
 //        // Setting the intent for the file
 //        Intent pdfIntent = new Intent(Intent.ACTION_VIEW);
 //
-//        String[] mimeTypes =
-//                {"application/msword","application/vnd.openxmlformats-officedocument.wordprocessingml.document", // .doc & .docx
-//                        "application/vnd.ms-powerpoint","application/vnd.openxmlformats-officedocument.presentationml.presentation", // .ppt & .pptx
-//                        "application/vnd.ms-excel","application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // .xls & .xlsx
-//                        "text/plain",
-//                        "application/zip"};
-//        pdfIntent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
+//
 //
 //        // for opening pdf files
 //        pdfIntent.setDataAndType(path, "application/pdf");
@@ -144,7 +139,8 @@ public class MyDownloadsArrayAdapter extends ArrayAdapter<String> {
 
         Intent intent = new Intent(Intent.ACTION_VIEW);
         String mimeType = getMimeType(path.getPath());
-        Log.i("mimetype",mimeType);
+        Log.i("path",path.getPath());
+//        Log.i("mimetype",mimeType);
         if(android.os.Build.VERSION.SDK_INT >=24) {
             Uri fileURI = FileProvider.getUriForFile(getContext(),
                     BuildConfig.APPLICATION_ID + ".provider",
@@ -154,7 +150,7 @@ public class MyDownloadsArrayAdapter extends ArrayAdapter<String> {
         }else {
             intent.setDataAndType(path, mimeType);
         }
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_GRANT_READ_URI_PERMISSION|Intent.FLAG_ACTIVITY_NEW_TASK);
         try {
             context.startActivity(Intent.createChooser(intent,"Open with"));
         }catch (ActivityNotFoundException e){
@@ -268,7 +264,8 @@ public class MyDownloadsArrayAdapter extends ArrayAdapter<String> {
 
     public  String getMimeType(String url) {
         String type = null;
-        String extension = MimeTypeMap.getFileExtensionFromUrl(url);
+        String extension = url.substring(url.lastIndexOf(".") + 1);
+        Log.i("extension",extension);
         if (extension != null) {
             type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
         }
