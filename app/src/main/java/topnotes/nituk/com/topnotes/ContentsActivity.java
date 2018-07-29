@@ -55,7 +55,7 @@ public class ContentsActivity extends AppCompatActivity {
         choosenSubject= getIntent().getIntExtra("subject",0);
         choosenType=getIntent().getIntExtra("type",0);
 
-        Toast.makeText(this,"Subject:"+choosenSubject+"Type:"+choosenType,Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this,"Subject:"+choosenSubject+"Type:"+choosenType,Toast.LENGTH_SHORT).show();
 
         // initialise
 

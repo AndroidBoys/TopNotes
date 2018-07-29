@@ -212,14 +212,14 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.setType("*/*");
         //need to send mimetypes for some devices (read from stackoverflow not sure
-        String[] mimeTypes =
-                {"application/msword","application/vnd.openxmlformats-officedocument.wordprocessingml.document", // .doc & .docx
+      
+        String[] mimetypes ={"application/msword","application/vnd.openxmlformats-officedocument.wordprocessingml.document", // .doc & .docx
                         "application/vnd.ms-powerpoint","application/vnd.openxmlformats-officedocument.presentationml.presentation", // .ppt & .pptx
                         "application/vnd.ms-excel","application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // .xls & .xlsx
                         "text/plain",
                         "application/pdf",
                         "application/zip"};
-        intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
+        intent.putExtra(Intent.EXTRA_MIME_TYPES, mimetypes);
         try {
             startActivityForResult(intent,FILE_SELECT_CODE);
 
@@ -434,21 +434,21 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
         }
     }
 
-    private void createNotification(){
-
-        NotificationCompat.Builder builder=new NotificationCompat.Builder(activity);
-        builder.setSmallIcon(R.drawable.notes);
-        builder.setContentTitle("New Notes Uploaded");
-        //builder.setContentText(getResources().getStringArray(R.array.subjectList)[choosenSubject] + getResources().getStringArray(R.array.subjectList)[choosenType] +" uploaded ..You can download it..");
-        builder.setContentText(subjectNameType+" "+notesNameType+" uploaded ..You can download it..");
-        Uri defaultRingtone=RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        builder.setSound(defaultRingtone);
-        Intent intent=new Intent(activity,SubjectListActivity.class);
-        PendingIntent pendingIntent=PendingIntent.getActivity(activity,0,intent,PendingIntent.FLAG_UPDATE_CURRENT);
-        builder.setContentIntent(pendingIntent);
-        NotificationManager notificationManager=(NotificationManager)activity.getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(0,builder.build());
-    }
+//    private void createNotification(){
+//
+//        NotificationCompat.Builder builder=new NotificationCompat.Builder(activity);
+//        builder.setSmallIcon(R.drawable.notes);
+//        builder.setContentTitle("New Notes Uploaded");
+//        //builder.setContentText(getResources().getStringArray(R.array.subjectList)[choosenSubject] + getResources().getStringArray(R.array.subjectList)[choosenType] +" uploaded ..You can download it..");
+//        builder.setContentText(subjectNameType+" "+notesNameType+" uploaded ..You can download it..");
+//        Uri defaultRingtone=RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+//        builder.setSound(defaultRingtone);
+//        Intent intent=new Intent(activity,SubjectListActivity.class);
+//        PendingIntent pendingIntent=PendingIntent.getActivity(activity,0,intent,PendingIntent.FLAG_UPDATE_CURRENT);
+//        builder.setContentIntent(pendingIntent);
+//        NotificationManager notificationManager=(NotificationManager)activity.getSystemService(Context.NOTIFICATION_SERVICE);
+//        notificationManager.notify(0,builder.build());
+//    }
 
     public String calculateProperFileSize(double bytes){
         String[] fileSizeUnits = {"bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"};
