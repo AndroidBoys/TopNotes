@@ -141,7 +141,6 @@ public class DownloadfinalFragment extends Fragment {
             fileTitleList.add(contents.get(i).getTitle());
             contentList.add(contents.get(i));
           }
-
         }
     }
 

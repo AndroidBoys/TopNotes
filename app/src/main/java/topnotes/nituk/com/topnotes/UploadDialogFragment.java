@@ -601,8 +601,6 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
 
             notificationManagerCompat.notify(UPLOAD_NOTIFICATION_ID, notificationBuilder.build());
             // to track the current notification
-
-
         }
 
         private void createNotificationChannel(){

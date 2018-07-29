@@ -53,6 +53,7 @@ public class MyDownloadsArrayAdapter extends ArrayAdapter<String> {
         this.choosenType=choosenType;
     }
 
+
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -82,9 +83,11 @@ public class MyDownloadsArrayAdapter extends ArrayAdapter<String> {
         deleteImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-             deleteAction(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)+"/TopNotes/"+MyApplication.getApp().subjectNames.get(choosenSubject)+"/"
+             deleteAction("/TopNotes/"+MyApplication.getApp().subjectNames.get(choosenSubject)+"/"
                      +context.getResources().getStringArray(R.array.categoryList)[choosenType]+"/"
                 +contentList.get(position).getFileName());
+             Log.i("deletePosition","-------------------"+String.valueOf(position));
+             Log.i("filenamedeledte","-------------------"+contentList.get(position).getFileName());
                 //deleteAction(downloadsNotesNameArray.get(choosenFile)+".pdf");
             }
         });
@@ -181,8 +184,9 @@ public class MyDownloadsArrayAdapter extends ArrayAdapter<String> {
 
     private void deleteFile(String path)
     {
-       File file = new File(path);
-       // File file=new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS),"EEM.pdf");
+       File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS),path);
+//       File file=new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS),path);
+        // File file=new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS),"EEM.pdf");
         if(file.exists()) {
              Toast.makeText(context,"starting deletion!",Toast.LENGTH_SHORT).show();
              DocumentFile documentFile = DocumentFile.fromFile(file);
@@ -205,7 +209,10 @@ public class MyDownloadsArrayAdapter extends ArrayAdapter<String> {
 
     private void deleteFromListView()
     {
+        Log.i("iteminlistView","-------------------"+this.getItem(choosenFile));
         this.remove(this.getItem(choosenFile));
+//        Log.i("itemafterdeletion","-------------------"+this.getItem(choosenFile));
+//        this.remove(this.getItem(choosenFile));
         this.notifyDataSetChanged();//it will notify the adapter
     }
 
