@@ -33,6 +33,7 @@
                 android:layout_weight="1"
                 android:text="Operating system"
                 android:textColor="@color/whiteColor"
+                android:layout_marginTop="7dp"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
                 android:textStyle="bold" />
 
@@ -103,7 +104,7 @@
                 android:id="@+id/totalRating"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="4.2"
+                android:text="5.0"
                 android:textAlignment="center"
                 android:layout_weight="1"
                 android:textSize="24dp"
