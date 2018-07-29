@@ -37,8 +37,7 @@ import androidx.fragment.app.DialogFragment;
 
 public class DownloadDialogFragment extends Dialog_fragment {
 
-    private static String notificationChannelId = "DOWNLOAD_NOTIFICATION";
-    private static int notificationId = 1;
+    public static final String notificationChannelId="NOTIFICATION";
     private TextView titleTextView;
     private TextView subjectTextView;
     private TextView sizeTextView;
@@ -48,7 +47,7 @@ public class DownloadDialogFragment extends Dialog_fragment {
     private TextView creditsTextView;
     private int choosenSubject;
     private int choosenType;
-    private static Activity activity;
+    private Activity activity;
     private Content content;
     private List<File> fileList;
     private ArrayList<String> titleNameofFiles;
@@ -178,50 +177,5 @@ public class DownloadDialogFragment extends Dialog_fragment {
         fragment.setArguments(bundle);
         return fragment;
     }
-
-
-    public  static void showDownloadNotification() {
-
-        createNotificationChannel(); //notification won't work without this in android version above 8.0+
-
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(activity, notificationChannelId);
-        //this channelid should be unique and it is used to track the notification
-
-        Intent intent = new Intent(activity,SubjectListActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(activity, 0, intent, 0);
-
-        notificationBuilder.setSmallIcon(R.drawable.ic_arrow_downward_black_24dp)
-                .setContentTitle("Downloading in Progress...")
-                .setStyle(new NotificationCompat.DecoratedCustomViewStyle())
-                .setPriority(NotificationCompat.DEFAULT_ALL) //to support Android 7.1 and lower.
-                .addAction(R.drawable.light_blue_color,"pause",pendingIntent)
-                .addAction(R.drawable.light_blue_color,"Stop",pendingIntent)
-                .addAction(R.drawable.light_blue_color,"cancel",pendingIntent)
-                .setContentText("Downloading...")
-                .setProgress(10,5,false);
-
-        //to display notification
-        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(activity);
-
-        notificationManagerCompat.notify(notificationId, notificationBuilder.build());
-        // to track the current notification
-
-    }
-
-    private static void createNotificationChannel() {
-        // Create the NotificationChannel, but only on API 26+ because
-        // the NotificationChannel class is new and not in the support library
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel(notificationChannelId, "TopNotes", importance);
-            channel.setDescription("none");
-            // Register the channel with the system; you can't change the importance
-            // or other notification behaviors after this
-            NotificationManager notificationManager = activity.getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
-        }
-    }
-
-
 
 }

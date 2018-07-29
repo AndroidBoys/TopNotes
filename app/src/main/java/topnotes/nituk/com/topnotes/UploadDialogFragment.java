@@ -3,6 +3,7 @@ package topnotes.nituk.com.topnotes;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
@@ -66,6 +67,7 @@ import java.util.UUID;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.DialogFragment;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
@@ -78,7 +80,9 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
 
 
     private static final int FILE_SELECT_CODE = 0;
-    public  static final int REQ_CODE =1 ;
+    public static final int REQ_CODE = 1;
+    public static final int UPLOAD_NOTIFICATION_ID = 2;
+    public static final String notificationChannelId = "uplaod_channel";
     private ImageView chooseFileImageViewButton;
     private Button uploadButton;
     private StorageReference mStorageRef;
@@ -90,18 +94,14 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
     private int choosenType;
     private Activity activity;
     private LinearLayout superLinearLayout;
-    private Spinner subjectSpinner,categorySpinner;
+    private Spinner subjectSpinner, categorySpinner;
     private String notesNameType;
     private String subjectNameType;
-    private ProgressDialog progressDialog;
-    private boolean duplicateExistsOnServer;
-
 
 
     private EditText titleEditText;
 
-    public UploadDialogFragment()
-    {
+    public UploadDialogFragment() {
 
     }
 
@@ -109,7 +109,7 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
 
-        Dialog dialog=super.onCreateDialog(savedInstanceState);
+        Dialog dialog = super.onCreateDialog(savedInstanceState);
 
         dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 //       dialog.getWindow().setLocalFocus(true,true);
@@ -117,8 +117,7 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
         //
     }
 
-    public static UploadDialogFragment getInstance()
-    {
+    public static UploadDialogFragment getInstance() {
         return new UploadDialogFragment();
     }
 
@@ -126,51 +125,50 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View view=inflater.inflate(R.layout.upload_dialog_fragment,container,true);
-      // This context should be use throughout the fragment to access any resources related to the hosting activity
+        View view = inflater.inflate(R.layout.upload_dialog_fragment, container, true);
+        // This context should be use throughout the fragment to access any resources related to the hosting activity
         // There was a bug in uploading due to null (getActivity) which occurs due to completion of HTTP request and detachment of
         // the base activity
-        activity=getActivity();
+        activity = getActivity();
 
-        progressDialog= new ProgressDialog(activity);
+        // progressDialog= new ProgressDialog(activity);
 
         // setup the uploader profile on the upload fragment
-        uploadUserImageView=view.findViewById(R.id.uploadUserImageView);
-        uploadUserNameTextView=view.findViewById(R.id.uploadUserName);
+        uploadUserImageView = view.findViewById(R.id.uploadUserImageView);
+        uploadUserNameTextView = view.findViewById(R.id.uploadUserName);
         uploadUserNameTextView.setText(User.getUser().getName());
         Picasso.get().load(User.getUser().getImageUrl()).into(uploadUserImageView);
-        superLinearLayout=view.findViewById(R.id.superUploadFragmentLinearLayout);
+        superLinearLayout = view.findViewById(R.id.superUploadFragmentLinearLayout);
 
 
-        uploadButton=view.findViewById(R.id.uploadButton);
-        chooseFileImageViewButton=view.findViewById(R.id.chooseFileImageViewButton);
-        mStorageRef= FirebaseStorage.getInstance().getReference();
+        uploadButton = view.findViewById(R.id.uploadButton);
+        chooseFileImageViewButton = view.findViewById(R.id.chooseFileImageViewButton);
+        mStorageRef = FirebaseStorage.getInstance().getReference();
 
         superLinearLayout.setOnClickListener(this);
-        titleEditText=view.findViewById(R.id.uploadTitleEditText);
+        titleEditText = view.findViewById(R.id.uploadTitleEditText);
         titleEditText.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View view, int i, KeyEvent keyEvent) {
-                if(i==KeyEvent.KEYCODE_ENTER&&keyEvent.getAction()==KeyEvent.ACTION_DOWN)
-                onClick(uploadButton);
+                if (i == KeyEvent.KEYCODE_ENTER && keyEvent.getAction() == KeyEvent.ACTION_DOWN)
+                    onClick(uploadButton);
                 return false;
             }
         });
 
-        Log.i("activity:::",getActivity().toString());
-
+        Log.i("activity:::", getActivity().toString());
 
 
         //To show dropdown list in our app we need to use spinner widget.
-        subjectSpinner=view.findViewById(R.id.subjectSpinner);
-        ArrayAdapter<String> subjectSpinnerAdapter=new ArrayAdapter<>(getActivity(),android.R.layout.simple_spinner_dropdown_item,MyApplication.getApp().spinnerSubjectList);
+        subjectSpinner = view.findViewById(R.id.subjectSpinner);
+        ArrayAdapter<String> subjectSpinnerAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item, MyApplication.getApp().spinnerSubjectList);
         subjectSpinner.setAdapter(subjectSpinnerAdapter);
         subjectSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 // since the select option is also included
-                Log.d("coosenSubject",""+i);
-                choosenSubject=i-1;
+                Log.d("coosenSubject", "" + i);
+                choosenSubject = i - 1;
             }
 
             @Override
@@ -179,16 +177,16 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
             }
         });
 
-        categorySpinner=view.findViewById(R.id.categorySpinner);
-        ArrayAdapter<String> categorysSpinnerAdapter=new ArrayAdapter<>(getActivity(),android.R.layout.simple_spinner_dropdown_item,getResources().getStringArray(R.array.spinnerCategoryList));
+        categorySpinner = view.findViewById(R.id.categorySpinner);
+        ArrayAdapter<String> categorysSpinnerAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item, getResources().getStringArray(R.array.spinnerCategoryList));
         categorySpinner.setAdapter(categorysSpinnerAdapter);
         categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-               // since the select option is also included..
-                Log.d("catagory",""+i);
+                // since the select option is also included..
+                Log.d("catagory", "" + i);
 
-                choosenType=i-1;
+                choosenType = i - 1;
 
             }
 
@@ -197,7 +195,6 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
 
             }
         });
-
 
 
         chooseFileImageViewButton.setOnClickListener(this);
@@ -208,20 +205,20 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
     }
 
 
-    private  void chooseFile(){
+    private void chooseFile() {
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.setType("*/*");
         //need to send mimetypes for some devices (read from stackoverflow not sure
-      
-        String[] mimetypes ={"application/msword","application/vnd.openxmlformats-officedocument.wordprocessingml.document", // .doc & .docx
-                        "application/vnd.ms-powerpoint","application/vnd.openxmlformats-officedocument.presentationml.presentation", // .ppt & .pptx
-                        "application/vnd.ms-excel","application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // .xls & .xlsx
-                        "text/plain",
-                        "application/pdf",
-                        "application/zip"};
+
+        String[] mimetypes = {"application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // .doc & .docx
+                "application/vnd.ms-powerpoint", "application/vnd.openxmlformats-officedocument.presentationml.presentation", // .ppt & .pptx
+                "application/vnd.ms-excel", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // .xls & .xlsx
+                "text/plain",
+                "application/pdf",
+                "application/zip"};
         intent.putExtra(Intent.EXTRA_MIME_TYPES, mimetypes);
         try {
-            startActivityForResult(intent,FILE_SELECT_CODE);
+            startActivityForResult(intent, FILE_SELECT_CODE);
 
         } catch (android.content.ActivityNotFoundException ex) {
             // Potentially direct the user to the Market with a Dialog
@@ -269,85 +266,84 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
 //        }
 //    }
 
-    private void uploadFile(Uri uri)
-    {
+    private void uploadFile(Uri uri) {
 
         //using current time to set title so their will be no title of similar names:(Removed since content have a fileName now)
 //        Calendar calendar=Calendar.getInstance();
 //        SimpleDateFormat simpleDateFormat=new SimpleDateFormat("dd-MM-yyyy_HH:mm:ss");
-       // final String dateTime=simpleDateFormat.format(calendar.getTime());
+        // final String dateTime=simpleDateFormat.format(calendar.getTime());
         //Uri file = Uri.fromFile(new File("path/to/images/rivers.jpg"));
         StorageReference riversRef = mStorageRef.child("courses")
                 .child(MyApplication.getApp().subjectNames.get(choosenSubject))
                 .child(activity.getResources().getStringArray(R.array.categoryList)[choosenType])
                 .child(getFileName(fileUri));
+//
+//            progressDialog.setTitle("Uploading...");
+//            //Log.i("activity again::",getActivity().toString());
+//            // context for the sucess listener
+//            progressDialog.show();
+        Toast.makeText(activity, "Uploading started....", Toast.LENGTH_SHORT).show();
+        riversRef.putFile(uri)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        // Get a URL to the uploaded content
 
-            progressDialog.setTitle("Uploading...");
-            //Log.i("activity again::",getActivity().toString());
-            // context for the sucess listener
-            progressDialog.show();
-            riversRef.putFile(uri)
-                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            // Get a URL to the uploaded content
+                        taskSnapshot.getStorage().getDownloadUrl().addOnSuccessListener(activity, new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                //Toast.makeText(activity, "File uploaded successfully, file url:" + uri.toString(), Toast.LENGTH_SHORT).show();
+                                Log.i("Upload success, Url:", uri.toString());
+                                makeEntryToFBDB(uri.toString());
+                                //progressDialog.dismiss();
+                                Toast.makeText(activity, "uploaded sucessfully!", Toast.LENGTH_SHORT).show();
+                                fileUri = null;
+                            }
+                        });
 
-                            taskSnapshot.getStorage().getDownloadUrl().addOnSuccessListener(activity, new OnSuccessListener<Uri>() {
-                                @Override
-                                public void onSuccess(Uri uri) {
-                                    Toast.makeText(activity, "File uploaded successfully, file url:" + uri.toString(), Toast.LENGTH_SHORT).show();
-                                    Log.i("Upload success, Url:", uri.toString());
-                                    makeEntryToFBDB(uri.toString());
-                                    progressDialog.dismiss();
-                                    fileUri = null;
-                                }
-                            });
-
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception exception) {
-                            // Handle unsuccessful uploads
-                            Toast.makeText(getActivity(), "File upload Failed," + exception.getMessage(), Toast.LENGTH_SHORT).show();
-                            exception.printStackTrace();
-                            progressDialog.dismiss();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        // Handle unsuccessful uploads
+                        Toast.makeText(getActivity(), "Uploading Failed," + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                        exception.printStackTrace();
+//                            progressDialog.dismiss();
 
 
-                        }
-                    })
-                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                            double progress = (100 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
-                            progressDialog.setMessage((int) progress + "% Uploaded");
-                        }
-                    });
+                    }
+                })
+                .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                        double progress = (100 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+                        //progressDialog.setMessage((int) progress + "% Uploaded");
+                        showDownloadNotification("Uploading..",(int)progress);
+                    }
+                });
 
     }
-
 
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == FILE_SELECT_CODE && resultCode == Activity.RESULT_OK && data!=null)
-        {
+        if (requestCode == FILE_SELECT_CODE && resultCode == Activity.RESULT_OK && data != null) {
             fileUri = data.getData();
-            Toast.makeText(getContext(),"File ready to upload !",Toast.LENGTH_SHORT).show();
-            Log.i("fileuri",fileUri.toString());
-            Log.i("path",fileUri.getPath());
-            Log.i("info","fileName:"+getFileName(fileUri)+"and fileSize:"+getFileSize(fileUri));
+            Toast.makeText(getContext(), "File ready to upload !", Toast.LENGTH_SHORT).show();
+            Log.i("fileuri", fileUri.toString());
+            Log.i("path", fileUri.getPath());
+            Log.i("info", "fileName:" + getFileName(fileUri) + "and fileSize:" + getFileSize(fileUri));
 
 
         }
 
-     }
+    }
 
     // The method saves the upload file's metadata to firebasedatabase
-    public void makeEntryToFBDB(String url)
-    {
+    public void makeEntryToFBDB(String url) {
         UUID contentUUID = UUID.randomUUID();
         Content content = new Content();
         content.setTitle(titleEditText.getText().toString());
@@ -359,18 +355,18 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
         content.setSubject(MyApplication.getApp().subjectNames.get(choosenSubject));
 
         Long uriSizeinLong = getFileSize(fileUri);
-        Log.i("size in long:",uriSizeinLong.toString());
+        Log.i("size in long:", uriSizeinLong.toString());
         String s = uriSizeinLong + "";
         Double uriSize = Double.parseDouble(s);
-        Log.i("size in double:",uriSize.toString());
+        Log.i("size in double:", uriSize.toString());
         // cast long to double
         String fileSize = calculateProperFileSize(uriSize);
         content.setSize(fileSize);
-        Log.i("uploaded size:",fileSize);
+        Log.i("uploaded size:", fileSize);
 
 
         String fileName = getFileName(fileUri);
-        Log.i("fileName:",fileName);
+        Log.i("fileName:", fileName);
         content.setFileName(fileName);
 
 
@@ -380,17 +376,17 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
                 .child(activity.getResources().getStringArray(R.array.typeToken)[choosenType])
                 .child(contentUUID.toString())
                 .setValue(content);
-       // createNotification();
+        // createNotification();
 
     }
-    private void sendResult(Content content)
-    {
+
+    private void sendResult(Content content) {
         Intent intent = new Intent();
-        intent.putExtra("content",content);
-        Log.i("content with title:",content.getTitle());
+        intent.putExtra("content", content);
+        Log.i("content with title:", content.getTitle());
 
         //return the result to that fragment which create this fragment
-        getTargetFragment().onActivityResult(getTargetRequestCode(),REQ_CODE,intent);
+        getTargetFragment().onActivityResult(getTargetRequestCode(), REQ_CODE, intent);
 
 
     }
@@ -427,8 +423,8 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
                 }
                 break;
             case R.id.superUploadFragmentLinearLayout:
-                InputMethodManager inputMethodManager=(InputMethodManager)activity.getSystemService(Context.INPUT_METHOD_SERVICE);
-                inputMethodManager.hideSoftInputFromWindow(titleEditText.getWindowToken(),0);
+                InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputMethodManager.hideSoftInputFromWindow(titleEditText.getWindowToken(), 0);
                 break;
 
         }
@@ -450,12 +446,12 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
 //        notificationManager.notify(0,builder.build());
 //    }
 
-    public String calculateProperFileSize(double bytes){
+    public String calculateProperFileSize(double bytes) {
         String[] fileSizeUnits = {"bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"};
         String sizeToReturn = "";// = FileUtils.byteCountToDisplaySize(bytes), unit = "";
         int index = 0;
-        for(index = 0; index < fileSizeUnits.length; index++){
-            if(bytes < 1024){
+        for (index = 0; index < fileSizeUnits.length; index++) {
+            if (bytes < 1024) {
                 break;
             }
             bytes = bytes / 1024;
@@ -504,46 +500,43 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
 //       return splits[1];
 //    }
 
-    private Long getFileSize(Uri uri)
-    {   int index=0;
+    private Long getFileSize(Uri uri) {
+        int index = 0;
         Cursor returnCursor =
                 activity.getContentResolver().query(uri, null, null, null, null);
         returnCursor.moveToFirst();
-        try{
+        try {
 
             index = returnCursor.getColumnIndex(OpenableColumns.SIZE);
             return returnCursor.getLong(index);
 
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             returnCursor.close();
         }
-       return null;
-     }
+        return null;
+    }
 
-    public String getFileName(Uri uri)
-    {
+    public String getFileName(Uri uri) {
 
-        int index =0;
-        Cursor returnCursor = activity.getContentResolver().query(uri,null,null,null,null);
+        int index = 0;
+        Cursor returnCursor = activity.getContentResolver().query(uri, null, null, null, null);
         returnCursor.moveToFirst();
         try {
             index = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
             return returnCursor.getString(index);
         } catch (Exception e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             returnCursor.close();
         }
-      
+
         return "";
     }
 
-    public void checkDuplicacy()
-    {
-        DatabaseReference reference =FirebaseDatabase.getInstance().getReference("courses").child(MyApplication.getApp().subjectNamesToken.get(choosenSubject))
+    public void checkDuplicacy() {
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("courses").child(MyApplication.getApp().subjectNamesToken.get(choosenSubject))
                 .child(activity.getResources().getStringArray(R.array.typeToken)[choosenType]);
 
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -551,20 +544,17 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 List<String> fileNames = new ArrayList<>();
 
-                for(DataSnapshot dsp:dataSnapshot.getChildren())
-                {
+                for (DataSnapshot dsp : dataSnapshot.getChildren()) {
                     fileNames.add(dsp.getValue(Content.class).getFileName());
                 }
 
-                Log.i("fileOnserver",fileNames.toString());
+                Log.i("fileOnserver", fileNames.toString());
 
-                if(!fileNames.contains(getFileName(fileUri))) // no duplicate file
+                if (!fileNames.contains(getFileName(fileUri))) // no duplicate file
                 {
                     uploadFile(fileUri);
-                }
-                else
-                {
-                    Toast.makeText(activity,"The file already exists on our servers",Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(activity, "The file already exists on our servers", Toast.LENGTH_LONG).show();
                 }
 
 
@@ -575,12 +565,62 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
 
             }
         });
+    }
+
+
+        public void showDownloadNotification (String title,int progress){
+
+            createNotificationChannel(); //notification won't work without this in android version above 8.0+
+
+            NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(activity, notificationChannelId);
+            //this channelid should be unique and it is used to track the notification
+
+//            Intent intent = new Intent();
+//            PendingIntent pendingIntent = PendingIntent.getActivity(activity, 0, intent, 0);
+
+                     if(progress<100) {
+                         notificationBuilder.setSmallIcon(R.drawable.my_uploads)
+                                 .setContentTitle("Uploading...")
+                                 .setStyle(new NotificationCompat.DecoratedCustomViewStyle())
+                                 .setPriority(NotificationCompat.DEFAULT_ALL) //to support Android 7.1 and lower.
+                                 .setContentText(progress + "%" + " uploaded")
+                                 .setProgress(100, progress, false);
+                     }else{
+                         notificationBuilder.setSmallIcon(R.mipmap.ic_launcher_round)
+                                 .setContentTitle("Success")
+                                 .setStyle(new NotificationCompat.DecoratedCustomViewStyle())
+                                 .setPriority(NotificationCompat.DEFAULT_ALL) //to support Android 7.1 and lower.
+                                 .setContentText(progress+"% uploaded")
+                                 .setSubText("File uploaded sucessfully")
+                                 .setProgress(100, progress, false);
+                     }
+
+
+            //to display notification
+            NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(activity);
+
+            notificationManagerCompat.notify(UPLOAD_NOTIFICATION_ID, notificationBuilder.build());
+            // to track the current notification
+
+
+        }
+
+        private void createNotificationChannel(){
+            // Create the NotificationChannel, but only on API 26+ because
+            // the NotificationChannel class is new and not in the support library
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                int importance = NotificationManager.IMPORTANCE_DEFAULT;
+                NotificationChannel channel = new NotificationChannel(notificationChannelId, "TopNotes", importance);
+                channel.setDescription("none");
+                // Register the channel with the system; you can't change the importance
+                // or other notification behaviors after this
+                NotificationManager notificationManager = activity.getSystemService(NotificationManager.class);
+                notificationManager.createNotificationChannel(channel);
+            }
+        }
+
 
 
     }
 
-
-
-
-}
 
