@@ -72,9 +72,9 @@ public class SubjectListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         //Below code is used to check the background service
-        if(!isMyServiceRunning(MyService.class)){
-            MyService.registerAlarm(getApplicationContext());
-        }
+//        if(!isMyServiceRunning(MyService.class)){
+//            MyService.registerAlarm(getApplicationContext());
+//        }
 
         registerReceiver(onComplete,new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
 

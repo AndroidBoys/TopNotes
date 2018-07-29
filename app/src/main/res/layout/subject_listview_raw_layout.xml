@@ -9,14 +9,14 @@ setOnItemClickListener in it-->
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="90dp">
+    android:layout_height="80dp">
 
     <LinearLayout
 
         android:focusable="false"
         android:layout_width="match_parent"
         android:orientation="horizontal"
-        android:background="@drawable/upload_background_color"
+        android:background="@drawable/subject_background_color"
         android:layout_height="80dp">
 
         <TextView
@@ -37,10 +37,10 @@ setOnItemClickListener in it-->
 
     </LinearLayout>
 
-    <View
-        android:layout_margin="1dp"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/blackColor"/>
+    <!--<View-->
+        <!--android:layout_marginTop="5dp"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="1dp"-->
+        <!--android:background="@color/blackColor"/>-->
 
 </LinearLayout>
