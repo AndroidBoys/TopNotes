@@ -95,9 +95,9 @@ public class MyDownloadsArrayAdapter extends ArrayAdapter<String> {
                 int choosenFile = listView.getPositionForView(parentView);
                 Log.i("choosenFile+delete",Integer.toString(choosenFile));
 
-                deleteAction(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)+"/TopNotes/"+MyApplication.getApp().subjectNames.get(choosenSubject)+"/"
-                     +context.getResources().getStringArray(R.array.categoryList)[choosenType]+"/"
-                +contentList.get(choosenFile).getFileName(),choosenFile);
+                deleteAction("/TopNotes/"+MyApplication.getApp().subjectNames.get(choosenSubject)+"/"
+                        +context.getResources().getStringArray(R.array.categoryList)[choosenType]+"/"
+                        +contentList.get(choosenFile).getFileName(),choosenFile);
             }
         });
 
