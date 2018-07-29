@@ -204,8 +204,14 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.setType("*/*");
         //need to send mimetypes for some devices (read from stackoverflow not sure
-        String[] mimetypes = {"application/pdf"};
-        intent.putExtra(Intent.EXTRA_MIME_TYPES, mimetypes);
+        String[] mimeTypes =
+                {"application/msword","application/vnd.openxmlformats-officedocument.wordprocessingml.document", // .doc & .docx
+                        "application/vnd.ms-powerpoint","application/vnd.openxmlformats-officedocument.presentationml.presentation", // .ppt & .pptx
+                        "application/vnd.ms-excel","application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // .xls & .xlsx
+                        "text/plain",
+                        "application/pdf",
+                        "application/zip"};
+        intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
         try {
             startActivityForResult(intent,FILE_SELECT_CODE);
 
@@ -219,13 +225,7 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
 
 //    private void chooseFile()
 //    {
-//        String[] mimeTypes =
-//                {"application/msword","application/vnd.openxmlformats-officedocument.wordprocessingml.document", // .doc & .docx
-//                        "application/vnd.ms-powerpoint","application/vnd.openxmlformats-officedocument.presentationml.presentation", // .ppt & .pptx
-//                        "application/vnd.ms-excel","application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // .xls & .xlsx
-//                        "text/plain",
-//                        "application/pdf",
-//                        "application/zip"};
+
 //
 //
 //        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -264,15 +264,15 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
     private void uploadFile(Uri uri)
     {
 
-        //using current time to set title so their will be no title of similar names
-        Calendar calendar=Calendar.getInstance();
-        SimpleDateFormat simpleDateFormat=new SimpleDateFormat("dd-MM-yyyy_HH:mm:ss");
-        final String dateTime=simpleDateFormat.format(calendar.getTime());
+        //using current time to set title so their will be no title of similar names:(Removed since content have a fileName now)
+//        Calendar calendar=Calendar.getInstance();
+//        SimpleDateFormat simpleDateFormat=new SimpleDateFormat("dd-MM-yyyy_HH:mm:ss");
+       // final String dateTime=simpleDateFormat.format(calendar.getTime());
         //Uri file = Uri.fromFile(new File("path/to/images/rivers.jpg"));
         StorageReference riversRef = mStorageRef.child("courses")
                 .child(MyApplication.getApp().subjectNames.get(choosenSubject))
                 .child(getResources().getStringArray(R.array.categoryList)[choosenType])
-                .child(titleEditText.getText().toString()+"_"+dateTime);
+                .child(titleEditText.getText().toString());
         final ProgressDialog progressDialog = new ProgressDialog(getActivity());
         progressDialog.setTitle("Uploading...");
         //Log.i("activity again::",getActivity().toString());
@@ -289,7 +289,7 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
                             public void onSuccess(Uri uri) {
                                 Toast.makeText(activity,"File uploaded successfully, file url:"+uri.toString(),Toast.LENGTH_SHORT).show();
                                 Log.i("Upload success, Url:",uri.toString());
-                                makeEntryToFBDB(uri.toString(),dateTime);
+                                makeEntryToFBDB(uri.toString());
                                 progressDialog.dismiss();
                                 fileUri=null;
                             }
@@ -338,11 +338,11 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
      }
 
     // The method saves the upload file's metadata to firebasedatabase
-    public void makeEntryToFBDB(String url,String dateTime)
+    public void makeEntryToFBDB(String url)
     {
         UUID contentUUID = UUID.randomUUID();
         Content content = new Content();
-        content.setTitle(titleEditText.getText().toString()+"  "+dateTime);
+        content.setTitle(titleEditText.getText().toString());
         content.setDate(DateFormat.getDateFormat(activity).format(new Date()));
         content.setAuthor(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
         content.setDownloadUrl(url);
