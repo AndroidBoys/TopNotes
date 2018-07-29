@@ -14,6 +14,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
 import android.text.format.DateFormat;
@@ -42,7 +43,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -57,6 +60,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.DecimalFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import androidx.annotation.NonNull;
@@ -89,6 +93,8 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
     private Spinner subjectSpinner,categorySpinner;
     private String notesNameType;
     private String subjectNameType;
+    private ProgressDialog progressDialog;
+    private boolean duplicateExistsOnServer;
 
 
 
@@ -125,6 +131,8 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
         // There was a bug in uploading due to null (getActivity) which occurs due to completion of HTTP request and detachment of
         // the base activity
         activity=getActivity();
+
+        progressDialog= new ProgressDialog(activity);
 
         // setup the uploader profile on the upload fragment
         uploadUserImageView=view.findViewById(R.id.uploadUserImageView);
@@ -271,50 +279,50 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
         //Uri file = Uri.fromFile(new File("path/to/images/rivers.jpg"));
         StorageReference riversRef = mStorageRef.child("courses")
                 .child(MyApplication.getApp().subjectNames.get(choosenSubject))
-                .child(getResources().getStringArray(R.array.categoryList)[choosenType])
-                .child(titleEditText.getText().toString());
-        final ProgressDialog progressDialog = new ProgressDialog(getActivity());
-        progressDialog.setTitle("Uploading...");
-        //Log.i("activity again::",getActivity().toString());
-        // context for the sucess listener
-        progressDialog.show();
-        riversRef.putFile(uri)
-                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        // Get a URL to the uploaded content
+                .child(activity.getResources().getStringArray(R.array.categoryList)[choosenType])
+                .child(getFileName(fileUri));
 
-                        taskSnapshot.getStorage().getDownloadUrl().addOnSuccessListener(activity,new OnSuccessListener<Uri>() {
-                            @Override
-                            public void onSuccess(Uri uri) {
-                                Toast.makeText(activity,"File uploaded successfully, file url:"+uri.toString(),Toast.LENGTH_SHORT).show();
-                                Log.i("Upload success, Url:",uri.toString());
-                                makeEntryToFBDB(uri.toString());
-                                progressDialog.dismiss();
-                                fileUri=null;
-                            }
-                        });
+            progressDialog.setTitle("Uploading...");
+            //Log.i("activity again::",getActivity().toString());
+            // context for the sucess listener
+            progressDialog.show();
+            riversRef.putFile(uri)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            // Get a URL to the uploaded content
 
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        // Handle unsuccessful uploads
-                        Toast.makeText(getActivity(),"File upload Failed,"+ exception.getMessage(),Toast.LENGTH_SHORT).show();
-                        exception.printStackTrace();
-                        progressDialog.dismiss();
+                            taskSnapshot.getStorage().getDownloadUrl().addOnSuccessListener(activity, new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    Toast.makeText(activity, "File uploaded successfully, file url:" + uri.toString(), Toast.LENGTH_SHORT).show();
+                                    Log.i("Upload success, Url:", uri.toString());
+                                    makeEntryToFBDB(uri.toString());
+                                    progressDialog.dismiss();
+                                    fileUri = null;
+                                }
+                            });
+
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            // Handle unsuccessful uploads
+                            Toast.makeText(getActivity(), "File upload Failed," + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                            exception.printStackTrace();
+                            progressDialog.dismiss();
 
 
-                    }
-                })
-                .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                double progress = (100*taskSnapshot.getBytesTransferred())/taskSnapshot.getTotalByteCount();
-                progressDialog.setMessage((int)progress+"% Uploaded");
-            }
-        });
+                        }
+                    })
+                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                            double progress = (100 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+                            progressDialog.setMessage((int) progress + "% Uploaded");
+                        }
+                    });
 
     }
 
@@ -402,7 +410,7 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
                 } else if (titleEditText.getText().toString().matches("")) {
                     Toast.makeText(getActivity(), "Please Write the title name !", Toast.LENGTH_SHORT).show();
                 } else {
-                    uploadFile(fileUri);
+                    checkDuplicacy();
                     DialogFragment dialog = (DialogFragment) getFragmentManager().findFragmentByTag("upload");
                     dialog.dismiss();
                 }
@@ -532,6 +540,47 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
       
         return "";
     }
+
+    public void checkDuplicacy()
+    {
+        DatabaseReference reference =FirebaseDatabase.getInstance().getReference("courses").child(MyApplication.getApp().subjectNamesToken.get(choosenSubject))
+                .child(activity.getResources().getStringArray(R.array.typeToken)[choosenType]);
+
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                List<String> fileNames = new ArrayList<>();
+
+                for(DataSnapshot dsp:dataSnapshot.getChildren())
+                {
+                    fileNames.add(dsp.getValue(Content.class).getFileName());
+                }
+
+                Log.i("fileOnserver",fileNames.toString());
+
+                if(!fileNames.contains(getFileName(fileUri))) // no duplicate file
+                {
+                    uploadFile(fileUri);
+                }
+                else
+                {
+                    Toast.makeText(activity,"The file already exists on our servers",Toast.LENGTH_LONG).show();
+                }
+
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
+    }
+
+
+
 
 }
 
