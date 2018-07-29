@@ -122,27 +122,16 @@ public class DbHelper extends SQLiteOpenHelper {
 
     public void deleteContentList(String subjectName,String subjectType)
     {
-        List<Content> contents = this.readContentList(subjectName,subjectType);
         DbHelper dbHelper=new DbHelper(context);
         SQLiteDatabase sqLiteDatabase=dbHelper.getWritableDatabase();
 
-        for(int i=0;i<contents.size();i++)
-        {
-            byte[] data =SerializationUtils.serialize(contents.get(i));
-
-
-
-            int rowsDeleted= 0;
-            try {
-                Log.i("delete","deleting"+i+new String(data,"UTF-8"));
-                rowsDeleted = sqLiteDatabase.delete(DbContract.TABLE_NAME,DbContract.CONTENT+"=? and "+DbContract.SUBJECT_NAME
-                        +"=? and "+DbContract.SUBJECT_TYPE+"=?",new String[]{new String(data,"UTF-8"),subjectName,subjectType});
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
+                int rowsDeleted= 0;
+                rowsDeleted = sqLiteDatabase.delete(DbContract.TABLE_NAME,DbContract.SUBJECT_NAME
+                        +"=? and "+DbContract.SUBJECT_TYPE+"=?",new String[]{subjectName,subjectType});
             Log.i("valuedeleted",Integer.toString(rowsDeleted));
-        }
+
         sqLiteDatabase.close();
+        dbHelper.close();
         Log.i("Deleted","Old list cleared");
     }
 
