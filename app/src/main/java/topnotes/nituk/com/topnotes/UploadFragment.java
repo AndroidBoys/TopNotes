@@ -81,7 +81,7 @@ public class UploadFragment extends Fragment {
             // no uploaded content than show nothing to display fragment
             frameLayout.setVisibility(View.VISIBLE);
             uploadFileListView.setVisibility(View.INVISIBLE);
-            getFragmentManager().beginTransaction().replace(R.id.nothingToDisplayFrameLayout,new NothingToDisplayDialogFragment("upload"))
+            getFragmentManager().beginTransaction().replace(R.id.nothingToDisplayFrameLayout,new NothingToDisplayDialogFragment("upload","Please upload some files"))
                     .commit();
 
         }

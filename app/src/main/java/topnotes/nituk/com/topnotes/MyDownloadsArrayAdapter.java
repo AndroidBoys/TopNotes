@@ -20,6 +20,7 @@ import android.webkit.MimeTypeMap;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,7 +44,6 @@ public class MyDownloadsArrayAdapter extends ArrayAdapter<String> {
     private Context context;
     private int choosenSubject;
     private int choosenType;
-    private int choosenFile;
 
     public MyDownloadsArrayAdapter(Context context,List<Content> contentList,List<String> contentTitleList,int choosenSubject,int choosenType) {
         super(context,-1,contentTitleList);
@@ -55,7 +55,7 @@ public class MyDownloadsArrayAdapter extends ArrayAdapter<String> {
 
 
     @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, final ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rowView = inflater.inflate(R.layout.downloads_listview_raw_layout, parent, false);
 
@@ -67,36 +67,52 @@ public class MyDownloadsArrayAdapter extends ArrayAdapter<String> {
         ImageView deleteImageView = rowView.findViewById(R.id.delete);
         ImageView shareImageView = rowView.findViewById(R.id.share);
 
-        choosenFile=position;
 
         clickableLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                View parentRow = (View)view.getParent();
+                ListView listView = (ListView) parentRow.getParent();
+                int choosenFile = listView.getPositionForView(parentRow);
+
+                Log.i("choosenFile+open",Integer.toString(choosenFile));
+
                 openFile(MyApplication.getApp().subjectNames.get(choosenSubject)+"/"
                         +context.getResources().getStringArray(R.array.categoryList)[choosenType]
-                       +"/" +contentList.get(position).getFileName());
-                Log.i("clicked:", "" + position);
-                Log.i("file:", contentList.get(position).getFileName());
+                       +"/" +contentList.get(choosenFile).getFileName());
+                Log.i("clicked:", "" + choosenFile);
+                Log.i("file:", contentList.get(choosenFile).getFileName());
             }
         });
 
         deleteImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-             deleteAction("/TopNotes/"+MyApplication.getApp().subjectNames.get(choosenSubject)+"/"
+                View parentView= (View)view.getParent();
+                LinearLayout linearLayout = (LinearLayout) parentView.getParent();
+                LinearLayout outerLinearLayout= (LinearLayout) linearLayout.getParent();
+                ListView listView =(ListView) outerLinearLayout.getParent();
+                int choosenFile = listView.getPositionForView(parentView);
+                Log.i("choosenFile+delete",Integer.toString(choosenFile));
+
+                deleteAction(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)+"/TopNotes/"+MyApplication.getApp().subjectNames.get(choosenSubject)+"/"
                      +context.getResources().getStringArray(R.array.categoryList)[choosenType]+"/"
-                +contentList.get(position).getFileName());
-             Log.i("deletePosition","-------------------"+String.valueOf(position));
-             Log.i("filenamedeledte","-------------------"+contentList.get(position).getFileName());
-                //deleteAction(downloadsNotesNameArray.get(choosenFile)+".pdf");
+                +contentList.get(choosenFile).getFileName(),choosenFile);
             }
         });
 
         shareImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                View parentView= (View)view.getParent();
+                LinearLayout linearLayout = (LinearLayout) parentView.getParent();
+                LinearLayout outerLinearLayout= (LinearLayout) linearLayout.getParent();
+                ListView listView =(ListView) outerLinearLayout.getParent();
+                int choosenFile = listView.getPositionForView(parentView);
+                Log.i("choosenFile+share",Integer.toString(choosenFile));
+
                 shareFile("TopNotes/"+MyApplication.getApp().subjectNames.get(choosenSubject)+"/"
-                        +context.getResources().getStringArray(R.array.categoryList)[choosenType],position);//+"/"
+                        +context.getResources().getStringArray(R.array.categoryList)[choosenType],choosenFile);//+"/"
                         //+downloadsNotesNameArray.get(position)+".pdf");
             }
         });
@@ -165,7 +181,7 @@ public class MyDownloadsArrayAdapter extends ArrayAdapter<String> {
     }
 
 
-    private void deleteAction(final String path)
+    private void deleteAction(final String path, final int choosenFile)
     {
         new AlertDialog.Builder(context)
                 .setIcon(R.drawable.ic_launcher_background)
@@ -175,14 +191,14 @@ public class MyDownloadsArrayAdapter extends ArrayAdapter<String> {
 
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                            deleteFile(path);
+                            deleteFile(path,choosenFile);
                     }
                 })
                 .setNegativeButton("No",null)
                 .show();
     }
 
-    private void deleteFile(String path)
+    private void deleteFile(String path, int choosenFile)
     {
        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS),path);
 //       File file=new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS),path);
@@ -191,7 +207,7 @@ public class MyDownloadsArrayAdapter extends ArrayAdapter<String> {
              Toast.makeText(context,"starting deletion!",Toast.LENGTH_SHORT).show();
              DocumentFile documentFile = DocumentFile.fromFile(file);
              if(documentFile.delete())//if file will delete then it will return true
-             {   deleteFromListView();
+             {   deleteFromListView(choosenFile);
                  Toast.makeText(context,"sucess!"+!file.exists(),Toast.LENGTH_SHORT).show();
              }
              else{
@@ -202,18 +218,14 @@ public class MyDownloadsArrayAdapter extends ArrayAdapter<String> {
        }
     }
 
-    public void deleteFromDB()
+
+    private void deleteFromListView(int choosenFile)
     {
 
-    }
-
-    private void deleteFromListView()
-    {
-        Log.i("iteminlistView","-------------------"+this.getItem(choosenFile));
-        this.remove(this.getItem(choosenFile));
-//        Log.i("itemafterdeletion","-------------------"+this.getItem(choosenFile));
 //        this.remove(this.getItem(choosenFile));
-        this.notifyDataSetChanged();//it will notify the adapter
+//        this.notifyDataSetChanged();//it will notify the adapter
+        contentList.remove(choosenFile);
+        notifyDataSetChanged();
     }
 
     private void shareFile(String filePath,int position) {
@@ -279,4 +291,8 @@ public class MyDownloadsArrayAdapter extends ArrayAdapter<String> {
         return type;
     }
 
+    @Override
+    public int getCount() {
+        return contentList.size();
+    }
 }

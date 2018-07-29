@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,6 +45,7 @@ public class ContentsActivity extends AppCompatActivity {
     private DbHelper dbHelper;
     private boolean isInDB;
     private List<Content> localContentList;
+    private FrameLayout fragmeLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +53,9 @@ public class ContentsActivity extends AppCompatActivity {
 
         setTheme(getIntent().getIntExtra("theme",0));//it will change the theme of activity
         setContentView(R.layout.activity_contents);
+
+
+        fragmeLayout = findViewById(R.id.contentsFrameLayout);
 
         choosenSubject= getIntent().getIntExtra("subject",0);
         choosenType=getIntent().getIntExtra("type",0);
@@ -233,6 +238,7 @@ public class ContentsActivity extends AppCompatActivity {
                         Log.i("localsize:",""+localContentList.size());
                         refreshDownloadsCount();
                         addToDB();
+                        showNOItemPage();
                     }
 
                     @Override
@@ -242,6 +248,17 @@ public class ContentsActivity extends AppCompatActivity {
                 });
 
 
+
+    }
+
+    private void showNOItemPage() {
+        if(localContentList.size()==0)
+        {
+            mRecyclerView.setVisibility(View.INVISIBLE);
+            fragmeLayout.setVisibility(View.VISIBLE);
+            getSupportFragmentManager().beginTransaction().replace(R.id.contentsFrameLayout,
+                    new NothingToDisplayDialogFragment("download","No Items till now in this section")).commit();
+        }
 
     }
 

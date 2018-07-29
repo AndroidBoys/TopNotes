@@ -42,7 +42,7 @@ public class SplashActivity extends AppCompatActivity {
         progressBar=findViewById(R.id.progressBar);
         progressBar.setMax(4000);
         SharedPreferences sharedPreferences=getSharedPreferences("topnotes.nituk.com.topnotes.quotes",Context.MODE_PRIVATE);
-        quotesTextView.setText(sharedPreferences.getString("quotes","Chai pilo frands"));
+        quotesTextView.setText(sharedPreferences.getString("quotes","Learn "+SplashActivity.getEmojiByUnicode(128513)+" Share "+getEmojiByUnicode(128522)+"Repeat\n Help us building a great Community!\n"+getEmojiByUnicode(10084)));
 
         // testing purpose
 //        Intent intent = new Intent(this,SubjectListActivity.class);
@@ -72,5 +72,10 @@ public class SplashActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         finish();
+    }
+
+
+    public static String getEmojiByUnicode(int unicode){
+        return new String(Character.toChars(unicode));
     }
 }
