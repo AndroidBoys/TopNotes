@@ -16,6 +16,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -81,6 +82,20 @@ public class MyService extends IntentService {
 
         private void checkAnyChangeInFBDB() {
             DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("courses");
+            databaseReference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                    Log.i("InsideOnDataChange", dataSnapshot.getValue().toString());
+                    createNotification();
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+            /*
             databaseReference.addChildEventListener(new ChildEventListener() {
                 @Override
                 public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
@@ -112,6 +127,6 @@ public class MyService extends IntentService {
                 public void onCancelled(@NonNull DatabaseError databaseError) {
 
                 }
-            });
+            });*/
         }
 }
