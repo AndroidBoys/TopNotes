@@ -64,7 +64,7 @@ public class DownloadfinalFragment extends Fragment {
             mDownloadedFilesListView.setVisibility(View.INVISIBLE);
             frameLayout.setVisibility(View.VISIBLE);
             getFragmentManager().beginTransaction().replace(R.id.downloadfileFrameLayout,
-                    new NothingToDisplayDialogFragment("download")).commit();
+                    new NothingToDisplayDialogFragment("download","Please Download files to see")).commit();
         }
         MyDownloadsArrayAdapter myDownloadsArrayAdapter = new MyDownloadsArrayAdapter(getActivity(),contentList,fileTitleList,choosenSubject,choosenType);
         mDownloadedFilesListView.setAdapter(myDownloadsArrayAdapter);

@@ -584,7 +584,8 @@ public class UploadDialogFragment extends DialogFragment implements View.OnClick
                                  .setStyle(new NotificationCompat.DecoratedCustomViewStyle())
                                  .setPriority(NotificationCompat.DEFAULT_ALL) //to support Android 7.1 and lower.
                                  .setContentText(progress + "%" + " uploaded")
-                                 .setProgress(100, progress, false);
+                                 .setProgress(100, progress, false)
+                                 .setOngoing(true);
                      }else{
                          notificationBuilder.setSmallIcon(R.mipmap.ic_launcher_round)
                                  .setContentTitle("Success")
