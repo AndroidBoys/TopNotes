@@ -2,10 +2,12 @@ package topnotes.nituk.com.topnotes;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
@@ -14,6 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.MimeTypeMap;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -100,29 +103,65 @@ public class MyDownloadsArrayAdapter extends ArrayAdapter<String> {
 
         return rowView;
     }
+//
+//    private void openFile(String file)
+//    {
+//
+//        File pdfFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getPath(),"TopNotes/"+file);
+//        Log.i("pdfFile:",pdfFile.toString());
+//        Uri path = Uri.fromFile(pdfFile);
+//        Log.i("uri:",path.toString());
+//
+//        // Setting the intent for the file
+//        Intent pdfIntent = new Intent(Intent.ACTION_VIEW);
+//
+//
+//
+//        // for opening pdf files
+//        pdfIntent.setDataAndType(path, "application/pdf");
+//        //pdfIntent.setDataAndType(path, "application/pdf");
+//        // for opening images
+//        //pdfIntent.setDataAndType(path, "image/*");
+//        // If the instance of pdf reader already exists
+//        pdfIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//        // for api>24
+//        pdfIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+//
+//        context.startActivity(Intent.createChooser(pdfIntent,"Open with"));
+//    }
 
     private void openFile(String file)
     {
-
         File pdfFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getPath(),"TopNotes/"+file);
         Log.i("pdfFile:",pdfFile.toString());
         Uri path = Uri.fromFile(pdfFile);
         Log.i("uri:",path.toString());
 
-        // Setting the intent for the file
-        Intent pdfIntent = new Intent(Intent.ACTION_VIEW);
-        // for opening pdf files
-        pdfIntent.setDataAndType(path, "application/pdf");
-        //pdfIntent.setDataAndType(path, "*/*");
-        // for opening images
-        //pdfIntent.setDataAndType(path, "image/*");
-        // If the instance of pdf reader already exists
-        pdfIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        // for api>24
-        pdfIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        String mimeType = getMimeType(path.getPath());
+        Log.i("path",path.getPath());
+//        Log.i("mimetype",mimeType);
+        if(android.os.Build.VERSION.SDK_INT >=24) {
+            Uri fileURI = FileProvider.getUriForFile(getContext(),
+                    BuildConfig.APPLICATION_ID + ".provider",
+                    pdfFile);
+            intent.setDataAndType(fileURI, mimeType);
 
-        context.startActivity(pdfIntent);
+        }else {
+            intent.setDataAndType(path, mimeType);
+        }
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_GRANT_READ_URI_PERMISSION|Intent.FLAG_ACTIVITY_NEW_TASK);
+        try {
+            context.startActivity(Intent.createChooser(intent,"Open with"));
+        }catch (ActivityNotFoundException e){
+            Toast.makeText(context, "No Application found to open this type of file.", Toast.LENGTH_LONG).show();
+
+        }
+
+
     }
+
+
     private void deleteAction(final String path)
     {
         new AlertDialog.Builder(context)
@@ -221,6 +260,16 @@ public class MyDownloadsArrayAdapter extends ArrayAdapter<String> {
         context.startActivity(intent);
 
 
+    }
+
+    public  String getMimeType(String url) {
+        String type = null;
+        String extension = url.substring(url.lastIndexOf(".") + 1);
+        Log.i("extension",extension);
+        if (extension != null) {
+            type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
+        }
+        return type;
     }
 
 }
