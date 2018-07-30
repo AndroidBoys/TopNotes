@@ -19,6 +19,7 @@
     <EditText
         android:hint="announcements"
         android:visibility="invisible"
+        android:maxLines="4"
         android:id="@+id/announcementEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
@@ -32,6 +33,7 @@
 
     <EditText
         android:hint="quotes"
+        android:maxLines="4"
         android:visibility="invisible"
         android:id="@+id/quotesEditText"
         android:layout_width="match_parent"
