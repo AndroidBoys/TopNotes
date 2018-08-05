@@ -43,6 +43,7 @@ public class ContactUsFragment extends Fragment implements View.OnClickListener{
     private Activity activity;
     private EditText feedbackEditText;
     private Button showFeedbackButton;
+    private Context context;
     public ContactUsFragment() {
     }
 
@@ -50,6 +51,7 @@ public class ContactUsFragment extends Fragment implements View.OnClickListener{
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         activity=getActivity();
+        context=getContext();
         View view=inflater.inflate(R.layout.contact_us,container,false);
         final Button sendFeedBackButton=view.findViewById(R.id.sendFeedbackButton);
         LinearLayout linearLayout=view.findViewById(R.id.superContentLayout);

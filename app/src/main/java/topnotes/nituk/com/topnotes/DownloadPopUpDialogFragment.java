@@ -108,6 +108,9 @@ public class DownloadPopUpDialogFragment extends DialogFragment implements View.
 //        fragmentTransaction.setCustomAnimations(R.anim.fragment_open_enter,
 //                R.anim.fragment_open_exit, R.anim.fragment_close_enter,
 //                R.anim.fragment_close_exit);
+//       if (getFragmentManager()!= null) {
+//           getFragmentManager().popBackStack();
+//       }
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.replace(R.id.frameLayout,replacableFragment);
         fragmentTransaction.commit();

@@ -59,10 +59,10 @@ public class SubjectListActivity extends AppCompatActivity {
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private ImageView userImageView;
     private TextView userNameTextView, userEmailTextView;
-    protected static Stack stack;
+//    protected static Stack stack;
     private NavigationView navigationView;
-    private int flag=0;
-    private boolean firstTime=true;
+//    private int flag=0;
+//    private boolean firstTime=true;
     static int colorFlag=0;
     private SharedPreferences sharedPreferences;
 
@@ -94,7 +94,7 @@ public class SubjectListActivity extends AppCompatActivity {
 
         //setTheme(R.style.yellowTheme);
         setContentView(R.layout.activity_subject_list);
-        stack=new Stack();
+//        stack=new Stack();
         ////
 
         drawerLayout = findViewById(R.id.drawerLayout);
@@ -125,18 +125,22 @@ public class SubjectListActivity extends AppCompatActivity {
         //This below method is used for click events of navigaiton
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            MenuItem lastMenuItemSelected = null;
+            //MenuItem lastMenuItemSelected = null;
 
             @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                if (lastMenuItemSelected != null) {
-                    lastMenuItemSelected.setChecked(false);
-
+            public boolean onNavigationItemSelected(@NonNull final MenuItem menuItem) {
+//                if (lastMenuItemSelected != null) {
+//                    lastMenuItemSelected.setChecked(false);
+//
+//                }
+                if(getSupportFragmentManager().getBackStackEntryCount()!=0){
+                    getSupportFragmentManager().popBackStack();
                 }
                 menuItem.setChecked(true);
-                lastMenuItemSelected = menuItem;
+                //lastMenuItemSelected = menuItem;
 
-                stack.push(new Integer(menuItem.getItemId()));
+                drawerLayout.closeDrawer(Gravity.START);
+                //stack.push(new Integer(menuItem.getItemId()));
                 Log.i("Inside menuitem",String.valueOf(menuItem.getItemId()));
                 switch (menuItem.getItemId()) {
 
@@ -189,10 +193,12 @@ public class SubjectListActivity extends AppCompatActivity {
                                 .setNegativeButton("No", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
-                                        stack.pop();
-                                        Integer menuId = (Integer) stack.peek();
-//                                      Log.i("menuId", String.valueOf(menuId));
-                                        navigationView.setCheckedItem(menuId);
+                                        menuItem.setChecked(false);
+//                                        stack.pop();
+//                                        Integer menuId = (Integer) stack.peek();
+////                                      Log.i("menuId", String.valueOf(menuId));
+////                                        navigationView.setCheckedItem(menuId);
+//                                        navigationView.setCheckedItem(R.id.subject);
                                     }
                                 }).show();
                         break;
@@ -204,15 +210,15 @@ public class SubjectListActivity extends AppCompatActivity {
         });
         if (NetworkCheck.isNetworkAvailable(getApplicationContext())) {
             //if network is connected then user will move into Mysubject fragment
-            addDifferentFragments(MySubjects.getInstance(),"downloads");//it will show the list of subjects when this activity will be opened.
+            addDifferentFragments(MySubjects.getInstance(),"subjects");//it will show the list of subjects when this activity will be opened.
             //navigationView.getMenu().getItem(0).setChecked(true);
-            stack.push(R.id.mySubjects);//Pusing the id in the stack when app opened first
+            //stack.push(R.id.mySubjects);//Pushing the id in the stack when app opened first
             navigationView.setCheckedItem(R.id.mySubjects);
 
         } else {
             //if network is not connected then user will move into DownloadFragment.
-            addDifferentFragments(DownloadFirstFragment.getInstance(),"subjects");
-            stack.push(R.id.myDownloads);//Pushing the id in the stack when app opened first
+            addDifferentFragments(DownloadFirstFragment.getInstance(),"downloads");
+            //stack.push(R.id.myDownloads);//Pushing the id in the stack when app opened first
 //            navigationView.getMenu().getItem(1).setChecked(true);
             navigationView.setCheckedItem(R.id.myDownloads);
         }
@@ -270,7 +276,7 @@ public class SubjectListActivity extends AppCompatActivity {
 //        fragmentTransaction.commitNow();
 //        Log.d("below replace","this is me");
         //
-        fragmentTransaction.addToBackStack(null );//it will push the fragment in the stack
+        //fragmentTransaction.addToBackStack(null );//it will push the fragment in the stack
         fragmentTransaction.commit();
         Log.d("after commit","this is me");
 
@@ -328,12 +334,17 @@ public class SubjectListActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
 
-
+        Fragment fragment=getSupportFragmentManager().findFragmentByTag("subjects");
         DrawerLayout drawer = findViewById(R.id.drawerLayout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         }
-        else if(getSupportFragmentManager().getBackStackEntryCount()!=1) {
+        else if(getSupportFragmentManager().getBackStackEntryCount()!=0) {
+
+            getSupportFragmentManager().popBackStack();
+            Log.i("inside","stack count");
+//            addDifferentFragments(MySubjects.getInstance(),"subjects");
+//            navigationView.setCheckedItem(R.id.mySubjects);
 //                    Fragment fragment=getSupportFragmentManager().findFragmentByTag("subjects");
 //                    if(==fragment && !firstTime){
 //                        //This if condition is to check if user reach in MySubject fragment or not.
@@ -342,13 +353,16 @@ public class SubjectListActivity extends AppCompatActivity {
 //                        //fragment that's why i put this condition here.
 //                        flag=1;
 //                    }else {
-                        stack.pop();
-                        getSupportFragmentManager().popBackStack(); //it will pop the fragment from the stack
-                        Integer menuId = (Integer) stack.peek();
-//                      Log.i("menuId", String.valueOf(menuId));
-                        navigationView.setCheckedItem(menuId);
+//                        stack.pop();
+//                        //getSupportFragmentManager().popBackStack(); //it will pop the fragment from the stack
+//                        Integer menuId = (Integer) stack.peek();
+////                      Log.i("menuId", String.valueOf(menuId));
+//                        navigationView.setCheckedItem(menuId);
                         //firstTime=false;
-        } else {
+        }else if(!(fragment instanceof MySubjects)){
+            addDifferentFragments(MySubjects.getInstance(),"subjects");
+            navigationView.setCheckedItem(R.id.mySubjects);
+        } else{
             alertDialog();
         }
     }
