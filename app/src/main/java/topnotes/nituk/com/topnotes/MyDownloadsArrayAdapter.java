@@ -184,7 +184,7 @@ public class MyDownloadsArrayAdapter extends ArrayAdapter<String> {
     private void deleteAction(final String path, final int choosenFile)
     {
         new AlertDialog.Builder(context)
-                .setIcon(R.drawable.ic_launcher_background)
+                .setIcon(android.R.drawable.ic_menu_delete)
                 .setTitle("Delete")
                 .setMessage("Do you really want to delete?")
                 .setPositiveButton("Yes",new AlertDialog.OnClickListener(){
