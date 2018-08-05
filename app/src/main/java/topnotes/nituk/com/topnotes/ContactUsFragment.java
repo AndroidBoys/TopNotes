@@ -13,10 +13,12 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.FirebaseError;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -37,7 +39,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
-import static androidx.core.content.ContextCompat.getSystemService;
 
 public class ContactUsFragment extends Fragment implements View.OnClickListener{
 
@@ -102,16 +103,17 @@ public class ContactUsFragment extends Fragment implements View.OnClickListener{
                             .addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
-                                    AlertDialog.Builder builder=new AlertDialog.Builder(getActivity());
+                                    AlertDialog.Builder builder=new AlertDialog.Builder(activity);
                                     builder.setTitle("Feedback Send")
                                             .setMessage("Thank you for your feedback")
                                             .show();
+                                    //Toast.makeText(activity,"Feedback Sended!!! Thanks for your feedback",Toast.LENGTH_SHORT).show();
                                 }
                             }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            AlertDialog.Builder builder=new AlertDialog.Builder(getActivity());
-                            builder.setTitle("Feedback Send")
+                            AlertDialog.Builder builder=new AlertDialog.Builder(activity);
+                            builder.setTitle("Feedback Not Send")
                                     .setMessage("Error while sending feedback")
                                     .show();
 

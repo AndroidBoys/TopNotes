@@ -2,13 +2,17 @@ package topnotes.nituk.com.topnotes;
 
 // The class object represents the current user and it is singleton class means only one instace will be created
 public class User {
-   private String name;
-   private String rn;
-   private  String email;
-   private String imageUrl;
-   private static User mCurrentUser;
+    public String name;
+    public String rn;
+    public  String email;
+    public String imageUrl;
+    public static User mCurrentUser;
 
-   private User(String name, String rn, String email, String imageUrl) {
+    public User(){
+
+    }
+
+    public User(String name, String rn, String email, String imageUrl) {
         this.name = name;
         this.rn = rn;
         this.email = email;

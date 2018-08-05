@@ -8,14 +8,14 @@ import java.util.UUID;
 
 // Model for a single Content(e.g- Notes,Question Paper etc.)
 public class Content implements Serializable {
-    private String title;
-    private String author;
-    private String date;
-    private String downloadUrl;
-    private String subject;
-    private String size;
-    private int downloads;
-    private String fileName;
+    public String title;
+    public String author;
+    public String date;
+    public String downloadUrl;
+    public String subject;
+    public String size;
+    public int downloads;
+    public String fileName;
 
 
     public Content() {
