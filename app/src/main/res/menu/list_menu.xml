@@ -62,6 +62,6 @@
     <item android:id="@+id/logOut"
           android:title="Log Out"
           android:icon="@drawable/log_out"
-          android:checkable="true"/>
+          android:checkable="false"/>
 
 </menu>

@@ -204,14 +204,14 @@ public class MyDownloadsArrayAdapter extends ArrayAdapter<String> {
 //       File file=new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS),path);
         // File file=new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS),"EEM.pdf");
         if(file.exists()) {
-             Toast.makeText(context,"starting deletion!",Toast.LENGTH_SHORT).show();
+             //Toast.makeText(context,"starting deletion!",Toast.LENGTH_SHORT).show();
              DocumentFile documentFile = DocumentFile.fromFile(file);
              if(documentFile.delete())//if file will delete then it will return true
              {   deleteFromListView(choosenFile);
-                 Toast.makeText(context,"sucess!"+!file.exists(),Toast.LENGTH_SHORT).show();
+                 Toast.makeText(context,"Deleted Successfully",Toast.LENGTH_SHORT).show();
              }
              else{
-                 Toast.makeText(context,"No success!"+!file.exists(),Toast.LENGTH_SHORT).show();
+                 Toast.makeText(context,"Deleted Unsuccessful",Toast.LENGTH_SHORT).show();
              }
         } else {
          Toast.makeText(context,"it's weird file doesn't exist!",Toast.LENGTH_SHORT).show();

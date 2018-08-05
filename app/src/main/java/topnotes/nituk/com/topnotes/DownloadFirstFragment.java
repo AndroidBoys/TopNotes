@@ -38,6 +38,7 @@ public class DownloadFirstFragment extends Fragment {
                 FragmentManager fragmentManager = getFragmentManager();
                 DownloadPopUpDialogFragment downloadPopUpDialogFragment = DownloadPopUpDialogFragment.getInstance(i);
                 downloadPopUpDialogFragment.show(fragmentManager, "download_dialog");
+
             }
 
 

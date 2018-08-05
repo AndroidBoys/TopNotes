@@ -256,8 +256,12 @@ public class ContentsActivity extends AppCompatActivity {
         {
             mRecyclerView.setVisibility(View.INVISIBLE);
             fragmeLayout.setVisibility(View.VISIBLE);
-            getSupportFragmentManager().beginTransaction().replace(R.id.contentsFrameLayout,
-                    new NothingToDisplayDialogFragment("download","No Items till now in this section")).commit();
+            try {
+                getSupportFragmentManager().beginTransaction().replace(R.id.contentsFrameLayout,
+                        new NothingToDisplayDialogFragment("download", "No Items till now in this section")).commit();
+            }catch(Exception e){
+                e.printStackTrace();
+            }
         }
 
     }
