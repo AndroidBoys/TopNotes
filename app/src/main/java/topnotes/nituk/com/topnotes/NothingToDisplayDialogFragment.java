@@ -28,7 +28,7 @@ public class NothingToDisplayDialogFragment extends Fragment {
             updownTextView.setText(msg);
         }
         else if(updown.equals("download")) {
-            updownImageView.setImageResource(R.drawable.my_downloads);
+            updownImageView.setImageResource(R.drawable.my_downloads1);
             updownTextView.setText(msg);
         }
 
