@@ -33,6 +33,7 @@ import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
@@ -40,7 +41,7 @@ import static androidx.core.content.ContextCompat.getSystemService;
 
 public class ContactUsFragment extends Fragment implements View.OnClickListener{
 
-    private Activity activity;
+    private AppCompatActivity activity;
     private EditText feedbackEditText;
     private Button showFeedbackButton;
     private Context context;
@@ -50,7 +51,7 @@ public class ContactUsFragment extends Fragment implements View.OnClickListener{
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        activity=getActivity();
+        activity=(AppCompatActivity)getActivity();
         context=getContext();
         View view=inflater.inflate(R.layout.contact_us,container,false);
         final Button sendFeedBackButton=view.findViewById(R.id.sendFeedbackButton);
@@ -94,9 +95,10 @@ public class ContactUsFragment extends Fragment implements View.OnClickListener{
                     SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     String feedbackTime = dateFormat.format(calendar.getTime());
 
+                    activity.getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout,MySubjects.getInstance()).commit();
                     FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth
                             .getInstance().getCurrentUser().getUid()).child("Feedback").child(feedbackTime)
-                            .setValue(feedbackEditText.getText().toString())
+                            .setValue(feedbackEditText.getText().toString()+" : "+User.getUser().getName())
                             .addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
@@ -140,7 +142,7 @@ public class ContactUsFragment extends Fragment implements View.OnClickListener{
                             @Override
                             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                                 Log.d("feedbacksuser",dataSnapshot.getValue().toString());
-                                feedbacks.add(dataSnapshot.getValue().toString()+" From:"+User.getUser().getName());
+                                feedbacks.add(dataSnapshot.getValue().toString());
                                 if(FeedbackList.arrayAdapter!=null)
                                     FeedbackList.arrayAdapter.notifyDataSetChanged();
                             }
